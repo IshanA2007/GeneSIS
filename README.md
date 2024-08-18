@@ -1,2 +1,3 @@
-# Grades
-SIS StudentVue, but better
+# grades
+
+A new Flutter project.
