@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grades/utils/constants/colors.dart';
 
 class GenesisOutlinedButtonTheme {
   GenesisOutlinedButtonTheme._();
@@ -7,7 +8,7 @@ class GenesisOutlinedButtonTheme {
     style: OutlinedButton.styleFrom(
       elevation: 0,
       foregroundColor: Colors.black,
-      side: const BorderSide(color: Color(0xFF44C5BD)),
+      side: const BorderSide(color: GenesisColors.primaryColor),
       textStyle: const TextStyle(
         fontSize: 16,
         color: Colors.black,
@@ -24,7 +25,7 @@ class GenesisOutlinedButtonTheme {
     style: OutlinedButton.styleFrom(
       elevation: 0,
       foregroundColor: Colors.white,
-      side: const BorderSide(color: Color(0xFF44C5BD)),
+      side: const BorderSide(color: GenesisColors.primaryColor),
       textStyle: const TextStyle(
         fontSize: 16,
         color: Colors.white,
