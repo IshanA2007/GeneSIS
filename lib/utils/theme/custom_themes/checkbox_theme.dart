@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grades/utils/constants/colors.dart';
 
 class GenesisCheckboxTheme {
   GenesisCheckboxTheme._(); // To avoid creating instances
@@ -15,7 +16,7 @@ class GenesisCheckboxTheme {
     }),
     fillColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
-        return const Color(0xFF44C5BD);
+        return GenesisColors.primaryColor;
       } else {
         return Colors.transparent;
       }
@@ -33,7 +34,7 @@ class GenesisCheckboxTheme {
     }),
     fillColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
-        return const Color(0xFF44C5BD);
+        return GenesisColors.primaryColor;
       } else {
         return Colors.transparent;
       }

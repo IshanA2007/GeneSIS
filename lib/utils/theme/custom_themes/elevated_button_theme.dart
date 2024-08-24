@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grades/utils/constants/colors.dart';
 
 class GenesisElevatedButtonTheme {
   GenesisElevatedButtonTheme._();
@@ -7,10 +8,10 @@ class GenesisElevatedButtonTheme {
     style: ElevatedButton.styleFrom(
       elevation: 0,
       foregroundColor: Colors.white,
-      backgroundColor: const Color(0xFF44C5BD),
+      backgroundColor: GenesisColors.primaryColor,
       disabledForegroundColor: Colors.grey,
       disabledBackgroundColor: Colors.grey,
-      side: const BorderSide(color: Color(0xFF44C5BD)),
+      side: const BorderSide(color: GenesisColors.primaryColor),
       padding: const EdgeInsets.symmetric(vertical: 18),
       textStyle: const TextStyle(
         fontSize: 16,
@@ -27,10 +28,10 @@ class GenesisElevatedButtonTheme {
     style: ElevatedButton.styleFrom(
       elevation: 0,
       foregroundColor: Colors.white,
-      backgroundColor: const Color(0xFF44C5BD),
+      backgroundColor: GenesisColors.primaryColor,
       disabledForegroundColor: Colors.grey,
       disabledBackgroundColor: Colors.grey,
-      side: const BorderSide(color: Color(0xFF44C5BD)),
+      side: const BorderSide(color: GenesisColors.primaryColor),
       padding: const EdgeInsets.symmetric(vertical: 18),
       textStyle: const TextStyle(
         fontSize: 16,

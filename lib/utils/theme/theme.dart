@@ -5,6 +5,7 @@ import 'package:grades/utils/theme/custom_themes/elevated_button_theme.dart';
 import 'package:grades/utils/theme/custom_themes/outlined_button_theme.dart';
 import 'package:grades/utils/theme/custom_themes/text_field_theme.dart';
 import 'package:grades/utils/theme/custom_themes/text_theme.dart';
+import '../constants/colors.dart';
 
 class GenesisTheme {
   GenesisTheme._();
@@ -13,7 +14,7 @@ class GenesisTheme {
     useMaterial3: true,
     fontFamily: 'Poppins',
     brightness: Brightness.light,
-    primaryColor: const Color(0xFF44C5BD),
+    primaryColor: GenesisColors.primaryColor,
     scaffoldBackgroundColor: Colors.white,
     textTheme: GenesisTextTheme.lightTextTheme,
     elevatedButtonTheme: GenesisElevatedButtonTheme.lightElevatedButtonTheme,
@@ -22,11 +23,12 @@ class GenesisTheme {
     inputDecorationTheme: GenesisTextFormFieldTheme.lightInputDecorationTheme,
     appBarTheme: GenesisAppBarTheme.lightAppBarTheme,
   );
+
   static ThemeData darkTheme = ThemeData(
       useMaterial3: true,
       fontFamily: 'Poppins',
       brightness: Brightness.dark,
-      primaryColor: const Color(0xFF44C5BD),
+      primaryColor: GenesisColors.primaryColor,
       scaffoldBackgroundColor: Colors.black,
       textTheme: GenesisTextTheme.darkTextTheme,
       elevatedButtonTheme: GenesisElevatedButtonTheme.darkElevatedButtonTheme,
