@@ -7,9 +7,9 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      themeMode: ThemeMode.system,
-      theme: GradesTheme.lightTheme,
-      darkTheme: GradesTheme.darkTheme,
+      themeMode: ThemeMode.light,
+      theme: GenesisTheme.lightTheme,
+      darkTheme: GenesisTheme.darkTheme,
     );
   }
 }
