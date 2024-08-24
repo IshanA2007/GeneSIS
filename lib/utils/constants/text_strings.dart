@@ -11,6 +11,15 @@ class GenesisTexts {
       "Get started by logging in with your credentials";
   static const String onBoardingSubtitle3 =
       "Stay connected with your school and teachers";
+    
+  static const String loginTitle = "Welcome back,";
+  static const String loginSubTitle = "Sign in to your StudentVue account";
+
+  static const String email = "Email";
+  static const String password = "Password";
+  static const String rememberMe = "Remember me";
+  static const String forgotPassword = "Forgot password?";
+  static const String signIn = "Sign in";
 
   //Home
 }
