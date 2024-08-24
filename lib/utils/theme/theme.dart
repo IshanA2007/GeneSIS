@@ -1,21 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:grades/utils/theme/custom_themes/app_bar_theme.dart';
+import 'package:grades/utils/theme/custom_themes/checkbox_theme.dart';
+import 'package:grades/utils/theme/custom_themes/elevated_button_theme.dart';
+import 'package:grades/utils/theme/custom_themes/outlined_button_theme.dart';
+import 'package:grades/utils/theme/custom_themes/text_field_theme.dart';
 import 'package:grades/utils/theme/custom_themes/text_theme.dart';
 
-class GradesTheme {
-  GradesTheme._();
+class GenesisTheme {
+  GenesisTheme._();
 
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
+    fontFamily: 'Poppins',
     brightness: Brightness.light,
-    primaryColor: Colors.blue,
+    primaryColor: const Color(0xFF44C5BD),
     scaffoldBackgroundColor: Colors.white,
-    textTheme: GradesTextTheme.lightTextTheme,
+    textTheme: GenesisTextTheme.lightTextTheme,
+    elevatedButtonTheme: GenesisElevatedButtonTheme.lightElevatedButtonTheme,
+    checkboxTheme: GenesisCheckboxTheme.lightCheckboxTheme,
+    outlinedButtonTheme: GenesisOutlinedButtonTheme.lightOutlinedButtonTheme,
+    inputDecorationTheme: GenesisTextFormFieldTheme.lightInputDecorationTheme,
+    appBarTheme: GenesisAppBarTheme.lightAppBarTheme,
   );
   static ThemeData darkTheme = ThemeData(
-    useMaterial3: true,
-    brightness: Brightness.dark,
-    primaryColor: Colors.blue,
-    scaffoldBackgroundColor: Colors.black,
-    textTheme: GradesTextTheme.darkTextTheme,
-  );
+      useMaterial3: true,
+      fontFamily: 'Poppins',
+      brightness: Brightness.dark,
+      primaryColor: const Color(0xFF44C5BD),
+      scaffoldBackgroundColor: Colors.black,
+      textTheme: GenesisTextTheme.darkTextTheme,
+      elevatedButtonTheme: GenesisElevatedButtonTheme.darkElevatedButtonTheme,
+      checkboxTheme: GenesisCheckboxTheme.darkCheckboxTheme,
+      outlinedButtonTheme: GenesisOutlinedButtonTheme.darkOutlinedButtonTheme,
+      inputDecorationTheme: GenesisTextFormFieldTheme.darkInputDecorationTheme,
+      appBarTheme: GenesisAppBarTheme.darkAppBarTheme);
 }
