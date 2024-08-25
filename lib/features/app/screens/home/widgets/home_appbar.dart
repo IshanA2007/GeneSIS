@@ -20,7 +20,7 @@ class GenesisHomeAppBar extends StatelessWidget {
         children: [
           Text(GenesisTexts.homeAppbarTitle,
               style: Theme.of(context).textTheme.headlineLarge!.apply(
-                  color: dark ? GenesisColors.grey : GenesisColors.darkerGrey)),
+                  color: dark ? GenesisColors.grey : GenesisColors.black)),
           Text(GenesisTexts.homeAppbarSubTitle,
               style: Theme.of(context)
                   .textTheme

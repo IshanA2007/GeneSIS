@@ -52,6 +52,9 @@ class GenesisSizes {
   static const double cardRadiusLg = 16.0;
   static const double cardElevation = 2.0;
 
+  //Card padding
+  static const double cardPaddingLg = 20.0;
+
   //image carousel height
   static const double imageCarouselHeight = 200.0;
 
