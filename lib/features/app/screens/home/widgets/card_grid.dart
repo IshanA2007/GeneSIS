@@ -13,24 +13,29 @@ class GenesisCardGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: GenesisSizes.md),
-      child: GridView.builder(
-        itemCount: columns*rows,
-        shrinkWrap: true,
-        physics: const ScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: columns,
-            crossAxisSpacing: GenesisSizes.spaceBtwItems,
-            mainAxisSpacing: GenesisSizes.spaceBtwItems,
-            childAspectRatio: 2.2),
-        itemBuilder: (context, index) {
-          // make sure index in bounds
-          if (index < children.length) {
-            return GenesisCard(child: children[index]);
+      child: MediaQuery.removePadding(
+        context: context,
+        removeTop: true,
+        removeBottom: true,
+        child: GridView.builder(
+          itemCount: columns*rows,
+          shrinkWrap: true,
+          physics: const ScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columns,
+              crossAxisSpacing: GenesisSizes.spaceBtwItems,
+              mainAxisSpacing: GenesisSizes.spaceBtwItems,
+              childAspectRatio: 2.2),
+          itemBuilder: (context, index) {
+            // make sure index in bounds
+            if (index < children.length) {
+              return GenesisCard(child: children[index]);
+            }
+            else{
+              return const SizedBox.shrink();
+            }
           }
-          else{
-            return const SizedBox.shrink();
-          }
-        }
+        ),
       ),
     );
   }

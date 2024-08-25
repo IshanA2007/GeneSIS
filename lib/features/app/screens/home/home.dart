@@ -27,8 +27,7 @@ class HomeScreen extends StatelessWidget {
                 child: GenesisGPACardContent(),
               ),
             ),
-
-            GenesisGPAGrid(),
+            GenesisGPAGrid()
             //GenesisStatsGridView
             //GenesisGPACarousel
           ],
