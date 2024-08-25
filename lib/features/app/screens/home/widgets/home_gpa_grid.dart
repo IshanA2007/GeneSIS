@@ -14,7 +14,7 @@ class GenesisGPAGrid extends StatelessWidget {
     return GenesisCardGrid(
       key: super.key,
       columns: 2,
-      rows: 3,
+      rows: 2,
       children: const [
         GenesisStatsCardContent(
           title: "Class Rank",
