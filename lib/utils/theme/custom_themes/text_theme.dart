@@ -5,7 +5,7 @@ class GenesisTextTheme {
 
   static TextTheme lightTextTheme = TextTheme(
     headlineLarge: const TextStyle().copyWith(
-        fontSize: 32, fontWeight: FontWeight.bold, color: Colors.black),
+        fontSize: 36, fontWeight: FontWeight.bold, color: Colors.black),
     headlineMedium: const TextStyle().copyWith(
         fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
     headlineSmall: const TextStyle().copyWith(
@@ -38,7 +38,7 @@ class GenesisTextTheme {
 
   static TextTheme darkTextTheme = TextTheme(
     headlineLarge: const TextStyle().copyWith(
-        fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+        fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white),
     headlineMedium: const TextStyle().copyWith(
         fontSize: 24, fontWeight: FontWeight.w600, color: Colors.white),
     headlineSmall: const TextStyle().copyWith(
