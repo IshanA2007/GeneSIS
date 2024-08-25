@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grades/common/widgets/appbar/appbar.dart';
 import 'package:grades/features/app/screens/home/widgets/home_appbar.dart';
-import 'package:grades/features/app/screens/home/widgets/home_gpa_card.dart';
+import 'package:grades/features/app/screens/home/widgets/genesis_card.dart';
 import 'package:grades/features/app/screens/home/widgets/home_gpa_card_content.dart';
 import 'package:grades/features/app/screens/home/widgets/home_gpa_grid.dart';
 import 'package:grades/utils/constants/colors.dart';
@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(
                   horizontal: GenesisSizes.md,
                   vertical: GenesisSizes.spaceBtwItems),
-              child: GenesisGPACard(
+              child: GenesisCard(
                 child: GenesisGPACardContent(),
               ),
             ),

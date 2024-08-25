@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
 
-class GenesisGPACard extends StatelessWidget {
-  const GenesisGPACard(
+class GenesisCard extends StatelessWidget {
+  const GenesisCard(
       {super.key, required this.child, this.color, this.padding});
 
   final Widget child;
