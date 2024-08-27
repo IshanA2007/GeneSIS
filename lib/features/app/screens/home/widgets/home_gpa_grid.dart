@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grades/features/app/screens/home/widgets/genesis_card.dart';
+import 'package:grades/common/widgets/genesis_card.dart';
 import 'package:grades/utils/constants/sizes.dart';
-import 'package:grades/features/app/screens/home/widgets/card_grid.dart';
+import 'package:grades/common/widgets/card_grid.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'home_stats_card_content.dart';
@@ -15,6 +15,7 @@ class GenesisGPAGrid extends StatelessWidget {
       key: super.key,
       columns: 2,
       rows: 2,
+      childAspectRatio: 2.2,
       children: const [
         GenesisStatsCardContent(
           title: "Class Rank",
@@ -38,7 +39,7 @@ class GenesisGPAGrid extends StatelessWidget {
           title: "GPA Trend",
           stat: "-20%",
           units: " this month",
-          icon: Icon(Iconsax.hashtag, color: Colors.blue),
+          icon: Icon(Iconsax.trend_up, color: Colors.blue),
         ),
       ],
     );
