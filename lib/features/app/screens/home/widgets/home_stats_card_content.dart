@@ -23,21 +23,23 @@ class GenesisStatsCardContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: Theme.of(context).textTheme.titleMedium!),
+              FittedBox(child: Text(title, style: Theme.of(context).textTheme.titleMedium!)),
               const Spacer(),
-              RichText(
-                text: TextSpan(
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: stat,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .apply(color: GenesisColors.grey)),
-                    TextSpan(
-                        text: units,
-                        style: Theme.of(context).textTheme.labelSmall!),
-                  ],
+              FittedBox(
+                child: RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: stat,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .apply(color: GenesisColors.grey)),
+                      TextSpan(
+                          text: units,
+                          style: Theme.of(context).textTheme.labelSmall!),
+                    ],
+                  ),
                 ),
               ),
             ],
