@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grades/common/data/sample_gpa_data.dart';
-import 'package:grades/features/app/screens/home/widgets/genesis_card.dart';
+import 'package:grades/common/widgets/genesis_card.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
 
