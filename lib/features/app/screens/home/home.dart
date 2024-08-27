@@ -34,7 +34,9 @@ class HomeScreen extends StatelessWidget {
             ),
             //GenesisStatsGridView
             GenesisGPAGrid(),
-            //GenesisGPACarousel
+            SizedBox(
+              height: GenesisSizes.spaceBtwItems,
+            ),
             GenesisGPACarousel(),
           ],
         ),
@@ -42,4 +44,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-

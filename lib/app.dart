@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:grades/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:grades/utils/theme/theme.dart';
@@ -8,11 +9,16 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      themeMode: ThemeMode.system,
-      theme: GenesisTheme.lightTheme,
-      darkTheme: GenesisTheme.darkTheme,
-      home: const OnBoardingScreen()
+    return ScreenUtilInit(
+      designSize: const Size(430, 932),
+      builder: (context, child) {
+        return GetMaterialApp(
+          themeMode: ThemeMode.system,
+          theme: GenesisTheme.lightTheme,
+          darkTheme: GenesisTheme.darkTheme,
+          home: const OnBoardingScreen(),
+        );
+      },
     );
   }
 }
