@@ -1,5 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:grades/common/data/sample_gpa_data.dart';
 import 'package:grades/common/widgets/genesis_card.dart';
 import 'package:grades/utils/constants/colors.dart';
@@ -13,7 +13,6 @@ class GenesisCarouselGraph extends StatelessWidget {
 
   final VoidCallback? onPressed;
 
-
   @override
   Widget build(BuildContext context) {
     final data = GPAData();
@@ -25,7 +24,12 @@ class GenesisCarouselGraph extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("GPA Overview"),
+              Text(
+                "GPA Overview",
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium,
+              ),
               const SizedBox(
                 height: GenesisSizes.spaceBtwItems * 2,
               ),
@@ -73,8 +77,8 @@ class GenesisCarouselGraph extends StatelessWidget {
                             return data.leftTitle[value.toInt()] != null
                                 ? SideTitleWidget(
                                     axisSide: meta.axisSide,
-                                    child: Text(
-                                        data.leftTitle[value.toInt()].toString()),
+                                    child: Text(data.leftTitle[value.toInt()]
+                                        .toString()),
                                   )
                                 : const SizedBox();
                           },
