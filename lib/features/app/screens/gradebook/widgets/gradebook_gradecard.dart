@@ -75,7 +75,7 @@ class GradeCard extends StatelessWidget {
         // right - grade letter, percent
         Expanded(
           flex: 4,
-          child: Column(
+          child: FittedBox(fit: BoxFit.contain, child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
@@ -103,6 +103,7 @@ class GradeCard extends StatelessWidget {
               ),
             ],
           ),
+        ),
         ),
       ],
     );
