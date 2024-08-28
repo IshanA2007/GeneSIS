@@ -15,10 +15,10 @@ class GenesisGPACardContent extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: GenesisDeviceUtils.getScreenHeight() * .115,
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
+      child: FittedBox(
+        child: Row(
+          children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -55,9 +55,8 @@ class GenesisGPACardContent extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          Expanded(
-            child: Center(
+            SizedBox(width: GenesisSizes.spaceBtwSections),
+            Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 // Vertically center the whole column
@@ -74,8 +73,8 @@ class GenesisGPACardContent extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
