@@ -30,19 +30,18 @@ class GradeCard extends StatelessWidget {
           flex: 8,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Expanded(
-                flex: 1,
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Text(
-                    className,
-                    style: Theme.of(context).textTheme.headlineSmall!.apply(
-                        color:
-                            dark ? GenesisColors.white : GenesisColors.white),
-                  ),
+              Flexible(
+                child: Text(
+                  className,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.headlineSmall!.apply(
+                      color: dark ? GenesisColors.white : GenesisColors.white),
                 ),
-                // const Spacer(),
+              ),
+              const SizedBox(
+                height: GenesisSizes.spaceBtwItems,
               ),
               Expanded(
                 flex: 1,
@@ -57,30 +56,29 @@ class GradeCard extends StatelessWidget {
                               TextSpan(
                                 text:
                                     "${monthlyChange >= 0 ? '+' : '-'}${monthlyChange.abs()}%",
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: monthlyChange >= 0
-                                      ? Colors.greenAccent
-                                      : Colors.redAccent,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium!
+                                    .apply(
+                                      color: monthlyChange >= 0
+                                          ? Colors.greenAccent
+                                          : Colors.redAccent,
+                                    ),
                               ),
-                              const TextSpan(
+                              TextSpan(
                                 text: " change this month",
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.grey,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium!
+                                    .apply(color: GenesisColors.darkerGrey),
                               ),
                             ],
                           ),
                         ),
-                        // const Spacer(),
+                        const Spacer(),
                         Text(
                           '$missingAssignments missing assignments',
-                          style: const TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.grey,
-                          ),
+                          style: Theme.of(context).textTheme.labelMedium!.apply(color: GenesisColors.darkGrey),
                         ),
                         // const Spacer(),
                       ],
@@ -113,10 +111,7 @@ class GradeCard extends StatelessWidget {
                 ),
                 Text(
                   '${gradePercent.toStringAsFixed(2)}%',
-                  style: const TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.grey,
-                  ),
+                  style: Theme.of(context).textTheme.titleSmall!.apply(color: GenesisColors.grey),
                   textHeightBehavior: const TextHeightBehavior(
                     applyHeightToFirstAscent: false,
                     applyHeightToLastDescent: false,

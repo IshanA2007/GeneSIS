@@ -53,15 +53,12 @@ class GenesisStatsCardContent extends StatelessWidget {
         ),
         Expanded(
           flex: 4,
-          child: FittedBox(
-            fit: BoxFit.contain,
-            alignment: Alignment.centerRight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                icon,
-              ],
-            ),
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              icon,
+            ],
           ),
         ),
       ],

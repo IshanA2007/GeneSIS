@@ -12,7 +12,7 @@ class GenesisCardGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: GenesisSizes.md),
+      padding: const EdgeInsets.symmetric(horizontal: GenesisSizes.md, vertical: GenesisSizes.spaceBtwItems),
       child: MediaQuery.removePadding(
         context: context,
         removeTop: true,
