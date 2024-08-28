@@ -28,7 +28,7 @@ class GradeCard extends StatelessWidget {
         // left - class name, change %, missing assignments
         Expanded(
           flex: 8,
-          child: Column(
+          child: FittedBox(fit: BoxFit.fitHeight, alignment: Alignment.centerLeft, child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -36,7 +36,7 @@ class GradeCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.headlineSmall!.apply(
                     color: dark ? GenesisColors.white : GenesisColors.white),
               ),
-              const Spacer(),
+              // const Spacer(),
               RichText(
                 text: TextSpan(
                   children: [
@@ -53,23 +53,24 @@ class GradeCard extends StatelessWidget {
                     const TextSpan(
                       text: " change this month",
                       style: TextStyle(
-                        fontSize: 14.0,
+                        fontSize: 10.0,
                         color: Colors.grey,
                       ),
                     ),
                   ],
                 ),
               ),
-              const Spacer(),
+              // const Spacer(),
               Text(
                 '$missingAssignments missing assignments',
                 style: const TextStyle(
-                  fontSize: 14.0,
+                  fontSize: 10.0,
                   color: Colors.grey,
                 ),
               ),
-              const Spacer(),
-            ],
+              // const Spacer(),
+              ],
+            ),
           ),
         ),
         // right - grade letter, percent
