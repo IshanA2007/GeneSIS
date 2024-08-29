@@ -58,7 +58,7 @@ class GradeCard extends StatelessWidget {
                                     "${monthlyChange >= 0 ? '+' : '-'}${monthlyChange.abs()}%",
                                 style: Theme.of(context)
                                     .textTheme
-                                    .labelMedium!
+                                    .bodySmall!
                                     .apply(
                                       color: monthlyChange >= 0
                                           ? Colors.greenAccent
