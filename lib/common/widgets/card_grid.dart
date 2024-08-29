@@ -3,16 +3,17 @@ import 'package:grades/common/widgets/genesis_card.dart';
 import 'package:grades/utils/constants/sizes.dart';
 
 class GenesisCardGrid extends StatelessWidget {
-  const GenesisCardGrid({super.key, required this.columns, required this.rows, required this.children, required this.childAspectRatio});
+  const GenesisCardGrid({super.key, this.padding = const EdgeInsets.symmetric(horizontal: GenesisSizes.md), required this.columns, required this.rows, required this.children, required this.childAspectRatio});
 
   final int rows;
   final int columns;
   final List<Widget> children;
   final double childAspectRatio;
+  final EdgeInsets padding;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: GenesisSizes.md, vertical: GenesisSizes.spaceBtwItems),
+      padding: padding,
       child: MediaQuery.removePadding(
         context: context,
         removeTop: true,

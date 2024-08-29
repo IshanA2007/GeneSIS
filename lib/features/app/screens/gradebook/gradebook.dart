@@ -19,6 +19,7 @@ class Gradebook extends StatelessWidget {
             GenesisCardGrid(
               rows: 7,
               columns: 1,
+              padding: EdgeInsets.only(left: GenesisSizes.md, right: GenesisSizes.md, top: GenesisSizes.spaceBtwItems),
               childAspectRatio: 2.8,
               children: [
                 GradeCard(

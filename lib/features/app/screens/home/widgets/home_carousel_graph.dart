@@ -26,22 +26,29 @@ class GenesisCarouselGraph extends StatelessWidget {
             children: [
               Text(
                 "GPA Overview",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(
                 height: GenesisSizes.spaceBtwItems * 2,
               ),
               AspectRatio(
-                aspectRatio: 16 / 6.5,
+                aspectRatio: 16 / 6,
                 child: LineChart(
                   LineChartData(
                     lineTouchData: const LineTouchData(
                       handleBuiltInTouches: true,
                     ),
-                    gridData: const FlGridData(
-                      show: false,
+                    gridData: FlGridData(
+                      show: true,
+                      drawHorizontalLine: true,
+                      drawVerticalLine: false,
+                      horizontalInterval: 20,
+                      getDrawingHorizontalLine: (value) {
+                        return FlLine(
+                          color: GenesisColors.primaryColor.withOpacity(0.2),
+                          strokeWidth: 1,
+                        );
+                      },
                     ),
                     titlesData: FlTitlesData(
                       rightTitles: const AxisTitles(
@@ -61,8 +68,13 @@ class GenesisCarouselGraph extends StatelessWidget {
                             return data.bottomTitle[value.toInt()] != null
                                 ? SideTitleWidget(
                                     axisSide: meta.axisSide,
-                                    child: Text(data.bottomTitle[value.toInt()]
-                                        .toString()),
+                                    child: Text(
+                                      data.bottomTitle[value.toInt()]
+                                          .toString(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall,
+                                    ),
                                   )
                                 : const SizedBox();
                           },
@@ -77,8 +89,12 @@ class GenesisCarouselGraph extends StatelessWidget {
                             return data.leftTitle[value.toInt()] != null
                                 ? SideTitleWidget(
                                     axisSide: meta.axisSide,
-                                    child: Text(data.leftTitle[value.toInt()]
-                                        .toString()),
+                                    child: Text(
+                                      data.leftTitle[value.toInt()].toString(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall,
+                                    ),
                                   )
                                 : const SizedBox();
                           },
