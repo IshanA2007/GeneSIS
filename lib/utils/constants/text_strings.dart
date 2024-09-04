@@ -28,4 +28,8 @@ class GenesisTexts {
   //Gradebook
   static const String gradebookAppbarTitle = "Gradebook";
   static const String gradebookAppbarSubTitle = "You're doing great, keep it up!";
+
+  //GradesView
+  static const String gradesViewAppbarSubTitle = "Grade Type: ";
+  static const String plus = "+";
 }
