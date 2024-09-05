@@ -7,5 +7,5 @@ void handleGrade(double grade) {
 
 Future<void> main() async {
   var client = StudentVueClient('1620426', 'skibidi', 'sisstudent.fcps.edu');
-  print(await client.loadGradebook(callback: (handleGrade)));
+  print(await client.loadStudentData(callback: (handleGrade)));
 }

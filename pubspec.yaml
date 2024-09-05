@@ -10,7 +10,9 @@ dependencies:
   flutter:
     sdk: flutter
   studentvueclient:
-    path: ./lib/studentvue
+    git: 
+      url: https://github.com/IshanA2007/studentvue.git
+      ref: main
   http: ^1.1.0
   intl: ^0.18.1
   logger: ^2.0.1
