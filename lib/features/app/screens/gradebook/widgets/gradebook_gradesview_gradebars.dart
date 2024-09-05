@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/device/device_utilities.dart';
@@ -35,46 +34,47 @@ class GradesViewGradeBars extends StatelessWidget {
                   children: [
                     // Background taller container
                     Container(
-                      height: (GenesisDeviceUtils.getScreenHeight() *
-                          0.3 *
-                          0.30), // Slightly taller
+                      height: GenesisDeviceUtils.getScreenHeight() * 0.3 * 0.30,
                       width: GenesisDeviceUtils.getScreenWidth() * 0.27,
                       decoration: BoxDecoration(
                         color: GenesisColors.gradeBarSecondary,
-                        // Change to differentiate
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30),
                         ),
                       ),
                     ),
-                    // Foreground main container
-                    Container(
-                      height: (GenesisDeviceUtils.getScreenHeight() *
-                          0.3 *
-                          0.30) *
-                          .67,
-                      width: GenesisDeviceUtils.getScreenWidth() * 0.27,
-                      decoration: BoxDecoration(
-                        color: GenesisColors.primaryColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(35),
-                          topRight: Radius.circular(35),
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '68.33%',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall!
-                                .apply(color: GenesisColors.white),
+                    // Foreground main container with animation
+                    TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 1.0, end: GenesisDeviceUtils.getScreenHeight() * 0.3 * 0.30 * 0.67),
+                      duration: const Duration(seconds: 1),
+                      curve: Curves.easeOut,  // Smooth transition
+                      builder: (context, height, child) {
+                        return Container(
+                          height: height,
+                          width: GenesisDeviceUtils.getScreenWidth() * 0.27,
+                          decoration: BoxDecoration(
+                            color: GenesisColors.primaryColor,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(35),
+                              topRight: Radius.circular(35),
+                            ),
                           ),
-                          // Add more widgets as needed
-                        ],
-                      ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '68.33%',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelSmall!
+                                    .apply(color: GenesisColors.white),
+                              ),
+                              // Add more widgets as needed
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -98,46 +98,47 @@ class GradesViewGradeBars extends StatelessWidget {
                   children: [
                     // Background taller container
                     Container(
-                      height: (GenesisDeviceUtils.getScreenHeight() *
-                          0.3 *
-                          0.70), // Slightly taller
+                      height: GenesisDeviceUtils.getScreenHeight() * 0.3 * 0.70,
                       width: GenesisDeviceUtils.getScreenWidth() * 0.27,
                       decoration: BoxDecoration(
                         color: GenesisColors.gradeBarSecondary,
-                        // Change to differentiate
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30),
                         ),
                       ),
                     ),
-                    // Foreground main container
-                    Container(
-                      height: (GenesisDeviceUtils.getScreenHeight() *
-                          0.3 *
-                          0.70) *
-                          .67,
-                      width: GenesisDeviceUtils.getScreenWidth() * 0.27,
-                      decoration: BoxDecoration(
-                        color: GenesisColors.primaryColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(35),
-                          topRight: Radius.circular(35),
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '62.40%',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall!
-                                .apply(color: GenesisColors.white),
+                    // Foreground main container with animation
+                    TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 1.0, end: GenesisDeviceUtils.getScreenHeight() * 0.3 * 0.70 * 0.67),
+                      duration: const Duration(seconds: 1),
+                      curve: Curves.easeOut,
+                      builder: (context, height, child) {
+                        return Container(
+                          height: height,
+                          width: GenesisDeviceUtils.getScreenWidth() * 0.27,
+                          decoration: BoxDecoration(
+                            color: GenesisColors.primaryColor,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(35),
+                              topRight: Radius.circular(35),
+                            ),
                           ),
-                          // Add more widgets as needed
-                        ],
-                      ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '62.40%',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelSmall!
+                                    .apply(color: GenesisColors.white),
+                              ),
+                              // Add more widgets as needed
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
