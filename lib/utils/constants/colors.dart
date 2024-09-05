@@ -37,4 +37,6 @@ class GenesisColors {
   static const Color grey = Color(0xFFB3B3B3);
   static const Color lightGrey = Color(0xFFF9F9F9);
   static const Color white = Color(0xFFFFFFFF);
+
+  static const Color gradeBarSecondary = Color(0xFF1F2937);
 }
