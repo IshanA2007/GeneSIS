@@ -60,18 +60,21 @@ class GradesViewGradeBars extends StatelessWidget {
                               topRight: Radius.circular(35),
                             ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '68.33%',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall!
-                                    .apply(color: GenesisColors.white),
-                              ),
-                              // Add more widgets as needed
-                            ],
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '68.33%',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall!
+                                      .apply(color: GenesisColors.white),
+                                ),
+                                // Add more widgets as needed
+                              ],
+                            ),
                           ),
                         );
                       },
@@ -124,18 +127,21 @@ class GradesViewGradeBars extends StatelessWidget {
                               topRight: Radius.circular(35),
                             ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '62.40%',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall!
-                                    .apply(color: GenesisColors.white),
-                              ),
-                              // Add more widgets as needed
-                            ],
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '62.40%',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall!
+                                      .apply(color: GenesisColors.white),
+                                ),
+                                // Add more widgets as needed
+                              ],
+                            ),
                           ),
                         );
                       },
