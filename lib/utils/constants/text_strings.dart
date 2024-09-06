@@ -32,4 +32,8 @@ class GenesisTexts {
   //GradesView
   static const String gradesViewAppbarSubTitle = "Grade Type: ";
   static const String plus = "+";
+
+  //Feed
+  static const String feedAppbarTitle = "Updates";
+  static const String feedAppbarSubTitle = "View your latest assignment grades.";
 }
