@@ -63,4 +63,7 @@ class GenesisSizes {
 
   //grid view spacing
   static const double gridViewSpacing = 16.0;
+
+  //feed filter bar button radius
+  static const double feedFilterBarButtonRadius = 20.0;
 }

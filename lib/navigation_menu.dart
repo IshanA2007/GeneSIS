@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:grades/features/app/screens/home/home.dart";
 import 'package:grades/features/app/screens/gradebook/gradebook.dart';
+import 'package:grades/features/app/screens/feed/feed.dart';
 import "package:grades/utils/constants/colors.dart";
 import "package:grades/utils/helpers/helper_functions.dart";
 import "package:iconsax/iconsax.dart";
@@ -47,7 +48,7 @@ class NavigationController extends GetxController {
   final screens = [
     const HomeScreen(),
     const Gradebook(),
-    Container(color: Colors.yellow),
+    const Feed(),
     Container(color: Colors.red),
   ];
 }
