@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "97207396987",
+    "project_id": "genesis-317af",
+    "storage_bucket": "genesis-317af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97207396987:android:db80a07cafd61bf6e310de",
+        "android_client_info": {
+          "package_name": "com.genesis.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZEALowgMWVcI8LzlnHPMSi5bNi-L4VNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
