@@ -28,7 +28,7 @@ class GradeCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Get.to(() => const GradesView());
+        Get.to(() => GradesView(className: className, monthlyChange: monthlyChange, missingAssignments: missingAssignments, letterGrade: letterGrade, gradePercent: gradePercent));
       },
       child: Row(
         children: [

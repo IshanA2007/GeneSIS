@@ -23,19 +23,19 @@ class Gradebook extends StatelessWidget {
               childAspectRatio: 2.8,
               children: [
                 GradeCard(
-                    className: "Math 4",
+                    className: "Investigation Comp Sci (coding)",
                     monthlyChange: 10,
                     missingAssignments: 2,
                     letterGrade: "A",
                     gradePercent: 94.8),
                 GradeCard(
-                    className: "Mobile/Web Research",
+                    className: "Mobile WebAppRes TJ AV",
                     monthlyChange: -14,
                     missingAssignments: 12,
                     letterGrade: "F",
                     gradePercent: 14.2),
                 GradeCard(
-                    className: "Math 6",
+                    className: "AP Mac/Mic Economics",
                     monthlyChange: 10,
                     missingAssignments: 9,
                     letterGrade: "D-",
@@ -47,7 +47,7 @@ class Gradebook extends StatelessWidget {
                     letterGrade: "C",
                     gradePercent: 4.2),
                 GradeCard(
-                    className: "AP Government",
+                    className: "Found Comp Sci TJ HN",
                     monthlyChange: 5,
                     missingAssignments: 1,
                     letterGrade: "B+",
@@ -59,7 +59,7 @@ class Gradebook extends StatelessWidget {
                     letterGrade: "C-",
                     gradePercent: 73.2),
                 GradeCard(
-                    className: "AP German",
+                    className: "Concrete Math TJ HN",
                     monthlyChange: 0,
                     missingAssignments: 0,
                     letterGrade: "A",

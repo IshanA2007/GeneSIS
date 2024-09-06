@@ -43,7 +43,7 @@ class GradesViewAppBar extends StatelessWidget {
             ],
           ),
           Text(
-            "Swipe left to go back",
+            "Swipe right to go back",
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium!

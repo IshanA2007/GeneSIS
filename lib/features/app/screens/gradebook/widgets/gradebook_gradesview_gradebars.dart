@@ -36,7 +36,7 @@ class GradesViewGradeBars extends StatelessWidget {
                     Container(
                       height: GenesisDeviceUtils.getScreenHeight() * 0.3 * 0.30,
                       width: GenesisDeviceUtils.getScreenWidth() * 0.27,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: GenesisColors.gradeBarSecondary,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
@@ -46,14 +46,14 @@ class GradesViewGradeBars extends StatelessWidget {
                     ),
                     // Foreground main container with animation
                     TweenAnimationBuilder<double>(
-                      tween: Tween(begin: 1.0, end: GenesisDeviceUtils.getScreenHeight() * 0.3 * 0.30 * 0.67),
+                      tween: Tween(begin: 1.0, end: GenesisDeviceUtils.getScreenHeight() * 0.3 * 0.30 * 0.9),
                       duration: const Duration(seconds: 1),
                       curve: Curves.easeOut,  // Smooth transition
                       builder: (context, height, child) {
                         return Container(
                           height: height,
                           width: GenesisDeviceUtils.getScreenWidth() * 0.27,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: GenesisColors.primaryColor,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(35),
@@ -103,7 +103,7 @@ class GradesViewGradeBars extends StatelessWidget {
                     Container(
                       height: GenesisDeviceUtils.getScreenHeight() * 0.3 * 0.70,
                       width: GenesisDeviceUtils.getScreenWidth() * 0.27,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: GenesisColors.gradeBarSecondary,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
@@ -120,7 +120,7 @@ class GradesViewGradeBars extends StatelessWidget {
                         return Container(
                           height: height,
                           width: GenesisDeviceUtils.getScreenWidth() * 0.27,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: GenesisColors.primaryColor,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(35),
