@@ -1,0 +1,61 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter run
+
+## exception
+
+HttpException: HttpException: Connection closed before full header was received, uri = http://localhost:57466/devtools/page/CC56B13EB5DEF78A35BD1122D9993BEF
+
+```
+```
+
+## flutter doctor
+
+```
+[32m[✓][39m Flutter (Channel stable, 3.24.0, on macOS 14.6 23G80 darwin-arm64, locale en-US)
+    [32m•[39m Flutter version 3.24.0 on channel stable at /Users/loganbradley/Documents/flutter
+    [32m•[39m Upstream repository https://github.com/flutter/flutter.git
+    [32m•[39m Framework revision 80c2e84975 (5 weeks ago), 2024-07-30 23:06:49 +0700
+    [32m•[39m Engine revision b8800d88be
+    [32m•[39m Dart version 3.5.0
+    [32m•[39m DevTools version 2.37.2
+
+[31m[✗][39m Android toolchain - develop for Android devices
+    [31m✗[39m Unable to locate Android SDK.
+      Install Android Studio from: https://developer.android.com/studio/index.html
+      On first launch it will assist you in installing the Android SDK components.
+      (or visit https://flutter.dev/to/macos-android-setup for detailed instructions).
+      If the Android SDK has been installed to a custom location, please use
+      `flutter config --android-sdk` to update to that location.
+
+
+[32m[✓][39m Xcode - develop for iOS and macOS (Xcode 15.4)
+    [32m•[39m Xcode at /Applications/Xcode.app/Contents/Developer
+    [32m•[39m Build 15F31d
+    [32m•[39m CocoaPods version 1.15.2
+
+[32m[✓][39m Chrome - develop for the web
+    [32m•[39m Chrome at /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+
+[33m[!][39m Android Studio (not installed)
+    [32m•[39m Android Studio not found; download from https://developer.android.com/studio/index.html
+      (or visit https://flutter.dev/to/macos-android-setup for detailed instructions).
+
+[32m[✓][39m VS Code (version 1.92.2)
+    [32m•[39m VS Code at /Applications/Visual Studio Code.app/Contents
+    [32m•[39m Flutter extension version 3.94.0
+
+[32m[✓][39m Connected device (4 available)
+    [32m•[39m Logan’s iPhone (mobile)         • 00008130-000C60E10AF0001C • ios            • iOS 17.6.1 21G93
+    [32m•[39m macOS (desktop)                 • macos                     • darwin-arm64   • macOS 14.6 23G80 darwin-arm64
+    [32m•[39m Mac Designed for iPad (desktop) • mac-designed-for-ipad     • darwin         • macOS 14.6 23G80 darwin-arm64
+    [32m•[39m Chrome (web)                    • chrome                    • web-javascript • Google Chrome 128.0.6613.113
+
+[32m[✓][39m Network resources
+    [32m•[39m All expected network resources are available.
+
+[33m![39m Doctor found issues in 2 categories.
+```

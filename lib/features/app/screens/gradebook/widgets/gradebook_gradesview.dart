@@ -10,26 +10,32 @@ import 'gradebook_gradesview_gradebars.dart';
 import 'gradebook_gradeview_assignment.dart';
 
 class GradesView extends StatelessWidget {
-  const GradesView({super.key});
-
+  const GradesView({super.key, required this.className, required this.monthlyChange, required this.missingAssignments, required this.letterGrade, required this.gradePercent});
+  final String className;
+  final int monthlyChange;
+  final int missingAssignments;
+  final String letterGrade;
+  final double gradePercent;
   @override
   Widget build(BuildContext context) {
-    var weeklyChange = 0;
-    var monthlyChange = 4;
-    var semesterChange = -100;
+    var weeklyChange = 0; // HARDCODED VALUE
+    var semesterChange = -100;  // HARDCODED VALUE
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const GradesViewAppBar(
-              className: "Mobile WebAppRes TJ AV",
-              gpaBoost: "1.0",
+            GradesViewAppBar(
+              className: className,
+              gpaBoost: "1.0", // HARDCODED VALUE
             ),
             const SizedBox(
               height: GenesisSizes.spaceBtwSections,
             ),
             const GradesViewGradeBars(),
             GradesViewInfoCard(
+                letterGrade: letterGrade,
+                missingAssignments: missingAssignments,
+                gradePercent: gradePercent,
                 weeklyChange: weeklyChange,
                 monthlyChange: monthlyChange,
                 semesterChange: semesterChange),
@@ -46,7 +52,7 @@ class GradesView extends StatelessWidget {
                       const SizedBox(height: GenesisSizes.sm),
                       Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: GenesisSizes.cardPaddingLg),
+                            const EdgeInsets.symmetric(horizontal: GenesisSizes.cardPaddingLg),
                         child: Row(
                           children: [
                             Expanded(

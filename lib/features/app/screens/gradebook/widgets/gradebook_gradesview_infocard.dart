@@ -11,8 +11,13 @@ class GradesViewInfoCard extends StatelessWidget {
     required this.weeklyChange,
     required this.monthlyChange,
     required this.semesterChange,
+    required this.letterGrade,
+    required this.missingAssignments,
+    required this.gradePercent,
   });
-
+  final String letterGrade;
+  final int missingAssignments;
+  final double gradePercent;
   final int weeklyChange;
   final int monthlyChange;
   final int semesterChange;
@@ -35,20 +40,20 @@ class GradesViewInfoCard extends StatelessWidget {
                     Text("Grades",
                         style: Theme.of(context).textTheme.titleLarge!),
                     const SizedBox(height: GenesisSizes.sm),
-                    const Text(
-                      "A",
-                      style: TextStyle(
+                    Text(
+                      letterGrade,
+                      style: const TextStyle(
                         fontSize: 60.0,
                         fontWeight: FontWeight.w500,
                         color: Colors.tealAccent,
                       ),
-                      textHeightBehavior: TextHeightBehavior(
+                      textHeightBehavior: const TextHeightBehavior(
                         applyHeightToFirstAscent: false,
                         applyHeightToLastDescent: false,
                       ),
                     ),
                     Text(
-                      '${94.toStringAsFixed(2)}%',
+                      '${gradePercent.toStringAsFixed(2)}%',
                       style: Theme.of(context)
                           .textTheme
                           .titleSmall!
@@ -60,7 +65,7 @@ class GradesViewInfoCard extends StatelessWidget {
                     ),
                     const SizedBox(height: GenesisSizes.spaceBtwItems),
                     Text(
-                      '155 missing assignments',
+                      '$missingAssignments missing assignments',
                       style: Theme.of(context)
                           .textTheme
                           .labelMedium!
