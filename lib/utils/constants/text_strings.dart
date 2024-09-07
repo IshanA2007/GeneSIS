@@ -22,7 +22,7 @@ class GenesisTexts {
   static const String signIn = "Sign in";
 
   //Home
-  static const String homeAppbarTitle = "Hi, Ish!";
+  static const String homeAppbarTitle = "Hi, ";
   static const String homeAppbarSubTitle = "Have a wonderful Tuesday.";
 
   //Gradebook

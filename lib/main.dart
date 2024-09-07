@@ -3,6 +3,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:grades/app.dart';
+import 'package:grades/features/authentication/controllers/network/network_manager.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'data/repositories/authentication/authentication_repository.dart';
@@ -18,6 +19,9 @@ Future<void> main() async {
 
   //Native Splash Screen
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  //experimental
+  Get.put(NetworkManager());
 
   //Initialize Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)

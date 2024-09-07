@@ -6,6 +6,8 @@ import 'package:grades/utils/device/device_utilities.dart';
 import 'package:grades/utils/helpers/helper_functions.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../../utils/local_storage/storage_utility.dart';
+
 class GenesisHomeAppBar extends StatelessWidget {
   const GenesisHomeAppBar({
     super.key,
@@ -18,7 +20,7 @@ class GenesisHomeAppBar extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(GenesisTexts.homeAppbarTitle,
+          Text(GenesisTexts.homeAppbarTitle + GenesisStorage.getUserId(),
               style: Theme.of(context).textTheme.headlineLarge!.apply(
                   color: dark ? GenesisColors.grey : GenesisColors.black)),
           Text(GenesisTexts.homeAppbarSubTitle,
