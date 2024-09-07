@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:grades/common/widgets/genesis_card.dart';
+import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/utils/constants/sizes.dart';
 import 'package:grades/common/widgets/card_grid.dart';
 import 'package:iconsax/iconsax.dart';
@@ -11,27 +13,28 @@ class GenesisGPAGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Get.find<GenesisUserController>();
     return GenesisCardGrid(
       key: super.key,
       columns: 2,
       rows: 2,
       childAspectRatio: 2.2,
-      children: const [
+      children: [
         GenesisStatsCardContent(
           title: "Class Rank",
-          stat: "15",
+          stat: user.getClassRank(),
           units: " /500 students",
           icon: Icon(Iconsax.hashtag, color: Colors.yellow),
         ),
         GenesisStatsCardContent(
           title: "Attendance",
-          stat: "95%",
-          units: " 4 absences",
+          stat: user.getAttendance()["percent"] ?? "??%",
+          units: " ${user.getAttendance()["num"]} absences",
           icon: Icon(Iconsax.calendar, color: Colors.red),
         ),
         GenesisStatsCardContent(
           title: "AP Count",
-          stat: "11",
+          stat: user.getAPCount(),
           units: " APs taken",
           icon: Icon(Iconsax.book_1, color: Colors.green),
         ),

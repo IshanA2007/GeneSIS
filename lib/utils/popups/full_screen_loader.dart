@@ -13,8 +13,9 @@ class GenesisFullScreenLoader {
         canPop: false,
         child: Container(
           color: GenesisHelpers.isDarkMode(Get.context!)
-              ? GenesisColors.black
-              : GenesisColors.white,
+             ? Colors.black
+              : Colors.white,
+
           width: double.infinity,
           height: double.infinity,
           child: Column(

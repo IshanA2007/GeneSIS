@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
 import 'package:grades/utils/device/device_utilities.dart';
@@ -11,6 +13,7 @@ class GenesisGPACardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Get.find<GenesisUserController>();
     final dark = GenesisHelpers.isDarkMode(context);
     return SizedBox(
       width: double.infinity,
@@ -36,13 +39,13 @@ class GenesisGPACardContent extends StatelessWidget {
                             : GenesisColors.grey),
                     children: <TextSpan>[
                       TextSpan(
-                        text: '0.15',
+                        text: user.amntFromGoal(),
                         style: Theme.of(context)
                             .textTheme
                             .labelMedium!
                             .apply(color: GenesisColors.success),
                       ),
-                      const TextSpan(text: ' over your goal of 4.40')
+                      TextSpan(text: ' over your goal of ${user.getGPAGoal()}')
                     ],
                   ),
                 ),
@@ -62,7 +65,7 @@ class GenesisGPACardContent extends StatelessWidget {
                 // Vertically center the whole column
                 children: [
                   Text(
-                    '4.55',
+                    user.getGPA() ?? 'N/A',
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
