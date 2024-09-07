@@ -1,11 +1,24 @@
 import 'package:studentvueclient/studentvueclient.dart';
 
-void handleGrade(double grade) {
-  var gr = grade * 100;
-  print('Process is $gr percent complete');
+
+class GenesisHttpClient{
+
+  static void handleGrade(double grade) {
+    var gr = grade * 100;
+    print('Process is $gr percent complete');
+  }
+
+  static Future<void> queryStudentVue(String email, String password) async{
+    var client = StudentVueClient(email, password, 'sisstudent.fcps.edu');
+    print(await client.loadStudentData(callback: (handleGrade)));
+    print(await client.loadStudentData(callback: (handleGrade)));
+    print(await client.loadStudentData(callback: (handleGrade)));
+    print(await client.loadStudentData(callback: (handleGrade)));
+    print(await client.loadStudentData(callback: (handleGrade)));
+    print(await client.loadStudentData(callback: (handleGrade)));
+    print(await client.loadStudentData(callback: (handleGrade)));
+    return;
+  }
 }
 
-Future<void> main() async {
-  var client = StudentVueClient('1620426', 'skibidi', 'sisstudent.fcps.edu');
-  print(await client.loadStudentData(callback: (handleGrade)));
-}
+
