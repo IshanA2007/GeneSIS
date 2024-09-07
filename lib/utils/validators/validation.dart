@@ -1,5 +1,8 @@
 //regex stuff
 
+import 'package:grades/utils/http/http_client.dart';
+import 'package:studentvueclient/studentvueclient.dart';
+
 class GenesisValidator {
   static String? validateEmail(String? value){
     if (value == null || value.isEmpty){
@@ -25,6 +28,10 @@ class GenesisValidator {
   }
 
   static Future<bool> validateSISLogin(String user, String pass) async{
-    return true;
+    var client = GenesisHttpClient();
+    if (await client.testQuery(user, pass) != null){
+      return true;
+    }
+    throw 'Invalid StudentVue login';
   }
 }

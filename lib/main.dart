@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:grades/app.dart';
 import 'package:grades/features/authentication/controllers/network/network_manager.dart';
+import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'data/repositories/authentication/authentication_repository.dart';
@@ -17,11 +18,15 @@ Future<void> main() async {
   //Initialize Local Storage
   await GetStorage.init();
 
+  GetStorage().remove("username");
+  GetStorage().remove("password");
+
   //Native Splash Screen
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   //experimental
   Get.put(NetworkManager());
+  Get.put(GenesisUserController());
 
   //Initialize Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)

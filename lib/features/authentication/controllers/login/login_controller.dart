@@ -50,6 +50,8 @@ class LoginController extends GetxController {
       //final userCredentials = await AuthenticationRepository.instance
       // .loginWithEmailAndPassword(
       //     '${email.text.trim()}@fcpsschools.net', password.text.trim());
+      print(email.text.trim());
+      print(password.text.trim());
       await GenesisValidator.validateSISLogin(
           email.text.trim(), password.text.trim());
 
@@ -57,8 +59,9 @@ class LoginController extends GetxController {
       localStorage.write("username", email.text.trim());
 
       //query and store all necessary data
-      await GenesisHttpClient.queryStudentVue(
-          email.text.trim(), password.text.trim());
+      var httpClient = GenesisHttpClient();
+
+      await httpClient.queryStudentVue(email.text.trim(), password.text.trim());
 
       GenesisFullScreenLoader.stopLoading();
 

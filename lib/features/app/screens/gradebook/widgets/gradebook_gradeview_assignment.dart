@@ -5,11 +5,16 @@ import 'package:grades/features/app/screens/gradebook/widgets/gradebook_gradesvi
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
 import 'package:grades/utils/device/device_utilities.dart';
+import 'package:grades/utils/helpers/grade_calculations.dart';
 
 import 'gradebook_gradesview_gradebars.dart';
 
 class GradesViewAssignment extends StatelessWidget {
-  const GradesViewAssignment({super.key});
+  const GradesViewAssignment({super.key, required this.assignmentName, required this.earnedPoints, required this.possiblePoints});
+
+  final String assignmentName;
+  final double earnedPoints;
+  final double possiblePoints;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +25,7 @@ class GradesViewAssignment extends StatelessWidget {
           Expanded(
             flex: 4,
             child: Text(
-              "Assignment",
+              assignmentName,
               textAlign: TextAlign.start,
               style: Theme.of(context)
                   .textTheme
@@ -30,7 +35,7 @@ class GradesViewAssignment extends StatelessWidget {
           ),
           Expanded(
             flex: 2,
-            child: Text("10/10",
+            child: Text("$earnedPoints/$possiblePoints",
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
@@ -39,7 +44,7 @@ class GradesViewAssignment extends StatelessWidget {
           ),
           Expanded(
             flex: 4,
-            child: Text("100%",
+            child: Text("${GenesisGradeCalculations.percentify(earnedPoints, possiblePoints).toStringAsFixed(2)}%",
                 textAlign: TextAlign.end,
                 style: Theme.of(context)
                     .textTheme

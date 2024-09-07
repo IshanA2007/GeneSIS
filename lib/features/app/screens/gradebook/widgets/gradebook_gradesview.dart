@@ -1,37 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:grades/common/widgets/genesis_card.dart';
 import 'package:grades/features/app/screens/gradebook/widgets/gradebook_gradesview_infocard.dart';
 import 'package:grades/features/app/screens/gradebook/widgets/gradebook_gradesviewappbar.dart';
+import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
 import 'package:grades/utils/device/device_utilities.dart';
+import 'package:grades/utils/helpers/grade_calculations.dart';
 
 import 'gradebook_gradesview_gradebars.dart';
 import 'gradebook_gradeview_assignment.dart';
 
 class GradesView extends StatelessWidget {
-  const GradesView({super.key, required this.className, required this.monthlyChange, required this.missingAssignments, required this.letterGrade, required this.gradePercent});
+  const GradesView(
+      {super.key,
+      required this.className,
+      required this.monthlyChange,
+      required this.missingAssignments,
+      required this.letterGrade,
+      required this.gradePercent});
+
   final String className;
   final int monthlyChange;
   final int missingAssignments;
   final String letterGrade;
   final double gradePercent;
+
   @override
   Widget build(BuildContext context) {
     var weeklyChange = 0; // HARDCODED VALUE
-    var semesterChange = -100;  // HARDCODED VALUE
+    var semesterChange = -100; // HARDCODED VALUE
+    final user = Get.find<GenesisUserController>();
+    print(user.userdata['courses'][className]['categories']);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
             GradesViewAppBar(
               className: className,
-              gpaBoost: "1.0", // HARDCODED VALUE
+              gpaBoost: GenesisGradeCalculations.gpaBoostFromCourse(className), // HARDCODED VALUE
             ),
             const SizedBox(
               height: GenesisSizes.spaceBtwSections,
             ),
-            const GradesViewGradeBars(),
+            GradesViewGradeBars(
+              categories: user.userdata['courses'][className]['categories'],
+            ),
             GradesViewInfoCard(
                 letterGrade: letterGrade,
                 missingAssignments: missingAssignments,
@@ -51,8 +66,8 @@ class GradesView extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleLarge!),
                       const SizedBox(height: GenesisSizes.sm),
                       Padding(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: GenesisSizes.cardPaddingLg),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: GenesisSizes.cardPaddingLg),
                         child: Row(
                           children: [
                             Expanded(
@@ -88,11 +103,16 @@ class GradesView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: GenesisSizes.xs),
-                      for (int i = 0; i < 15; i++) ...[
-                        GradesViewAssignment(),
-                        const SizedBox(height: GenesisSizes.sm), // Add SizedBox after each item
+                      for (Map<String, dynamic> assignment in user
+                          .userdata['courses'][className]["assignments"]) ...[
+                        GradesViewAssignment(
+                          assignmentName: assignment['name'],
+                          earnedPoints: assignment['earnedPoints'],
+                          possiblePoints: assignment['possiblePoints'],
+                        ),
+                        const SizedBox(height: GenesisSizes.sm),
+                        // Add SizedBox after each item
                       ],
-
                     ],
                   ),
                 ),
