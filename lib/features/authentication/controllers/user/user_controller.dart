@@ -8,7 +8,7 @@ class GenesisUserController extends GetxController {
   //vars
 
   Map<String, dynamic> userdata = {
-    "stats": {"apcount": 11, "rank": 15, "absences": 4},
+    "stats": {"apcount": 0, "rank": 15, "absences": 4},
     "courses": {},
   };
 
@@ -55,11 +55,4 @@ class GenesisUserController extends GetxController {
     return userdata["stats"]["apcount"].toString();
   }
 
-  Map<String, dynamic> getCourseCategories(String course){
-    Map<String, dynamic> res = {};
-    for (AssignmentCategory category in userdata['courses'][course]){
-      res[category.name.toString()] = userdata['courses'][course][category.name];
-    }
-    return res;
-  }
 }
