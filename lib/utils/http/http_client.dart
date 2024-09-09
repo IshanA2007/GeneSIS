@@ -45,9 +45,12 @@ class GenesisHttpClient {
 
       if (category.name != null && category.weight != 100.00) {
         res[category.name] = {
+
           "weight": category.weight,
           "earnedPoints": category.earnedPoints,
           "possiblePoints": category.possiblePoints,
+
+
         };
       }
     }
@@ -104,9 +107,11 @@ class GenesisHttpClient {
       if (assignment.earnedPoints >= 0) {
         assignmentsInCategory.add({
           "name": assignment.assignmentName,
+          "date": assignment.date,
           "earnedPoints": assignment.earnedPoints,
           "possiblePoints": assignment.possiblePoints,
           "category": assignment.category,
+          "notes": assignment.notes,
         });
       }
     }
