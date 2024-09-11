@@ -36,4 +36,8 @@ class GenesisTexts {
   //Feed
   static const String feedAppbarTitle = "Updates";
   static const String feedAppbarSubTitle = "View your latest assignment grades.";
+
+  //Settings
+  static const String settingsAppbarTitle = "Settings";
+  static const String settingsAppbarSubTitle = "Optimize your experience.";
 }
