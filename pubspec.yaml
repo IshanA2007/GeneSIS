@@ -14,7 +14,7 @@ dependencies:
       url: https://github.com/IshanA2007/studentvue.git
       ref: main
   http: ^1.1.0
-  intl: ^0.18.1
+  intl: ^0.19.0
   logger: ^2.0.1
   url_launcher: ^6.1.12
   get: ^4.6.5

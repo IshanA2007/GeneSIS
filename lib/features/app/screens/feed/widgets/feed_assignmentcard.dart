@@ -7,22 +7,21 @@ import 'package:grades/utils/theme/custom_themes/text_theme.dart';
 class AssignmentCard extends StatelessWidget {
   final String name;
   final String gradePercent;
-  final int points;
-  final int totalPoints;
+  final double points;
+  final double totalPoints;
   final int impact; // positive, negative, or neutral impact
   final String className;
   final String date;
 
-  const AssignmentCard({
-    super.key,
-    required this.name,
-    required this.gradePercent,
-    required this.points,
-    required this.totalPoints,
-    required this.impact,
-    required this.className,
-    required this.date
-  });
+  const AssignmentCard(
+      {super.key,
+      required this.name,
+      required this.gradePercent,
+      required this.points,
+      required this.totalPoints,
+      required this.impact,
+      required this.className,
+      required this.date});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,6 @@ class AssignmentCard extends StatelessWidget {
         : impact < 0
             ? GenesisColors.error
             : GenesisColors.grey;
-          
 
     String impactText = impact > 0 ? "+$impact%" : "$impact%";
 
@@ -56,10 +54,12 @@ class AssignmentCard extends StatelessWidget {
             children: [
               Text(
                 name,
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
                 style: Theme.of(context).textTheme.labelMedium!,
               ),
-              Text(date,
-              style: Theme.of(context).textTheme.labelSmall!),
+              Text(date, style: Theme.of(context).textTheme.labelSmall!),
               const SizedBox(height: GenesisSizes.sm),
               Text(
                 "$gradePercent%",
@@ -106,29 +106,31 @@ class AssignmentCard extends StatelessWidget {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: shadowColor.withOpacity(0.6), // Shadow color based on impact
-                  offset: Offset(0, 3), // Shift the shadow downward
-                  blurRadius: 1.0, // How much the shadow is blurred
+                  color: shadowColor.withOpacity(0.6),
+                  // Shadow color based on impact
+                  offset: Offset(0, 3),
+                  // Shift the shadow downward
+                  blurRadius: 1.0,
+                  // How much the shadow is blurred
                   spreadRadius: 0, // How far the shadow spreads
                 ),
               ],
-              borderRadius:
-                BorderRadius.only(
-                    bottomLeft: Radius.circular(GenesisSizes.cardRadiusMd),
-                    bottomRight: Radius.circular(GenesisSizes.cardRadiusMd),),
-            color: GenesisColors.black, // background color for bottom part
-          ),
-            padding: const EdgeInsets.symmetric(vertical: GenesisSizes.lg, horizontal: GenesisSizes.md),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(GenesisSizes.cardRadiusMd),
+                bottomRight: Radius.circular(GenesisSizes.cardRadiusMd),
+              ),
+              color: GenesisColors.black, // background color for bottom part
+            ),
+            padding: const EdgeInsets.symmetric(
+                vertical: GenesisSizes.lg, horizontal: GenesisSizes.md),
             alignment: Alignment.center,
             child: FittedBox(
               fit: BoxFit.fitWidth,
-              child: Text(
-                className,
-                style: Theme.of(context).textTheme.titleLarge!
-                    ),
-              ),
+              child: Text(className,
+                  style: Theme.of(context).textTheme.titleLarge!),
             ),
           ),
+        ),
       ],
     );
   }

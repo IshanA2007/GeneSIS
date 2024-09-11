@@ -1,10 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/utils/helpers/grade_calculations.dart';
 import 'package:studentvueclient/studentvueclient.dart';
+import 'package:intl/intl.dart';
 
 class GenesisHttpClient {
   GenesisUserController user = Get.find<GenesisUserController>();
+  List<dynamic> unorderedAssignments = [];
 
   static void handleGrade(double grade) {
     var gr = grade * 100;
@@ -17,15 +20,17 @@ class GenesisHttpClient {
         await client.loadGradebook(callback: (handleGrade));
 
     for (SchoolClass course in gradebook.classes) {
-      if (GenesisGradeCalculations.gpaBoostFromCourse(course.className) == "1.0"){
+      if (GenesisGradeCalculations.gpaBoostFromCourse(course.className) ==
+          "1.0") {
         user.userdata['stats']['apcount'] += 1;
       }
       var assignments = constructAssignments(course);
       var categories = constructCategories(course, assignments);
 
+
       user.userdata["courses"][course.className] = {
         "missing": "2",
-        "letter": GenesisGradeCalculations.percentToLetter(
+        "letter": assignments.isEmpty ? "N/A" :  GenesisGradeCalculations.percentToLetter(
             double.parse(course.pctGrade!)),
         "percent": course.pctGrade!,
         "categories": categories,
@@ -33,36 +38,46 @@ class GenesisHttpClient {
       };
     }
 
+    constructOrderedAssignments(unorderedAssignments);
+
     print(user.userdata);
 
+
+
     return;
+  }
+
+  void constructOrderedAssignments(dynamic unordered){
+    DateFormat dateFormat = DateFormat('M/d/yyyy');
+    unordered.sort((a, b) {
+      DateTime dateA = dateFormat.parse(a['date']);
+      DateTime dateB = dateFormat.parse(b['date']);
+      return dateB.compareTo(dateA);
+    });
+    user.userdata['assignments'] = unordered;
   }
 
   dynamic constructCategories(SchoolClass course, dynamic assignments) {
     dynamic res = {};
 
     for (AssignmentCategory category in course.assignmentCategories) {
-
       if (category.name != null && category.weight != 100.00) {
         res[category.name] = {
-
           "weight": category.weight,
           "earnedPoints": category.earnedPoints,
           "possiblePoints": category.possiblePoints,
-
-
         };
       }
     }
     if (res.length == 0) {
-
       //loop through each assignment and create/modify assignmetn weights + earnedPoints / possiblePoints
-      for (dynamic assignment in assignments){
-        if (res.containsKey(assignment['category'])){
-          res[assignment['category']]['possiblePoints'] += assignment['possiblePoints'];
-          res[assignment['category']]['earnedPoints'] += assignment['earnedPoints'];
-        }
-        else {
+      for (dynamic assignment in assignments) {
+        if (res.containsKey(assignment['category'])) {
+          res[assignment['category']]['possiblePoints'] +=
+              assignment['possiblePoints'];
+          res[assignment['category']]['earnedPoints'] +=
+              assignment['earnedPoints'];
+        } else {
           res[assignment['category']] = {
             "weight": 50.0,
             "earnedPoints": assignment['earnedPoints'],
@@ -70,7 +85,7 @@ class GenesisHttpClient {
           };
         }
       }
-      for (var category in res.values){
+      for (var category in res.values) {
         category['weight'] = 100 / res.length;
       }
       return res;
@@ -78,24 +93,21 @@ class GenesisHttpClient {
 
     bool needsChanging = true;
     if (assignments.length > 0) {
-
       for (var cat in res.values) {
-
-        if (cat['possiblePoints'] > 0){
+        if (cat['possiblePoints'] > 0) {
           needsChanging = false;
           break;
         }
       }
     }
     if (needsChanging) {
-
-      for (dynamic assignment in assignments){
-
-        res[assignment['category']]['possiblePoints'] += assignment['possiblePoints'];
-        res[assignment['category']]['earnedPoints'] += assignment['earnedPoints'];
+      for (dynamic assignment in assignments) {
+        res[assignment['category']]['possiblePoints'] +=
+            assignment['possiblePoints'];
+        res[assignment['category']]['earnedPoints'] +=
+            assignment['earnedPoints'];
       }
     }
-
 
     return res;
   }
@@ -112,6 +124,16 @@ class GenesisHttpClient {
           "possiblePoints": assignment.possiblePoints,
           "category": assignment.category,
           "notes": assignment.notes,
+          "course": course.className,
+        });
+        unorderedAssignments.add({
+          "name": assignment.assignmentName,
+          "date": assignment.date,
+          "earnedPoints": assignment.earnedPoints,
+          "possiblePoints": assignment.possiblePoints,
+          "category": assignment.category,
+          "notes": assignment.notes,
+          "course": course.className,
         });
       }
     }
