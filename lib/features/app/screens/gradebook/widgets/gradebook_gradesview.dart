@@ -32,7 +32,7 @@ class GradesView extends StatelessWidget {
     var weeklyChange = 0; // HARDCODED VALUE
     var semesterChange = -100; // HARDCODED VALUE
     final user = Get.find<GenesisUserController>();
-    print(user.userdata['courses'][className]['categories']);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(

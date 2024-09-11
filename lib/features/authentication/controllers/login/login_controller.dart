@@ -50,8 +50,7 @@ class LoginController extends GetxController {
       //final userCredentials = await AuthenticationRepository.instance
       // .loginWithEmailAndPassword(
       //     '${email.text.trim()}@fcpsschools.net', password.text.trim());
-      print(email.text.trim());
-      print(password.text.trim());
+
       await GenesisValidator.validateSISLogin(
           email.text.trim(), password.text.trim());
 

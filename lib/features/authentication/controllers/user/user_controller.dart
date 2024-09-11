@@ -10,6 +10,7 @@ class GenesisUserController extends GetxController {
   Map<String, dynamic> userdata = {
     "stats": {"apcount": 0, "rank": 15, "absences": 4},
     "courses": {},
+    "assignments": [],
   };
 
   //"categories": {"Formative": {"weight": 30.0, "earnedPoints": 30.0, "possiblePoints": 30.0, "assignments": [{"name": "Test", "earnedPoints": 12, "possiblePoints": 12},]}}
@@ -54,5 +55,4 @@ class GenesisUserController extends GetxController {
   String getAPCount() {
     return userdata["stats"]["apcount"].toString();
   }
-
 }
