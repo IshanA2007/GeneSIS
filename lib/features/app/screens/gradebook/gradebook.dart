@@ -23,7 +23,7 @@ class Gradebook extends StatelessWidget {
       return GradeCard(
         className: courseName,
         monthlyChange: 0,
-        // Placeholder, adjust based on your logic
+        // Placeholder, adjust based on your logic <---- ???? "your logic" ?????
         missingAssignments: int.parse(courseData["missing"]),
         letterGrade: courseData["letter"],
         gradePercent: double.parse(courseData["percent"]),
@@ -39,7 +39,7 @@ class Gradebook extends StatelessWidget {
               rows: (courses.length / 1).ceil(),
               // Adjust rows based on the number of courses
               columns: 1,
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                   left: GenesisSizes.md,
                   right: GenesisSizes.md,
                   top: GenesisSizes.spaceBtwItems),
