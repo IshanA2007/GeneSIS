@@ -6,6 +6,7 @@ import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
 import 'package:grades/utils/device/device_utilities.dart';
 import 'package:grades/utils/helpers/grade_calculations.dart';
+import 'package:grades/utils/helpers/helper_functions.dart';
 
 import 'gradebook_gradesview_gradebars.dart';
 
@@ -18,8 +19,9 @@ class GradesViewAssignment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dark = GenesisHelpers.isDarkMode(context);
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: GenesisSizes.cardPaddingLg),
+      padding: const EdgeInsets.symmetric(horizontal: GenesisSizes.cardPaddingLg),
       child: Row(
         children: [
           Expanded(
@@ -30,7 +32,7 @@ class GradesViewAssignment extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .labelMedium!
-                  .apply(color: GenesisColors.white),
+                  .apply(color: !dark ? GenesisColors.black : GenesisColors.white),
             ),
           ),
           Expanded(
@@ -40,7 +42,7 @@ class GradesViewAssignment extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .labelMedium!
-                    .apply(color: GenesisColors.white)),
+                    .apply(color: !dark ? GenesisColors.black : GenesisColors.white)),
           ),
           Expanded(
             flex: 4,
@@ -49,7 +51,7 @@ class GradesViewAssignment extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .labelMedium!
-                    .apply(color: GenesisColors.white)),
+                    .apply(color: !dark ? GenesisColors.black : GenesisColors.white)),
           ),
         ],
       ),

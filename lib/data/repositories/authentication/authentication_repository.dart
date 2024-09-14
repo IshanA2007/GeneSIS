@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:grades/navigation_menu.dart';
 import 'package:grades/utils/exceptions/firebase_auth_exceptions.dart';
 
+import '../../../features/authentication/screens/gpa_input/gpa_input.dart';
 import '../../../utils/exceptions/firebase_exceptions.dart';
 import '../../../utils/exceptions/format_exceptions.dart';
 import '../../../utils/exceptions/platform_exceptions.dart';
@@ -26,10 +27,12 @@ class AuthenticationRepository extends GetxController {
   }
 
   screenRedirect({loggedIn = false}) async {
-    final user = _auth.currentUser;
-
     if (loggedIn) {
-
+      //check if user's local storage has a value for cumulativeGPA
+      if (deviceStorage.read('CUM_GPA') == null) {
+        Get.offAll(() => const GPAInputMenu());
+        return;
+      }
       Get.offAll(() => const NavigationMenu());
       return;
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/device/device_utilities.dart';
+import 'package:grades/utils/helpers/helper_functions.dart';
 
 class GradesViewGradeBars extends StatelessWidget {
   final Map<dynamic, dynamic> categories;
@@ -12,6 +13,7 @@ class GradesViewGradeBars extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dark = GenesisHelpers.isDarkMode(context);
     return Center(
       child: SizedBox(
         width: GenesisDeviceUtils.getScreenWidth(),
@@ -43,9 +45,9 @@ class GradesViewGradeBars extends StatelessWidget {
                     Container(
                       height: GenesisDeviceUtils.getScreenHeight() * 0.3 * (weight / 100),
                       width: GenesisDeviceUtils.getScreenWidth() * 0.27,
-                      decoration: const BoxDecoration(
-                        color: GenesisColors.gradeBarSecondary,
-                        borderRadius: BorderRadius.only(
+                      decoration: BoxDecoration(
+                        color: dark ? GenesisColors.gradeBarSecondary : GenesisColors.lightBackground,
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30),
                         ),

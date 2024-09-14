@@ -4,8 +4,8 @@ import 'package:grades/utils/constants/image_strings.dart';
 import 'package:grades/utils/constants/sizes.dart';
 import 'package:grades/utils/constants/text_strings.dart';
 
-class GenesisLoginHeader extends StatelessWidget {
-  const GenesisLoginHeader({
+class GenesisGPAInputHeader extends StatelessWidget {
+  const GenesisGPAInputHeader({
     super.key,
     required this.dark,
   });
@@ -26,15 +26,13 @@ class GenesisLoginHeader extends StatelessWidget {
                     ? GenesisImages.darkAppLogo
                     : GenesisImages.darkAppLogo),
               ),
-              Text(GenesisTexts.loginTitle,
+              Text(GenesisTexts.gpaInputTitle,
                   style: Theme.of(context).textTheme.headlineMedium),
               const SizedBox(height: GenesisSizes.sm),
-              Text(
-                GenesisTexts.loginSubTitle,
-                style: Theme.of(context).textTheme.bodyMedium!.apply(
-                    color:
-                        dark ? GenesisColors.grey : GenesisColors.darkerGrey),
-              ),
+              Text(GenesisTexts.gpaInputSubtitle,
+                  style: Theme.of(context).textTheme.bodyMedium!.apply(color: dark ? GenesisColors.grey : GenesisColors.darkerGrey),
+                  
+                  textAlign: TextAlign.center,),
             ],
           ),
         ),

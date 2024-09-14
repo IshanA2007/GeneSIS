@@ -45,7 +45,7 @@ class GradesViewInfoCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 60.0,
                         fontWeight: FontWeight.w500,
-                        color: Colors.tealAccent,
+                        color: GenesisColors.primaryColor,
                       ),
                       textHeightBehavior: const TextHeightBehavior(
                         applyHeightToFirstAscent: false,

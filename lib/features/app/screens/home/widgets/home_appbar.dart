@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:grades/common/widgets/appbar/appbar.dart';
+import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/text_strings.dart';
 import 'package:grades/utils/device/device_utilities.dart';
@@ -16,11 +18,12 @@ class GenesisHomeAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = GenesisHelpers.isDarkMode(context);
+    final user = Get.find<GenesisUserController>();
     return GenesisAppBar(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(GenesisTexts.homeAppbarTitle + GenesisStorage.getUserId(),
+          Text(GenesisTexts.homeAppbarTitle + user.userdata["name"],
               style: Theme.of(context).textTheme.headlineLarge!.apply(
                   color: dark ? GenesisColors.grey : GenesisColors.black)),
           Text(GenesisTexts.homeAppbarSubTitle,

@@ -4,6 +4,8 @@ import 'package:grades/common/data/sample_gpa_data.dart';
 import 'package:grades/common/widgets/genesis_card.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
+import 'package:grades/utils/device/device_utilities.dart';
+import 'package:grades/utils/helpers/helper_functions.dart';
 
 class GenesisCarouselGraph extends StatelessWidget {
   const GenesisCarouselGraph({
@@ -16,6 +18,7 @@ class GenesisCarouselGraph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final data = GPAData();
+    final isDark = GenesisHelpers.isDarkMode(context);
     return GestureDetector(
       onTap: onPressed,
       child: Padding(
@@ -116,7 +119,7 @@ class GenesisCarouselGraph extends StatelessWidget {
                             end: Alignment.bottomCenter,
                             colors: [
                               GenesisColors.primaryColor.withOpacity(0.5),
-                              GenesisColors.black,
+                              isDark ? GenesisColors.black : GenesisColors.lightBackground,
                             ],
                           ),
                           show: true,

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
+import 'package:grades/utils/constants/text_strings.dart';
 import 'package:grades/utils/device/device_utilities.dart';
 import 'package:grades/utils/helpers/helper_functions.dart';
 
@@ -15,6 +16,11 @@ class GenesisGPACardContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Get.find<GenesisUserController>();
     final dark = GenesisHelpers.isDarkMode(context);
+    final amntFromGoal = double.parse(user.amntFromGoal() ?? "0");
+    final isOverGoal = amntFromGoal >= 0;
+    final isOverGoalColor =
+        isOverGoal ? GenesisColors.success : GenesisColors.error;
+    final isOverGoalText = isOverGoal ? GenesisTexts.overGoalText : GenesisTexts.underGoalText;
     return SizedBox(
       width: double.infinity,
       height: GenesisDeviceUtils.getScreenHeight() * .115,
@@ -43,9 +49,9 @@ class GenesisGPACardContent extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .labelMedium!
-                            .apply(color: GenesisColors.success),
+                            .apply(color: isOverGoalColor),
                       ),
-                      TextSpan(text: ' over your goal of ${user.getGPAGoal()}')
+                      TextSpan(text: " $isOverGoalText ${user.getGPAGoal()}")
                     ],
                   ),
                 ),
@@ -58,7 +64,7 @@ class GenesisGPACardContent extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(width: GenesisSizes.spaceBtwSections),
+            const SizedBox(width: GenesisSizes.spaceBtwSections),
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,

@@ -28,7 +28,7 @@ class GenesisLoginForm extends StatelessWidget {
               validator: (value) => GenesisValidator.validateEmail(value),
               decoration: const InputDecoration(
                 prefixIcon: Icon(Iconsax.direct_right),
-                labelText: GenesisTexts.email,
+                labelText: GenesisTexts.id,
               )),
           const SizedBox(height: GenesisSizes.spaceBtwInputFields),
           //pass

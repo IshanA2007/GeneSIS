@@ -13,25 +13,20 @@ import 'gradebook_gradesview_gradebars.dart';
 import 'gradebook_gradeview_assignment.dart';
 
 class GradesView extends StatelessWidget {
-  const GradesView(
-      {super.key,
-      required this.className,
-      required this.monthlyChange,
-      required this.missingAssignments,
-      required this.letterGrade,
-      required this.gradePercent});
+  const GradesView({super.key, required this.className});
 
   final String className;
-  final int monthlyChange;
-  final int missingAssignments;
-  final String letterGrade;
-  final double gradePercent;
 
   @override
   Widget build(BuildContext context) {
-    var weeklyChange = 0; // HARDCODED VALUE
-    var semesterChange = -100; // HARDCODED VALUE
     final user = Get.find<GenesisUserController>();
+    final courseData = user.userdata['courses'][className];
+    final missingAssignments = int.parse(courseData["missing"]);
+    final letterGrade = courseData["letter"];
+    final gradePercent = double.parse(courseData["percent"]);
+    const weeklyChange = 0; // HARDCODED VALUE
+    const monthlyChange = 0; // HARDCODED VALUE
+    const semesterChange = -100; // HARDCODED VALUE
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -39,7 +34,8 @@ class GradesView extends StatelessWidget {
           children: [
             GradesViewAppBar(
               className: className,
-              gpaBoost: GenesisGradeCalculations.gpaBoostFromCourse(className), // HARDCODED VALUE
+              gpaBoost: GenesisGradeCalculations.gpaBoostFromCourse(
+                  className), // HARDCODED VALUE
             ),
             const SizedBox(
               height: GenesisSizes.spaceBtwSections,
@@ -118,6 +114,7 @@ class GradesView extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: GenesisSizes.defaultSpacing),
           ],
         ),
       ),
