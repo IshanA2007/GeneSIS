@@ -18,10 +18,12 @@ class GenesisHttpClient {
     var client = StudentVueClient(email, password, 'sisstudent.fcps.edu');
     StudentGradeData gradebook =
         await client.loadGradebook(callback: (handleGrade));
+    StudentData studentData = await client.loadStudentData(callback: (handleGrade));
+
+    user.userdata["name"] = studentData.formattedName!.split(" ")[0];
 
     for (SchoolClass course in gradebook.classes) {
-      if (GenesisGradeCalculations.gpaBoostFromCourse(course.className) ==
-          "1.0") {
+      if (course.className.contains("AP")) {
         user.userdata['stats']['apcount'] += 1;
       }
       var assignments = constructAssignments(course);
@@ -40,7 +42,6 @@ class GenesisHttpClient {
 
     constructOrderedAssignments(unorderedAssignments);
 
-    print(user.userdata);
 
 
 

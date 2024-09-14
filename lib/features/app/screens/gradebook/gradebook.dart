@@ -23,7 +23,6 @@ class Gradebook extends StatelessWidget {
       return GradeCard(
         className: courseName,
         monthlyChange: 0,
-        // Placeholder, adjust based on your logic <---- ???? "your logic" ?????
         missingAssignments: int.parse(courseData["missing"]),
         letterGrade: courseData["letter"],
         gradePercent: double.parse(courseData["percent"]),
@@ -36,7 +35,7 @@ class Gradebook extends StatelessWidget {
           children: [
             GradebookAppBar(),
             GenesisCardGrid(
-              rows: (courses.length / 1).ceil(),
+              rows: courses.length,
               // Adjust rows based on the number of courses
               columns: 1,
               padding: const EdgeInsets.only(

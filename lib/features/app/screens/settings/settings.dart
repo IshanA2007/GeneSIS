@@ -17,14 +17,21 @@ class Settings extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SettingsAppBar(),
-            Padding(padding: const EdgeInsets.symmetric(horizontal: GenesisSizes.md), child:
+            Padding(padding: const EdgeInsets.symmetric(horizontal: GenesisSizes.md * 2), child:
               Text("General", style: Theme.of(context)
                         .textTheme
                         .titleLarge),
             ),
-            const Padding(padding: EdgeInsets.symmetric(horizontal: GenesisSizes.md), child:
-              Setting(name: "allow us to steal your user data", type: "switch", status: 0),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: GenesisSizes.md * 2), child:
+              Setting(name: "Login with FaceID", type: "switch", status: 0),
             ),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: GenesisSizes.md * 2), child:
+            Setting(name: "Grade trend alerts", type: "switch", status: 0),
+            ),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: GenesisSizes.md * 2), child:
+            Setting(name: "Missing work alerts", type: "switch", status: 0),
+            ),
+
           ],
         ),
       ),

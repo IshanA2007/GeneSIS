@@ -21,7 +21,7 @@ class GradebookAppBar extends StatelessWidget {
         children: [
           Text(GenesisTexts.gradebookAppbarTitle,
               style: Theme.of(context).textTheme.headlineLarge!.apply(
-                  color: dark ? GenesisColors.grey : GenesisColors.darkerGrey)),
+                  color: dark ? GenesisColors.grey : GenesisColors.black)),
           Text(GenesisTexts.gradebookAppbarSubTitle,
               style: Theme.of(context)
                   .textTheme

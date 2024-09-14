@@ -28,7 +28,7 @@ class GradeCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Get.to(() => GradesView(className: className, monthlyChange: monthlyChange, missingAssignments: missingAssignments, letterGrade: letterGrade, gradePercent: gradePercent));
+        Get.to(() => GradesView(className: className));
       },
       child: Row(
         children: [
@@ -45,7 +45,7 @@ class GradeCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.headlineSmall!.apply(
                         color:
-                            dark ? GenesisColors.white : GenesisColors.white),
+                            dark ? GenesisColors.white : GenesisColors.black),
                   ),
                 ),
                 const SizedBox(
@@ -113,7 +113,7 @@ class GradeCard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 60.0,
                       fontWeight: FontWeight.w500,
-                      color: Colors.tealAccent,
+                      color: GenesisColors.primaryColor,
                     ),
                     textHeightBehavior: const TextHeightBehavior(
                       applyHeightToFirstAscent: false,

@@ -8,10 +8,13 @@ class GenesisUserController extends GetxController {
   //vars
 
   Map<String, dynamic> userdata = {
+    "name": "",
     "stats": {"apcount": 0, "rank": 15, "absences": 4},
     "courses": {},
     "assignments": [],
   };
+
+  var localStorage = GetStorage();
 
   //"categories": {"Formative": {"weight": 30.0, "earnedPoints": 30.0, "possiblePoints": 30.0, "assignments": [{"name": "Test", "earnedPoints": 12, "possiblePoints": 12},]}}
 
@@ -36,7 +39,7 @@ class GenesisUserController extends GetxController {
   }
 
   String getGPA() {
-    return gpas["overall"] ?? "0.00";
+    return localStorage.read("CUM_GPA") ?? "0.00";
   }
 
   String? amntFromGoal() {
