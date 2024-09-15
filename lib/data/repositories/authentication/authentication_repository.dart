@@ -29,7 +29,7 @@ class AuthenticationRepository extends GetxController {
   screenRedirect({loggedIn = false}) async {
     if (loggedIn) {
       //check if user's local storage has a value for cumulativeGPA
-      if (deviceStorage.read('CUM_GPA') == null) {
+      if (deviceStorage.read('GPA_HISTORY') == null) {
         Get.offAll(() => const GPAInputMenu());
         return;
       }

@@ -4,6 +4,8 @@ import 'package:grades/features/authentication/controllers/user/user_controller.
 import 'package:grades/utils/helpers/grade_calculations.dart';
 import 'package:studentvueclient/studentvueclient.dart';
 import 'package:intl/intl.dart';
+import 'dart:convert';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class GenesisHttpClient {
   GenesisUserController user = Get.find<GenesisUserController>();
@@ -11,7 +13,6 @@ class GenesisHttpClient {
 
   static void handleGrade(double grade) {
     var gr = grade * 100;
-    print('Process is $gr percent complete');
   }
 
   Future<void> queryStudentVue(String email, String password) async {
@@ -19,6 +20,7 @@ class GenesisHttpClient {
     StudentGradeData gradebook =
         await client.loadGradebook(callback: (handleGrade));
     StudentData studentData = await client.loadStudentData(callback: (handleGrade));
+    String pdfText = await getReportCardText(client);
 
     user.userdata["name"] = studentData.formattedName!.split(" ")[0];
 
@@ -145,7 +147,21 @@ class GenesisHttpClient {
     var client = StudentVueClient(email, password, 'sisstudent.fcps.edu');
     StudentData studentData =
         await client.loadStudentData(callback: (handleGrade));
-    print(studentData.formattedName);
+
     return studentData.formattedName;
+  }
+
+  Future<String> getReportCardText(StudentVueClient client) async {
+    StudentData studentData = await client.loadStudentData(callback: (handleGrade));
+    var docGUD = (await client.listDocuments())[0];
+    var b64encoded = await client.getDocument(docGUD);
+
+    var pdfBytes = base64Decode(b64encoded.trim());
+
+    PdfDocument document = PdfDocument(inputBytes: pdfBytes);
+    String extractedText = PdfTextExtractor(document).extractText();
+    document.dispose();
+    return extractedText;
+
   }
 }

@@ -28,7 +28,7 @@ class GenesisGPAInputForm extends StatelessWidget {
             TextFormField(
                 controller: controller.cumGPA,
                 validator: (value) =>
-                    GenesisValidator.validateEmptyText('Cumulative GPA', value),
+                    GenesisValidator.validateCumGPA(value),
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Iconsax.trend_up),
                   labelText: GenesisTexts.cumGPA,

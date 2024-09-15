@@ -18,8 +18,10 @@ Future<void> main() async {
   //Initialize Local Storage
   await GetStorage.init();
 
+
   GetStorage().remove("username");
   GetStorage().remove("password");
+
 
   //Native Splash Screen
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
