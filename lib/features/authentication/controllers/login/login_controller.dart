@@ -64,6 +64,8 @@ class LoginController extends GetxController {
 
       GenesisFullScreenLoader.stopLoading();
 
+
+
       AuthenticationRepository.instance.screenRedirect(loggedIn: true);
     } catch (e) {
       print(e.toString());

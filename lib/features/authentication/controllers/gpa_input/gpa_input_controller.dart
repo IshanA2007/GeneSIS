@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:grades/common/data/GPAData.dart';
 import 'package:grades/data/repositories/authentication/authentication_repository.dart';
 import 'package:grades/features/authentication/controllers/network/network_manager.dart';
 import 'package:grades/navigation_menu.dart';
 import 'package:grades/utils/constants/image_strings.dart';
+import 'package:grades/utils/helpers/grade_calculations.dart';
 import 'package:grades/utils/popups/full_screen_loader.dart';
 import 'package:grades/utils/validators/validation.dart';
 
@@ -27,8 +29,11 @@ class GPAInputController extends GetxController {
         GenesisFullScreenLoader.stopLoading();
         return;
       }
+      double updatedCumGPA = GenesisGradeCalculations.updateGPA(double.parse(cumGPA.text.trim()), double.parse(courseCreditsTaken.text.trim()));
+      localStorage.write("GPA_HISTORY", {"overall": [GPAData(updatedCumGPA)]});
+      print("GPA_HISTORY written");
+      print(localStorage.read("GPA_HISTORY"));
 
-      localStorage.write("CUM_GPA", cumGPA.text.trim());
       localStorage.write("COURSE_CREDITS_TAKEN", courseCreditsTaken.text.trim());
 
       GenesisFullScreenLoader.stopLoading();

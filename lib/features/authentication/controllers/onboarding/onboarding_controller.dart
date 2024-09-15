@@ -33,6 +33,8 @@ class OnBoardingController extends GetxController {
   }
 
   void skipPage() {
+    final storage = GetStorage();
+    storage.write('isFirstTime', false);
     Get.offAll(const LoginScreen());
   }
 }

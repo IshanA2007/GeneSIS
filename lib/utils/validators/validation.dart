@@ -18,6 +18,18 @@ class GenesisValidator {
     return null;
   }
 
+  static String? validateCumGPA(String? gpa){
+    if (gpa == null || gpa.isEmpty){
+      return 'GPA is required';
+    }
+    double val = double.tryParse(gpa) ?? -0.1;
+    if (val < 0){
+      return 'Invalid Cumulative GPA entered';
+    }
+
+    return null;
+  }
+
   static String? validateEmptyText(String? fieldName, String? value) {
     if (value == null || value.isEmpty) {
       return '$fieldName is required.';
