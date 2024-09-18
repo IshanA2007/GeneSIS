@@ -60,6 +60,8 @@ class GenesisGradeCalculations {
         return 1.3 + boost;
       case 'D':
         return 1.0 + boost;
+      case 'D-':
+        return 0.7 + boost;
       case 'F':
         return 0.0 + boost;
       default:
