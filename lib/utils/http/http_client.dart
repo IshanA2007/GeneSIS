@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:grades/features/authentication/controllers/user/user_controller.dart';
@@ -21,15 +19,6 @@ class GenesisHttpClient {
     var client = StudentVueClient(email, password, 'sisstudent.fcps.edu');
     StudentGradeData gradebook =
         await client.loadGradebook(callback: (handleGrade));
-    // Define the file path (this will write to a temporary directory)
-    final directory = Directory.systemTemp;
-    final file = File('${directory.path}/example.txt');
-
-    // Write the content to the file
-    await file.writeAsString(gradebook.toString());
-
-    // Confirm the file has been written
-    print('File written at: ${file.path}');
     StudentData studentData = await client.loadStudentData(callback: (handleGrade));
     String pdfText = await getReportCardText(client);
 
