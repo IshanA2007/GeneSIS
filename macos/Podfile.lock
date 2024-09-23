@@ -953,11 +953,12 @@ PODS:
     - BoringSSL-GRPC/Interface (= 0.0.32)
   - BoringSSL-GRPC/Interface (0.0.32)
   - cloud_firestore (4.17.5):
-    - Firebase/Firestore (= 10.25.0)
+    - Firebase/CoreOnly (~> 10.25.0)
+    - Firebase/Firestore (~> 10.25.0)
     - firebase_core
-    - Flutter
+    - FlutterMacOS
   - connectivity_plus (0.0.1):
-    - Flutter
+    - FlutterMacOS
     - ReachabilitySwift
   - Firebase/Auth (10.25.0):
     - Firebase/CoreOnly
@@ -968,12 +969,13 @@ PODS:
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 10.25.0)
   - firebase_auth (4.16.0):
-    - Firebase/Auth (= 10.25.0)
+    - Firebase/Auth (~> 10.25.0)
+    - Firebase/CoreOnly (~> 10.25.0)
     - firebase_core
-    - Flutter
+    - FlutterMacOS
   - firebase_core (2.32.0):
-    - Firebase/CoreOnly (= 10.25.0)
-    - Flutter
+    - Firebase/CoreOnly (~> 10.25.0)
+    - FlutterMacOS
   - FirebaseAppCheckInterop (10.29.0)
   - FirebaseAuth (10.25.0):
     - FirebaseAppCheckInterop (~> 10.17)
@@ -1011,9 +1013,7 @@ PODS:
     - leveldb-library (~> 1.22)
     - nanopb (< 2.30911.0, >= 2.30908.0)
   - FirebaseSharedSwift (10.29.0)
-  - Flutter (1.0.0)
-  - flutter_native_splash (0.0.1):
-    - Flutter
+  - FlutterMacOS (1.0.0)
   - GoogleUtilities/AppDelegateSwizzler (7.13.3):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -1126,19 +1126,17 @@ PODS:
     - FlutterMacOS
   - PromisesObjC (2.4.0)
   - ReachabilitySwift (5.2.3)
-  - RecaptchaInterop (100.0.0)
-  - url_launcher_ios (0.0.1):
-    - Flutter
+  - url_launcher_macos (0.0.1):
+    - FlutterMacOS
 
 DEPENDENCIES:
-  - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
-  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
-  - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
-  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - Flutter (from `Flutter`)
-  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
-  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - cloud_firestore (from `Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos`)
+  - connectivity_plus (from `Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos`)
+  - firebase_auth (from `Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos`)
+  - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
+  - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
 
 SPEC REPOS:
   trunk:
@@ -1161,34 +1159,31 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - ReachabilitySwift
-    - RecaptchaInterop
 
 EXTERNAL SOURCES:
   cloud_firestore:
-    :path: ".symlinks/plugins/cloud_firestore/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos
   connectivity_plus:
-    :path: ".symlinks/plugins/connectivity_plus/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos
   firebase_auth:
-    :path: ".symlinks/plugins/firebase_auth/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos
   firebase_core:
-    :path: ".symlinks/plugins/firebase_core/ios"
-  Flutter:
-    :path: Flutter
-  flutter_native_splash:
-    :path: ".symlinks/plugins/flutter_native_splash/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_core/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
   path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/darwin"
-  url_launcher_ios:
-    :path: ".symlinks/plugins/url_launcher_ios/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
+  url_launcher_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
 
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
-  cloud_firestore: 003d53b6b8b392600b7769acf9421cc4f23e5911
-  connectivity_plus: bf0076dd84a130856aa636df1c71ccaff908fa1d
+  cloud_firestore: c037b5acdf0be76bc426c05d978be2090f094219
+  connectivity_plus: 18d3c32514c886e046de60e9c13895109866c747
   Firebase: 0312a2352584f782ea56f66d91606891d4607f06
-  firebase_auth: 9826d36bb6831d560d7aaf274ea280e9fe91a8ad
-  firebase_core: a626d00494efa398e7c54f25f1454a64c8abf197
+  firebase_auth: 6c907cdee0563efb0dd05f10f1b48cd717903742
+  firebase_core: b5b8b60dad71f93132bbaa21e8d1379367d824f0
   FirebaseAppCheckInterop: 6a1757cfd4067d8e00fccd14fcc1b8fd78cfac07
   FirebaseAuth: c0f93dcc570c9da2bffb576969d793e95c344fbb
   FirebaseCore: 7ec4d0484817f12c3373955bc87762d96842d483
@@ -1197,8 +1192,7 @@ SPEC CHECKSUMS:
   FirebaseFirestore: 977ccc27a3caa5d68279f209c3b0450f85b9dc5f
   FirebaseFirestoreInternal: 04b8afa77b4e5b84e86ab5ad985193e9573239fa
   FirebaseSharedSwift: 20530f495084b8d840f78a100d8c5ee613375f6e
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_native_splash: edf599c81f74d093a4daf8e17bd7a018854bc778
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   "gRPC-C++": e725ef63c4475d7cdb7e2cf16eb0fde84bd9ee51
   gRPC-Core: eee4be35df218649fe66d721a05a7f27a28f069b
@@ -1208,9 +1202,8 @@ SPEC CHECKSUMS:
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   ReachabilitySwift: 7f151ff156cea1481a8411701195ac6a984f4979
-  RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
-  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  url_launcher_macos: 5f437abeda8c85500ceb03f5c1938a8c5a705399
 
-PODFILE CHECKSUM: e29dcf9acaa9ce74cff30b5d4a77b279aba51712
+PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
 
 COCOAPODS: 1.15.2

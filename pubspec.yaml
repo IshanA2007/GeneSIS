@@ -27,7 +27,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   firebase_core: ^2.24.2
   firebase_auth: ^4.16.0
-  cloud_firestore: ^4.14.0
+  cloud_firestore: ^4.17.5
   lottie: ^3.1.2
   connectivity_plus: ^5.0.1
   syncfusion_flutter_pdf: ^26.2.14
