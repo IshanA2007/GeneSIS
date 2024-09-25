@@ -7,6 +7,8 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
+import '../../common/data/GPAHistory.dart';
+
 class GenesisHttpClient {
   GenesisUserController user = Get.find<GenesisUserController>();
   List<dynamic> unorderedAssignments = [];
@@ -19,7 +21,8 @@ class GenesisHttpClient {
     var client = StudentVueClient(email, password, 'sisstudent.fcps.edu');
     StudentGradeData gradebook =
         await client.loadGradebook(callback: (handleGrade));
-    StudentData studentData = await client.loadStudentData(callback: (handleGrade));
+    StudentData studentData =
+        await client.loadStudentData(callback: (handleGrade));
     String pdfText = await getReportCardText(client);
 
     user.userdata["name"] = studentData.formattedName!.split(" ")[0];
@@ -30,12 +33,17 @@ class GenesisHttpClient {
       }
       var assignments = constructAssignments(course);
       var categories = constructCategories(course, assignments);
+      print(categories);
+      createData(assignments, categories);
 
+      user.history[course.className] = GPAHistory();
 
       user.userdata["courses"][course.className] = {
         "missing": "2",
-        "letter": assignments.isEmpty ? "N/A" :  GenesisGradeCalculations.percentToLetter(
-            double.parse(course.pctGrade!)),
+        "letter": assignments.isEmpty
+            ? "N/A"
+            : GenesisGradeCalculations.percentToLetter(
+                double.parse(course.pctGrade!)),
         "percent": course.pctGrade!,
         "categories": categories,
         "assignments": assignments,
@@ -44,13 +52,10 @@ class GenesisHttpClient {
 
     constructOrderedAssignments(unorderedAssignments);
 
-
-
-
     return;
   }
 
-  void constructOrderedAssignments(dynamic unordered){
+  void constructOrderedAssignments(dynamic unordered) {
     DateFormat dateFormat = DateFormat('M/d/yyyy');
     unordered.sort((a, b) {
       DateTime dateA = dateFormat.parse(a['date']);
@@ -152,7 +157,8 @@ class GenesisHttpClient {
   }
 
   Future<String> getReportCardText(StudentVueClient client) async {
-    StudentData studentData = await client.loadStudentData(callback: (handleGrade));
+    StudentData studentData =
+        await client.loadStudentData(callback: (handleGrade));
     var docGUD = (await client.listDocuments())[0];
     var b64encoded = await client.getDocument(docGUD);
 
@@ -162,6 +168,53 @@ class GenesisHttpClient {
     String extractedText = PdfTextExtractor(document).extractText();
     document.dispose();
     return extractedText;
+  }
 
+  createData(assignments, categories) {
+    // List to store GPA and dates
+    List<Map<String, dynamic>> gpaHistory = [];
+
+    // Define the date format for parsing the assignment dates
+    DateFormat inputDateFormat = DateFormat('M/d/yyyy');
+
+    // Loop through assignments
+    for (var assignment in assignments) {
+      String category = assignment['category'];
+      double earnedPoints = assignment['earnedPoints'];
+      double possiblePoints = assignment['possiblePoints'];
+
+      // Update category points by subtracting assignment's points
+      if (categories.containsKey(category)) {
+        categories[category]!['earnedPoints'] =
+            (categories[category]!['earnedPoints'] ?? 0) - earnedPoints;
+        categories[category]!['possiblePoints'] =
+            (categories[category]!['possiblePoints'] ?? 0) - possiblePoints;
+      }
+
+      // Recalculate GPA based on updated category values
+      double cumulativeGPA = 0.0;
+      for (var cat in categories.entries) {
+        double catEarned = cat.value['earnedPoints'] ?? 0;
+        double catPossible = cat.value['possiblePoints'] ?? 0;
+        double catWeight = cat.value['weight'] ?? 0;
+
+        if (catPossible > 0) {
+          cumulativeGPA += (catEarned / catPossible) * (catWeight / 100);
+        }
+      }
+      // Convert GPA to 4.0 scale
+      cumulativeGPA *= 4.0;
+
+      // Parse the date using the inputDateFormat
+      DateTime parsedDate = inputDateFormat.parse(assignment['date']);
+
+      // Add the calculated GPA and date to the history list
+      gpaHistory.add({
+        'date': DateFormat('M/d/yyyy').format(parsedDate),
+        'gpa': cumulativeGPA,
+      });
+    }
+
+    print(gpaHistory);
   }
 }

@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:grades/common/data/sample_gpa_data.dart';
+import 'package:grades/common/data/GPAHistory.dart';
 import 'package:grades/common/widgets/genesis_card.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
@@ -17,7 +17,7 @@ class GenesisCarouselGraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = GPAData();
+    final data = GPAHistory();
     final isDark = GenesisHelpers.isDarkMode(context);
     return GestureDetector(
       onTap: onPressed,
