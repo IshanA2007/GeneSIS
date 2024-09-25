@@ -30,7 +30,7 @@ class GPAInputController extends GetxController {
         return;
       }
       double updatedCumGPA = GenesisGradeCalculations.updateGPA(double.parse(cumGPA.text.trim()), double.parse(courseCreditsTaken.text.trim()));
-      localStorage.write("GPA_HISTORY", {"overall": [GPAData(updatedCumGPA)]});
+      localStorage.write("GPA_HISTORY", {"overall": [GPAData(updatedCumGPA).toMap()]});
       print("GPA_HISTORY written");
       print(localStorage.read("GPA_HISTORY"));
 
