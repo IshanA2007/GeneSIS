@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:grades/common/data/GPAData.dart';
 import 'package:grades/features/authentication/screens/login/login.dart';
 import 'package:studentvueclient/studentvueclient.dart';
 
@@ -40,10 +41,12 @@ class GenesisUserController extends GetxController {
   }
 
   String getGPA() {
-    var gpaList = localStorage.read("GPA_HISTORY")['overall'];
-
-    return gpaList[gpaList.length - 1].gpa.toStringAsFixed(3);
-  }
+    var gpaHistory = localStorage.read("GPA_HISTORY");
+    List<GPAData> gpaList = (gpaHistory['overall'] as List)
+        .map((item) => GPAData.fromMap(item))
+        .toList();
+    return gpaList.last.gpa.toStringAsFixed(3);
+}
 
   String? amntFromGoal() {
     double amount = double.parse(getGPA()) - double.parse(getGPAGoal());
