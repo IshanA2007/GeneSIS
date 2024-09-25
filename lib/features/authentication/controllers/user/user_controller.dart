@@ -4,6 +4,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:grades/features/authentication/screens/login/login.dart';
 import 'package:studentvueclient/studentvueclient.dart';
 
+import '../../../../common/data/GPAHistory.dart';
+
 class GenesisUserController extends GetxController {
   //vars
 
@@ -17,6 +19,7 @@ class GenesisUserController extends GetxController {
   var localStorage = GetStorage();
   //"history": {"overall": {curDate, "4.43"
   Map<String, String> gpas = <String, String>{"overall": "4.51"};
+  Map<String, GPAHistory> history = <String, GPAHistory>{};
 
   String gpaGoal = "4.40";
 
