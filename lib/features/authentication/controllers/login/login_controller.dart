@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:grades/data/repositories/authentication/authentication_repository.dart';
 import 'package:grades/features/authentication/controllers/network/network_manager.dart';
+import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/utils/constants/image_strings.dart';
 import 'package:grades/utils/popups/full_screen_loader.dart';
 import 'package:grades/utils/validators/validation.dart';
@@ -61,6 +62,28 @@ class LoginController extends GetxController {
       var httpClient = GenesisHttpClient();
 
       await httpClient.queryStudentVue(email.text.trim(), password.text.trim());
+
+      // assignments collected, calculate grades historically
+      GenesisUserController user = Get.find<GenesisUserController>();
+
+      print("what is it");
+      var assignments = user.userdata["assignments"];
+      // step 1 - separate assignments by teacher
+      Map<String, List<Map<String, dynamic>>> assignmentsByClass = {};
+      for (var assignment in assignments) {
+        String course = assignment["course"];
+        // initialize new classes with empty list
+        if (!assignmentsByClass.containsKey(course)) {
+          assignmentsByClass[course] = [];
+        }
+        // add assignment to its course's list
+        assignmentsByClass[course]!.add(assignment);
+      }
+      // step 2 - find start and end dates (first assignment date -> today?)
+      // step 3 - find what assignments are in for each class on each day (all assignments before and on current date)
+      // step 4 - calculate percentage grade for each class for each day
+      // step 5 - calculate GPA for each day
+      // step 6 - store somewhere in GenesisUserController
 
       GenesisFullScreenLoader.stopLoading();
 
