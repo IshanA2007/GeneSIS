@@ -45,7 +45,7 @@ class GPAInputController extends GetxController {
           GenesisHelpers.currentQuarter()); //TODO: calculate current quarter
       History overallHistory = user.curUser!.history
           .firstWhere((history) => history.name == "overall");
-      overallHistory.history.insert(0, GPAData(updatedCGPA));
+      // overallHistory.history.insert(0, GPAData(updatedCGPA));
 
       User curUser = user.curUser!;
       DateTime startDate = DateTime(2024, 8, 19);
@@ -55,7 +55,8 @@ class GPAInputController extends GetxController {
 
       List<DateTime> dateList =
           GenesisHelpers.generateDateList(startDate, endDate);
-
+      print("running datelist!!!");
+      print(dateList.length);
       for (DateTime date in dateList) {
         double outdatedGPA = curUser.initialCumGPA ?? 0.0;
         double creditsTaken = curUser.creditsTaken ?? 1.0;
@@ -67,25 +68,34 @@ class GPAInputController extends GetxController {
                 period.classData[GenesisHelpers.getQuarterOfDate(date) - 1];
             if (curClass.gradebookCode == "UK" ||
                 curClass.gradebookCode == "rolling") {
-              gpaVal += GenesisGradeCalculations.gpaFromLetter(
-                      GenesisGradeCalculations.percentToLetter(
-                          GenesisGradeCalculations.calculateGradeOn(
-                              date: date, course: curClass)),
-                      curClass.courseName) *
-                  0.5;
-              creditsTaken += 0.5;
+              double currentClassGrade = GenesisGradeCalculations.calculateGradeOn(
+                                date: date, course: curClass);
+              if (currentClassGrade != -1){
+                gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                        GenesisGradeCalculations.percentToLetter(currentClassGrade),
+                        curClass.courseName) *
+                    0.5;
+                
+                creditsTaken += 0.5;
+              }
             } else {
               //TODO: store quarterly grades in ClassData somehow
               //temp solution, just use current grade
-              gpaVal += GenesisGradeCalculations.gpaFromLetter(
-                      GenesisGradeCalculations.percentToLetter(
-                          curClass.percent),
-                      curClass.courseName) *
-                  0.5;
-              creditsTaken += 0.5;
+              double currentClassGrade = GenesisGradeCalculations.calculateGradeOn(
+                                date: date, course: curClass);
+              if (currentClassGrade != -1){
+                gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                        GenesisGradeCalculations.percentToLetter(currentClassGrade),
+                        curClass.courseName) *
+                    0.5;
+                
+                creditsTaken += 0.5;
+              }
             }
           }
         }
+        print("date: $date");
+        print("gpa: ${gpaVal/creditsTaken}");
         overallHistory.history.add(GPAData(gpaVal / creditsTaken));
 
         //TODO: implement q2-q4
