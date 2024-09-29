@@ -1,6 +1,8 @@
-
 import 'package:get/get.dart';
+import 'package:grades/common/data/GPAData.dart';
 import 'package:grades/features/authentication/controllers/user/user_controller.dart';
+import 'package:grades/utils/helpers/helper_functions.dart';
+import 'package:studentvueclient/studentvueclient.dart';
 
 import '../../common/data/ClassData.dart';
 import '../../common/data/Period.dart';
@@ -26,7 +28,7 @@ class GenesisGradeCalculations {
     return (earned / possible) * 100;
   }
 
-  static double calculateCumulativeGPA(User user, int curQuarter){
+  static double calculateCumulativeGPA(User user, int curQuarter) {
     double outdatedGPA = user.initialCumGPA ?? 0.0;
     double creditsTaken = user.creditsTaken ?? 1.0;
     double gpaVal = outdatedGPA * creditsTaken;
@@ -36,16 +38,16 @@ class GenesisGradeCalculations {
         if (curClass.gradebookCode == "UK" ||
             curClass.gradebookCode == "rolling") {
           gpaVal += GenesisGradeCalculations.gpaFromLetter(
-              GenesisGradeCalculations.percentToLetter(curClass.percent),
-              curClass.courseName) *
+                  GenesisGradeCalculations.percentToLetter(curClass.percent),
+                  curClass.courseName) *
               0.5;
           creditsTaken += 0.5;
         } else {
           //TODO: store quarterly grades in ClassData somehow
           //temp solution, just use current grade
           gpaVal += GenesisGradeCalculations.gpaFromLetter(
-              GenesisGradeCalculations.percentToLetter(curClass.percent),
-              curClass.courseName) *
+                  GenesisGradeCalculations.percentToLetter(curClass.percent),
+                  curClass.courseName) *
               0.5;
           creditsTaken += 0.5;
         }
@@ -107,5 +109,43 @@ class GenesisGradeCalculations {
       return "0.5";
     }
     return "0.0";
+  }
+
+  static double calculateGradeOn(
+      //TODO: implement
+      {required DateTime date,
+      required ClassData course}) {
+    double cumPercent = 0.0;
+    double cumWeightage = 0.0;
+    List<GPAData> res = [];
+    List<AssignmentCategory> categories = course.categories;
+    Map<String, dynamic> categoryMap = {};
+    for (AssignmentCategory category in categories) {
+      categoryMap[category.name ?? "what"] = {
+        "earnedPoints": 0.0,
+        "possiblePoints": 0.0,
+        "weight": category.weight
+      };
+    }
+    for (Assignment assignment in course.assignments.reversed) {
+      if (GenesisHelpers.stringToDateTime(assignment.date).isAfter(date)) {
+        break;
+      }
+      if (assignment.notes.toLowerCase().contains("not for grading")) {
+        continue;
+      }
+      categoryMap[assignment.category]["earnedPoints"] +=
+          assignment.earnedPoints;
+      categoryMap[assignment.category]["possiblePoints"] +=
+          assignment.possiblePoints;
+    }
+    for (dynamic cat in categoryMap.values) {
+      if (cat["possiblePoints"] > 0) {
+        cumPercent += (100 * cat["earnedPoints"] / cat['possiblePoints']) *
+            (cat["weight"] / 100);
+        cumWeightage += (cat["weight"] / 100);
+      }
+    }
+    return cumPercent / cumWeightage;
   }
 }

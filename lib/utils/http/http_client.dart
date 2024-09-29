@@ -55,7 +55,7 @@ class GenesisHttpClient {
 
     // update allAssignments, assignments, and percents of each class
     for (Period period in curUser.periods) {
-      ClassData curClass = period.classData[period.classData.length - 1];
+      ClassData curClass = period.classData.last;
 
       SchoolClass foundClass = currentGb.classes.firstWhere(
           (schoolClass) => schoolClass.className == curClass.courseName);
