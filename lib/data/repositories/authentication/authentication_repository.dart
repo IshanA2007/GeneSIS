@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/features/authentication/screens/login/login.dart';
 import 'package:grades/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,6 +20,7 @@ class AuthenticationRepository extends GetxController {
 
   final deviceStorage = GetStorage();
   final _auth = FirebaseAuth.instance;
+  final user = Get.find<GenesisUserController>();
 
   @override
   void onReady() {
@@ -28,8 +30,9 @@ class AuthenticationRepository extends GetxController {
 
   screenRedirect({loggedIn = false}) async {
     if (loggedIn) {
+
       //check if user's local storage has a value for cumulativeGPA
-      if (deviceStorage.read('GPA_HISTORY') == null) {
+      if (user.requiresGPAInput()) {
         Get.offAll(() => const GPAInputMenu());
         return;
       }

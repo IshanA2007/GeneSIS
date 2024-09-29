@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:grades/common/data/GPAHistory.dart';
 import 'package:grades/common/widgets/genesis_card.dart';
 import 'package:grades/utils/constants/colors.dart';
@@ -7,17 +8,24 @@ import 'package:grades/utils/constants/sizes.dart';
 import 'package:grades/utils/device/device_utilities.dart';
 import 'package:grades/utils/helpers/helper_functions.dart';
 
+import '../../../../../common/data/History.dart';
+import '../../../../authentication/controllers/user/user_controller.dart';
+
 class GenesisCarouselGraph extends StatelessWidget {
   const GenesisCarouselGraph({
     super.key,
+    required this.history,
     this.onPressed,
   });
 
   final VoidCallback? onPressed;
+  final History history;
 
   @override
   Widget build(BuildContext context) {
-    final data = GPAHistory();
+    final user = Get.find<GenesisUserController>();
+    final data = user.createDataPoints(history);
+
     final isDark = GenesisHelpers.isDarkMode(context);
     return GestureDetector(
       onTap: onPressed,
@@ -27,9 +35,11 @@ class GenesisCarouselGraph extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "GPA Overview",
-                style: Theme.of(context).textTheme.titleLarge,
+              FittedBox(
+                child: Text(
+                  history.name == "overall" ? "GPA History" : "${history.name}History",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
               ),
               const SizedBox(
                 height: GenesisSizes.spaceBtwItems * 2,
@@ -130,10 +140,10 @@ class GenesisCarouselGraph extends StatelessWidget {
                         spots: data.spots,
                       ),
                     ],
-                    minX: 10,
-                    maxX: 120,
-                    minY: 0,
-                    maxY: 110,
+                    minX: data.minX,
+                    maxX: data.maxX,
+                    minY: data.minY,
+                    maxY: data.maxY,
                   ),
                 ),
               ),

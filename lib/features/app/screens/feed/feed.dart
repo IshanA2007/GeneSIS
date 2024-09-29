@@ -12,7 +12,9 @@ import 'package:grades/utils/constants/text_strings.dart';
 import 'package:grades/utils/helpers/grade_calculations.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:studentvueclient/studentvueclient.dart';
 
+import '../../../../common/data/ClassData.dart';
 import '../../../authentication/controllers/user/user_controller.dart';
 
 class Feed extends StatelessWidget {
@@ -21,21 +23,16 @@ class Feed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Get.find<GenesisUserController>();
-    final assignments = user.userdata["assignments"] as List<dynamic>;
 
-    // Create a list of GradeCard widgets based on the courses data
-    final assignmentCards = assignments.map((assignment) {
-      return AssignmentCard(
-          date: assignment['date'],
-          className: assignment['course'],
-          gradePercent: GenesisGradeCalculations.percentify(
-                  assignment['earnedPoints'], assignment['possiblePoints'])
-              .toStringAsFixed(2),
-          points: assignment['earnedPoints'],
-          totalPoints: assignment['possiblePoints'],
-          impact: 24,
-          name: assignment['name']);
-    }).toList();
+    List<AssignmentCard> assignmentCards = [];
+    List<Assignment> assignments = user.getAllAssignments();
+    for (Assignment assignment in assignments) {
+      ClassData containingClass = user.findClassWithAssignment(assignment)!;
+      assignmentCards.add(AssignmentCard(
+        assignment: assignment,
+        course: containingClass,
+      ));
+    }
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -48,7 +45,8 @@ class Feed extends StatelessWidget {
               height: GenesisSizes.spaceBtwItems,
             ),
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: GenesisSizes.md),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: GenesisSizes.md),
                 child: GenesisCardGrid(
                     cardPadding: const EdgeInsets.all(0),
                     columns: 2,

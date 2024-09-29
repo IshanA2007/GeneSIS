@@ -4,12 +4,14 @@ import 'package:get_storage/get_storage.dart';
 import 'package:grades/common/data/GPAData.dart';
 import 'package:grades/data/repositories/authentication/authentication_repository.dart';
 import 'package:grades/features/authentication/controllers/network/network_manager.dart';
+import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/navigation_menu.dart';
 import 'package:grades/utils/constants/image_strings.dart';
 import 'package:grades/utils/helpers/grade_calculations.dart';
 import 'package:grades/utils/popups/full_screen_loader.dart';
 import 'package:grades/utils/validators/validation.dart';
 
+import '../../../../common/data/History.dart';
 import '../../../../common/widgets/loaders/loaders.dart';
 import '../../../../utils/http/http_client.dart';
 
@@ -19,6 +21,7 @@ class GPAInputController extends GetxController {
   final cumGPA = TextEditingController();
   final courseCreditsTaken = TextEditingController();
   GlobalKey<FormState> gpaInputFormKey = GlobalKey<FormState>();
+  final user = Get.find<GenesisUserController>();
 
   Future<void> submitGPAInput() async {
     try {
@@ -29,12 +32,22 @@ class GPAInputController extends GetxController {
         GenesisFullScreenLoader.stopLoading();
         return;
       }
-      double updatedCumGPA = GenesisGradeCalculations.updateGPA(double.parse(cumGPA.text.trim()), double.parse(courseCreditsTaken.text.trim()));
-      localStorage.write("GPA_HISTORY", {"overall": [GPAData(updatedCumGPA).toMap()]});
-      print("GPA_HISTORY written");
-      print(localStorage.read("GPA_HISTORY"));
 
-      localStorage.write("COURSE_CREDITS_TAKEN", courseCreditsTaken.text.trim());
+      user.curUser!.initialCumGPA = double.parse(cumGPA.text.trim());
+      user.curUser!.creditsTaken = double.parse(courseCreditsTaken.text.trim());
+
+      double updatedCGPA = GenesisGradeCalculations.calculateCumulativeGPA(
+          user.curUser!, 1); //TODO: calculate current quarter
+      History overallHistory =
+      user.curUser!.history.firstWhere((history) => history.name == "overall");
+      overallHistory.history
+          .insert(0, GPAData(updatedCGPA));
+
+      Map<dynamic, dynamic> users = localStorage.read("users");
+      users[localStorage.read("username")] = user.curUser!.toMap();
+      localStorage.write("users", users);
+      localStorage.write(
+          "COURSE_CREDITS_TAKEN", courseCreditsTaken.text.trim());
 
       GenesisFullScreenLoader.stopLoading();
       Get.offAll(() => const NavigationMenu());

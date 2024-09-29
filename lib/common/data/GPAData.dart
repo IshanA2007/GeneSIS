@@ -4,6 +4,11 @@ class GPAData {
 
   GPAData(this.gpa) : dataDate = DateTime.now();
 
+  @override
+  String toString(){
+    return '$gpa earned at $dataDate';
+  }
+
   // Method to serialize the object into a Map
   Map<String, dynamic> toMap() {
     return {

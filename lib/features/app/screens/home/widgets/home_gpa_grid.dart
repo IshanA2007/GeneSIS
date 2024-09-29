@@ -28,8 +28,8 @@ class GenesisGPAGrid extends StatelessWidget {
         ),
         GenesisStatsCardContent(
           title: "Attendance",
-          stat: user.getAttendance()["percent"] ?? "??%",
-          units: " ${user.getAttendance()["num"]} absences",
+          stat: user.getAbsences().toString(),
+          units: " absences",
           icon: Icon(Iconsax.calendar, color: Colors.red),
         ),
         GenesisStatsCardContent(

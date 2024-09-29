@@ -23,7 +23,7 @@ class GenesisHomeAppBar extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(GenesisTexts.homeAppbarTitle + user.userdata["name"],
+          Text(GenesisTexts.homeAppbarTitle + user.getUsername(),
               style: Theme.of(context).textTheme.headlineLarge!.apply(
                   color: dark ? GenesisColors.grey : GenesisColors.black)),
           Text(GenesisTexts.homeAppbarSubTitle,

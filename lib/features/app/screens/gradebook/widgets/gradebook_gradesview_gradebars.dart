@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/device/device_utilities.dart';
 import 'package:grades/utils/helpers/helper_functions.dart';
+import 'package:studentvueclient/studentvueclient.dart';
 
 class GradesViewGradeBars extends StatelessWidget {
-  final Map<dynamic, dynamic> categories;
+  final List<AssignmentCategory> categories;
 
   const GradesViewGradeBars({
     super.key,
@@ -20,20 +21,23 @@ class GradesViewGradeBars extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.end,
-          children: categories.entries.map((category) {
-            double weight = category.value['weight'];
-            double earnedPoints = category.value['earnedPoints'];
-            double possiblePoints = category.value['possiblePoints'];
-            double percentage = (possiblePoints > 0) ? (earnedPoints / possiblePoints) * 100 : 0;
+          children: categories.map((category) {
+            double weight = category.weight;
+            double earnedPoints = category.earnedPoints;
+            double possiblePoints = category.possiblePoints;
+            double percentage = (possiblePoints > 0)
+                ? (earnedPoints / possiblePoints) * 100
+                : 0;
 
             return Column(
               children: [
-                Text(category.key,
+                Text(category.name ?? "unknown",
                     style: Theme.of(context)
                         .textTheme
                         .labelSmall!
                         .apply(color: GenesisColors.darkGrey)),
-                Text("${earnedPoints.toStringAsFixed(2)}/${possiblePoints.toStringAsFixed(2)} pts",
+                Text(
+                    "${earnedPoints.toStringAsFixed(2)}/${possiblePoints.toStringAsFixed(2)} pts",
                     style: Theme.of(context)
                         .textTheme
                         .labelSmall!
@@ -43,10 +47,14 @@ class GradesViewGradeBars extends StatelessWidget {
                   children: [
                     // Background taller container
                     Container(
-                      height: GenesisDeviceUtils.getScreenHeight() * 0.3 * (weight / 100),
+                      height: GenesisDeviceUtils.getScreenHeight() *
+                          0.3 *
+                          (weight / 100),
                       width: GenesisDeviceUtils.getScreenWidth() * 0.27,
                       decoration: BoxDecoration(
-                        color: dark ? GenesisColors.gradeBarSecondary : GenesisColors.lightBackground,
+                        color: dark
+                            ? GenesisColors.gradeBarSecondary
+                            : GenesisColors.lightBackground,
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30),
@@ -57,7 +65,10 @@ class GradesViewGradeBars extends StatelessWidget {
                     TweenAnimationBuilder<double>(
                       tween: Tween(
                           begin: 0.0,
-                          end: GenesisDeviceUtils.getScreenHeight() * 0.3 * (weight / 100) * (percentage / 100)),
+                          end: GenesisDeviceUtils.getScreenHeight() *
+                              0.3 *
+                              (weight / 100) *
+                              (percentage / 100)),
                       duration: const Duration(seconds: 1),
                       curve: Curves.easeOut, // Smooth transition
                       builder: (context, height, child) {
