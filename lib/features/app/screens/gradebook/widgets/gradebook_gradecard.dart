@@ -4,6 +4,7 @@ import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
 import 'package:grades/utils/helpers/helper_functions.dart';
 
+import '../../../../../common/data/ClassData.dart';
 import 'gradebook_gradesview.dart';
 
 class GradeCard extends StatelessWidget {
@@ -14,9 +15,11 @@ class GradeCard extends StatelessWidget {
     required this.missingAssignments,
     required this.letterGrade,
     required this.gradePercent,
+    required this.classData,
   });
 
   final String className;
+  final ClassData classData;
   final int monthlyChange;
   final int missingAssignments;
   final String letterGrade;
@@ -28,7 +31,7 @@ class GradeCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Get.to(() => GradesView(className: className));
+        Get.to(() => GradesView(classData: classData));
       },
       child: Row(
         children: [

@@ -5,19 +5,23 @@ class GPAHistory {
   final Map<int, String> leftTitle;
   final Map<int, String> bottomTitle;
 
-  // Constructor
+  // Constructor with optional parameters, using default values if not provided
   GPAHistory({
-    this.spots = const [
-      FlSpot(12, 50),
-      FlSpot(25, 48),
-      FlSpot(55, 10),
-      FlSpot(72, 90),
-      FlSpot(87, 22),
-      FlSpot(91, 78),
-      FlSpot(100, 12),
-      FlSpot(110, 87),
-    ],
-    this.leftTitle = const {20: "3.2", 50: "3.5", 80: "3.8", 110: "4.1"},
-    this.bottomTitle = const {20: "Feb", 60: "Jun", 100: "Oct"},
-  });
+    List<FlSpot>? spots,
+    Map<int, String>? leftTitle,
+    Map<int, String>? bottomTitle,
+  })  : spots = spots ??
+            const [
+              FlSpot(12, 50),
+              FlSpot(25, 48),
+              FlSpot(55, 10),
+              FlSpot(72, 90),
+              FlSpot(87, 22),
+              FlSpot(91, 78),
+              FlSpot(100, 12),
+              FlSpot(110, 87),
+            ],
+        leftTitle =
+            leftTitle ?? const {20: "3.2", 50: "3.5", 80: "3.8", 110: "4.1"},
+        bottomTitle = bottomTitle ?? const {20: "Feb", 60: "Jun", 100: "Oct"};
 }

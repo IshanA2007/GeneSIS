@@ -8,22 +8,23 @@ import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
 import 'package:grades/utils/device/device_utilities.dart';
 import 'package:grades/utils/helpers/grade_calculations.dart';
+import 'package:studentvueclient/studentvueclient.dart';
 
+import '../../../../../common/data/ClassData.dart';
 import 'gradebook_gradesview_gradebars.dart';
 import 'gradebook_gradeview_assignment.dart';
 
 class GradesView extends StatelessWidget {
-  const GradesView({super.key, required this.className});
+  const GradesView({super.key, required this.classData});
 
-  final String className;
+  final ClassData classData;
 
   @override
   Widget build(BuildContext context) {
     final user = Get.find<GenesisUserController>();
-    final courseData = user.userdata['courses'][className];
-    final missingAssignments = int.parse(courseData["missing"]);
-    final letterGrade = courseData["letter"];
-    final gradePercent = double.parse(courseData["percent"]);
+
+
+
     const weeklyChange = 0; // HARDCODED VALUE
     const monthlyChange = 0; // HARDCODED VALUE
     const semesterChange = -100; // HARDCODED VALUE
@@ -33,20 +34,20 @@ class GradesView extends StatelessWidget {
         child: Column(
           children: [
             GradesViewAppBar(
-              className: className,
+              className: classData.courseName,
               gpaBoost: GenesisGradeCalculations.gpaBoostFromCourse(
-                  className), // HARDCODED VALUE
+                  classData.courseName),
             ),
             const SizedBox(
               height: GenesisSizes.spaceBtwSections,
             ),
             GradesViewGradeBars(
-              categories: user.userdata['courses'][className]['categories'],
+              categories: classData.categories,
             ),
             GradesViewInfoCard(
-                letterGrade: letterGrade,
-                missingAssignments: missingAssignments,
-                gradePercent: gradePercent,
+                letterGrade: GenesisGradeCalculations.percentToLetter(classData.percent),
+                missingAssignments: user.getMissing(classData),
+                gradePercent: classData.percent,
                 weeklyChange: weeklyChange,
                 monthlyChange: monthlyChange,
                 semesterChange: semesterChange),
@@ -99,12 +100,11 @@ class GradesView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: GenesisSizes.xs),
-                      for (Map<String, dynamic> assignment in user
-                          .userdata['courses'][className]["assignments"]) ...[
+                      for (Assignment assignment in classData.assignments) ...[
                         GradesViewAssignment(
-                          assignmentName: assignment['name'],
-                          earnedPoints: assignment['earnedPoints'],
-                          possiblePoints: assignment['possiblePoints'],
+                          assignmentName: assignment.assignmentName,
+                          earnedPoints: assignment.earnedPoints,
+                          possiblePoints: assignment.possiblePoints,
                         ),
                         const SizedBox(height: GenesisSizes.sm),
                         // Add SizedBox after each item

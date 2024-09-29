@@ -19,8 +19,11 @@ Future<void> main() async {
   await GetStorage.init();
 
 
+
   GetStorage().remove("username");
   GetStorage().remove("password");
+
+  //GetStorage().erase();
 
 
   //Native Splash Screen
@@ -29,6 +32,7 @@ Future<void> main() async {
   //experimental
   Get.put(NetworkManager());
   Get.put(GenesisUserController());
+  GetStorage().writeIfNull("users", {});
 
   //Initialize Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)

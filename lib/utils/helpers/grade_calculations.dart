@@ -1,5 +1,10 @@
+
 import 'package:get/get.dart';
 import 'package:grades/features/authentication/controllers/user/user_controller.dart';
+
+import '../../common/data/ClassData.dart';
+import '../../common/data/Period.dart';
+import '../../common/data/User.dart';
 
 class GenesisGradeCalculations {
   static String percentToLetter(double percent) {
@@ -19,6 +24,34 @@ class GenesisGradeCalculations {
 
   static double percentify(double earned, double possible) {
     return (earned / possible) * 100;
+  }
+
+  static double calculateCumulativeGPA(User user, int curQuarter){
+    double outdatedGPA = user.initialCumGPA ?? 0.0;
+    double creditsTaken = user.creditsTaken ?? 1.0;
+    double gpaVal = outdatedGPA * creditsTaken;
+    if (curQuarter == 1 || curQuarter == 2) {
+      for (Period period in user.periods) {
+        ClassData curClass = period.classData[period.classData.length - 1];
+        if (curClass.gradebookCode == "UK" ||
+            curClass.gradebookCode == "rolling") {
+          gpaVal += GenesisGradeCalculations.gpaFromLetter(
+              GenesisGradeCalculations.percentToLetter(curClass.percent),
+              curClass.courseName) *
+              0.5;
+          creditsTaken += 0.5;
+        } else {
+          //TODO: store quarterly grades in ClassData somehow
+          //temp solution, just use current grade
+          gpaVal += GenesisGradeCalculations.gpaFromLetter(
+              GenesisGradeCalculations.percentToLetter(curClass.percent),
+              curClass.courseName) *
+              0.5;
+          creditsTaken += 0.5;
+        }
+      }
+    }
+    return gpaVal / creditsTaken;
   }
 
   // TODO: update GPA based on semester/yearlong instead of assuming semester and forgetting last semester

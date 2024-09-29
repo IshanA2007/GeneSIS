@@ -71,7 +71,7 @@ class GenesisGPACardContent extends StatelessWidget {
                 // Vertically center the whole column
                 children: [
                   Text(
-                    user.getGPA() ?? 'N/A',
+                    user.getGPA(),
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!

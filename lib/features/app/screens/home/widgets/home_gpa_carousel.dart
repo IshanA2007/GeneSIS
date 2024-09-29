@@ -7,6 +7,9 @@ import 'package:grades/features/app/screens/home/widgets/home_carousel_graph.dar
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
 
+import '../../../../../common/data/History.dart';
+import '../../../../authentication/controllers/user/user_controller.dart';
+
 class GenesisGPACarousel extends StatelessWidget {
   const GenesisGPACarousel({
     super.key,
@@ -15,14 +18,15 @@ class GenesisGPACarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(HomeController());
+    final user = Get.find<GenesisUserController>();
+    List<GenesisCarouselGraph> historyGraphs = [];
+    for (History history in user.curUser?.history ?? []){
+      historyGraphs.add(GenesisCarouselGraph(history: history));
+    }
     return Column(
       children: [
         CarouselSlider(
-          items: const [
-            GenesisCarouselGraph(),
-            GenesisCarouselGraph(),
-            GenesisCarouselGraph(),
-          ],
+          items: historyGraphs,
           options: CarouselOptions(
             viewportFraction: 1,
             onPageChanged: (index, _) => controller.updatePageIndicator(index),
@@ -34,11 +38,11 @@ class GenesisGPACarousel extends StatelessWidget {
             () => Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < historyGraphs.length; i++)
                   GenesisCircularContainer(
-                    width: 20,
+                    width: 100 / historyGraphs.length,
                     height: 4,
-                    margin: EdgeInsets.only(right: 10),
+                    margin: const EdgeInsets.only(right: 10),
                     backgroundColor: controller.carouselCurrentIndex.value == i
                         ? GenesisColors.primaryColor
                         : GenesisColors.primaryBackground.withOpacity(0.5),

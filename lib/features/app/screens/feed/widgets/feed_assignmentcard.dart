@@ -5,28 +5,19 @@ import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
 import 'package:grades/utils/theme/custom_themes/text_theme.dart';
 import 'package:get/get.dart';
+import 'package:studentvueclient/studentvueclient.dart';
+
+import '../../../../../common/data/ClassData.dart';
 
 class AssignmentCard extends StatelessWidget {
-  final String name;
-  final String gradePercent;
-  final double points;
-  final double totalPoints;
-  final int impact; // positive, negative, or neutral impact
-  final String className;
-  final String date;
+  final Assignment assignment;
+  final ClassData course;
 
-  const AssignmentCard(
-      {super.key,
-      required this.name,
-      required this.gradePercent,
-      required this.points,
-      required this.totalPoints,
-      required this.impact,
-      required this.className,
-      required this.date});
+  const AssignmentCard({super.key, required this.assignment, required this.course});
 
   @override
   Widget build(BuildContext context) {
+    int impact = 24; //TODO: make an assignment impact
     Color impactColor = impact > 0
         ? GenesisColors.success
         : impact < 0
@@ -43,7 +34,7 @@ class AssignmentCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Get.to(() => GradesView(className: className));
+        Get.to(() => GradesView(classData: course));
       },
       child: Stack(
         children: [
@@ -60,23 +51,23 @@ class AssignmentCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  name,
+                  assignment.assignmentName,
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: Theme.of(context).textTheme.labelMedium!,
                 ),
-                Text(date, style: Theme.of(context).textTheme.labelSmall!),
+                Text(assignment.date, style: Theme.of(context).textTheme.labelSmall!),
                 const SizedBox(height: GenesisSizes.sm),
                 Text(
-                  "$gradePercent%",
+                  "${(assignment.earnedPoints*100/assignment.possiblePoints).toStringAsFixed(1)}%",
                   style: Theme.of(context)
                       .textTheme
                       .headlineMedium!
                       .apply(color: GenesisColors.feedAssignmentPercentColor),
                 ),
                 Text(
-                  "$points/$totalPoints",
+                  "${assignment.earnedPoints}/${assignment.possiblePoints}",
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall!
@@ -135,7 +126,7 @@ class AssignmentCard extends StatelessWidget {
               alignment: Alignment.center,
               child: FittedBox(
                 fit: BoxFit.fitWidth,
-                child: Text(className,
+                child: Text(course.courseName,
                     style: Theme.of(context).textTheme.titleLarge!),
               ),
             ),

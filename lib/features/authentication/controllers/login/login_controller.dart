@@ -19,6 +19,7 @@ class LoginController extends GetxController {
   final email = TextEditingController();
   final password = TextEditingController();
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
+  final user = Get.find<GenesisUserController>();
 
   @override
   void onInit() {
@@ -63,27 +64,7 @@ class LoginController extends GetxController {
 
       await httpClient.queryStudentVue(email.text.trim(), password.text.trim());
 
-      // assignments collected, calculate grades historically
-      GenesisUserController user = Get.find<GenesisUserController>();
-
-      print("what is it");
-      var assignments = user.userdata["assignments"];
-      // step 1 - separate assignments by teacher
-      Map<String, List<Map<String, dynamic>>> assignmentsByClass = {};
-      for (var assignment in assignments) {
-        String course = assignment["course"];
-        // initialize new classes with empty list
-        if (!assignmentsByClass.containsKey(course)) {
-          assignmentsByClass[course] = [];
-        }
-        // add assignment to its course's list
-        assignmentsByClass[course]!.add(assignment);
-      }
-      // step 2 - find start and end dates (first assignment date -> today?)
-      // step 3 - find what assignments are in for each class on each day (all assignments before and on current date)
-      // step 4 - calculate percentage grade for each class for each day
-      // step 5 - calculate GPA for each day
-      // step 6 - store somewhere in GenesisUserController
+      user.initUser(email.text.trim());
 
       GenesisFullScreenLoader.stopLoading();
 
