@@ -120,7 +120,7 @@ class GenesisUserController extends GetxController {
       if (gpa > maxY) {
         maxY = gpa;
       }
-      spots.add(FlSpot(inc, gpa));
+      spots.add(FlSpot(inc, double.parse(gpa.toStringAsFixed(1))));
       inc += 1;
     }
     maxX = inc - 1;
