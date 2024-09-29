@@ -146,6 +146,9 @@ class GenesisGradeCalculations {
         cumWeightage += (cat["weight"] / 100);
       }
     }
+    if (cumWeightage == 0){
+      return -1;
+    }
     return cumPercent / cumWeightage;
   }
 }
