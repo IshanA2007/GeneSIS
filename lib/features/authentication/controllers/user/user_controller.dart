@@ -36,8 +36,10 @@ class GenesisUserController extends GetxController {
     History? overallHistory = curUser?.history
         .firstWhere((historyPoint) => historyPoint.name == "overall");
     double curGPA = overallHistory?.history.last.gpa ?? 0.0;
-    double res = double.parse(
-        (curGPA - (curUser?.initialCumGPA ?? 0.0)).toStringAsFixed(0));
+    double res = double.parse((((curGPA - (curUser?.initialCumGPA ?? 0.0)) /
+                (curUser?.initialCumGPA ?? 1.0)) *
+            100)
+        .toStringAsFixed(1));
     if (res == 0) {
       return "+0";
     }

@@ -1,4 +1,3 @@
-import 'package:grades/common/data/GPAData.dart';
 import 'package:studentvueclient/studentvueclient.dart';
 
 import 'History.dart';
@@ -11,8 +10,8 @@ class User {
   double? initialCumGPA;
   double? creditsTaken;
   int absences;
-  Map<String, int> rank;
-  List<History> history; // Assuming history can be any dynamic type
+  Map<String, int> rank; // Assumes 'rank' and 'total' keys
+  List<History> history;
 
   User({
     required this.name,
@@ -23,10 +22,8 @@ class User {
     required this.rank,
     this.initialCumGPA,
     this.creditsTaken,
-
   });
 
-  // Neat and organized toString method
   @override
   String toString() {
     return '''
@@ -40,7 +37,7 @@ User:
 ${periods.map((p) => '    ${p.toString()}').join('\n')}
   Assignments: 
 ${assignments.map((a) => '    ${a.toString()}').join('\n')}
-  Assignments: 
+  History: 
 ${history.map((h) => '    ${h.toString()}').join('\n')}
 ''';
   }
@@ -52,7 +49,7 @@ ${history.map((h) => '    ${h.toString()}').join('\n')}
       'absences': absences,
       'initialCumGPA': initialCumGPA,
       'creditsTaken': creditsTaken,
-      'rank': rank,
+      'rank': {'rank': rank['rank'], 'total': rank['total']},
       'periods': periods.map((p) => p.toMap()).toList(),
       'assignments': assignments.map((a) => a.toMap()).toList(),
       'history': history.map((h) => h.toMap()).toList(),
@@ -63,10 +60,13 @@ ${history.map((h) => '    ${h.toString()}').join('\n')}
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       name: map['name'] ?? '',
-      rank: map['rank'] ?? {},
+      rank: {
+        'rank': map['rank']?['rank'] ?? 0,
+        'total': map['rank']?['total'] ?? 0,
+      },
       absences: map['absences'] ?? 0,
-      initialCumGPA: map['initialCumGPA'] ?? -1.0,
-      creditsTaken: map['creditsTaken'] ?? -1.0,
+      initialCumGPA: map['initialCumGPA']?.toDouble() ?? -1.0,
+      creditsTaken: map['creditsTaken']?.toDouble() ?? -1.0,
       periods: List<Period>.from(
           map['periods']?.map((p) => Period.fromMap(p)) ?? []),
       assignments: List<Assignment>.from(

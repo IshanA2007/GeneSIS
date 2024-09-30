@@ -44,6 +44,7 @@ class GenesisHttpClient {
     List<String> classesWithUpdatedAssignments = [];
     var localStorage = GetStorage();
     int currentQuarter = 1;
+    bool isFirstTime = false;
 
     var client = StudentVueClient(email, password, 'sisstudent.fcps.edu');
     StudentGradeData currentGb =
@@ -54,9 +55,12 @@ class GenesisHttpClient {
     localStorage.writeIfNull("users", {});
     Map<dynamic, dynamic> users = localStorage.read("users");
     if (!users.containsKey(email)) {
+      isFirstTime = true;
       users[email] = (await makeUser(email, password, currentGb)).toMap();
       localStorage.write("users", users);
     }
+
+    print("hi");
 
     User curUser = User.fromMap(localStorage.read("users")[email]);
 
@@ -98,7 +102,8 @@ class GenesisHttpClient {
       overallHistory.history
           .add(GPAData(calculateCumulativeGPA(curUser, currentQuarter)));
       user.addOrReplaceDocument(email, overallHistory.history.last.gpa);
-      Map<String, int> ranking = await user.getGpaRanking(overallHistory.history.last.gpa);
+      Map<String, int> ranking =
+      await user.getGpaRanking(overallHistory.history.last.gpa);
       curUser.rank = ranking;
     }
 
@@ -111,6 +116,8 @@ class GenesisHttpClient {
         classHistory.history.add(GPAData(curClass.percent));
       }
     }
+
+    print("hello");
 
     users = localStorage.read("users");
     users[email] = curUser.toMap();
