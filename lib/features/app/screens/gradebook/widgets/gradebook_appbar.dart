@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:grades/common/widgets/appbar/appbar.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/text_strings.dart';
@@ -6,6 +7,8 @@ import 'package:grades/utils/device/device_utilities.dart';
 import 'package:grades/utils/helpers/helper_functions.dart';
 import 'package:grades/utils/local_storage/storage_utility.dart';
 import 'package:iconsax/iconsax.dart';
+
+import '../../../../authentication/screens/login/widgets/login_policy_view.dart';
 
 class GradebookAppBar extends StatelessWidget {
   const GradebookAppBar({
@@ -36,7 +39,7 @@ class GradebookAppBar extends StatelessWidget {
               color: GenesisColors.primaryColor),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {Get.to(const PolicyView());},
           icon: const Icon(Iconsax.message_question, color: GenesisColors.primaryColor),
         )
       ],

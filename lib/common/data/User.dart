@@ -11,6 +11,7 @@ class User {
   double? initialCumGPA;
   double? creditsTaken;
   int absences;
+  Map<String, int> rank;
   List<History> history; // Assuming history can be any dynamic type
 
   User({
@@ -19,6 +20,7 @@ class User {
     required this.assignments,
     required this.history,
     required this.absences,
+    required this.rank,
     this.initialCumGPA,
     this.creditsTaken,
 
@@ -33,6 +35,7 @@ User:
   Absences: $absences
   Initial GPA: $initialCumGPA
   Credits Taken: $creditsTaken
+  Rank: ${rank['rank']} of ${rank['total']}
   Periods: 
 ${periods.map((p) => '    ${p.toString()}').join('\n')}
   Assignments: 
@@ -49,6 +52,7 @@ ${history.map((h) => '    ${h.toString()}').join('\n')}
       'absences': absences,
       'initialCumGPA': initialCumGPA,
       'creditsTaken': creditsTaken,
+      'rank': rank,
       'periods': periods.map((p) => p.toMap()).toList(),
       'assignments': assignments.map((a) => a.toMap()).toList(),
       'history': history.map((h) => h.toMap()).toList(),
@@ -59,6 +63,7 @@ ${history.map((h) => '    ${h.toString()}').join('\n')}
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       name: map['name'] ?? '',
+      rank: map['rank'] ?? {},
       absences: map['absences'] ?? 0,
       initialCumGPA: map['initialCumGPA'] ?? -1.0,
       creditsTaken: map['creditsTaken'] ?? -1.0,
