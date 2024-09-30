@@ -6,6 +6,7 @@ import 'package:grades/utils/constants/text_strings.dart';
 import 'package:grades/utils/validators/validation.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../../utils/constants/colors.dart';
 import '../../../controllers/login/login_controller.dart';
 
 class GenesisLoginForm extends StatelessWidget {
@@ -67,8 +68,15 @@ class GenesisLoginForm extends StatelessWidget {
                 ],
               ),
               TextButton(
-                  onPressed: () {},
-                  child: const Text(GenesisTexts.forgotPassword))
+                onPressed: () {},
+                child: Text(
+                  GenesisTexts.forgotPassword,
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium!
+                      .apply(color: GenesisColors.info),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: GenesisSizes.spaceBtwSections),

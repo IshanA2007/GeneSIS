@@ -38,6 +38,66 @@ class GenesisUserController extends GetxController {
 
   //methods
 
+  String getGPAYearlyChange() {
+    History? overallHistory = curUser?.history
+        .firstWhere((historyPoint) => historyPoint.name == "overall");
+    double curGPA = overallHistory?.history.last.gpa ?? 0.0;
+    double res = double.parse((curGPA - (curUser?.initialCumGPA ?? 0.0)).toStringAsFixed(0));
+    if (res == 0) {
+      return "+0";
+    }
+    if (res > 0) {
+      return "+$res";
+    }
+    else{
+      return "-$res";
+    }
+  }
+
+  double getMonthlyChange(ClassData course) {
+    DateTime now = DateTime.now();
+    DateTime monthAgoDate = DateTime(now.year, now.month - 1, now.day);
+
+    //TODO: beginning of quarter dynanmic retreival
+    DateTime beginningOfQuarter = DateTime(now.year, 8, 19);
+
+    if (monthAgoDate.isBefore(beginningOfQuarter)) {
+      monthAgoDate = beginningOfQuarter;
+    }
+
+    double grade = GenesisGradeCalculations.calculateGradeOn(
+        date: monthAgoDate, course: course);
+
+    return double.parse((course.percent - grade).toStringAsFixed(1));
+  }
+
+  double getWeeklyChange(ClassData course) {
+    DateTime now = DateTime.now();
+    DateTime weekAgoDate = now.subtract(Duration(days: 7));
+
+    // TODO: beginning of quarter dynamic retrieval
+    DateTime beginningOfQuarter = DateTime(now.year, 8, 19);
+
+    // Ensure we don't go before the beginning of the quarter
+    if (weekAgoDate.isBefore(beginningOfQuarter)) {
+      weekAgoDate = beginningOfQuarter;
+    }
+
+    // Calculate the grade as of the date one week ago
+    double grade = GenesisGradeCalculations.calculateGradeOn(
+        date: weekAgoDate, course: course);
+
+    // Return the weekly change rounded to 1 decimal place
+    return double.parse((course.percent - grade).toStringAsFixed(1));
+  }
+
+  double getQuarterChange(ClassData course) {
+    double grade = (course.assignments.last.earnedPoints /
+            course.assignments.last.possiblePoints) *
+        100;
+    return double.parse((course.percent - grade).toStringAsFixed(1));
+  }
+
   void initUser(String username) {
     users = GetStorage().read("users");
     curUser = User.fromMap(users[username]);
@@ -101,6 +161,7 @@ class GenesisUserController extends GetxController {
   }
 
   FlChartData createDataPoints(History history) {
+    int multiplier = history.name == "overall" ? 10 : 10;
     List<FlSpot> spots = [];
     Map<int, String> leftTitle = {};
     Map<int, String> bottomTitle = {};
@@ -113,7 +174,7 @@ class GenesisUserController extends GetxController {
     // Generate FlSpot data and determine min/max Y values
     for (GPAData dataPoint in history.history) {
       double gpa =
-          dataPoint.gpa * 10; // Multiply by 10 for internal calculation
+          dataPoint.gpa * multiplier; // Multiply by 10 for internal calculation
       if (gpa < minY) {
         minY = gpa;
       }
@@ -126,11 +187,16 @@ class GenesisUserController extends GetxController {
     maxX = inc - 1;
 
     // Adjust Y limits slightly for visual padding
-    minY -= 5;
-    maxY += 5;
-    if (maxY > 1000) {
+    if (!(history.name == "overall")) {
+      minY -= 5;
+      maxY += 5;
+    } else {
+      minY -= 0.3;
+      maxY += 0.3;
+    }
+    if (maxY > (100 * multiplier)) {
       // Since we're now working with values multiplied by 10
-      maxY = 1000;
+      maxY = 100.0 * multiplier;
     }
 
     // Define 4 intervals for the left title (Y-axis)
@@ -139,13 +205,14 @@ class GenesisUserController extends GetxController {
     for (int i = 0; i <= 3; i++) {
       double yValue = minY + (i * yInterval);
       leftTitle[yValue.round()] =
-          (yValue / 10).toStringAsFixed(1); // Divide by 10 for display
+          (yValue / multiplier).toStringAsFixed(1); // Divide by 10 for display
     }
 
     // Populate bottom titles (X-axis) with corresponding labels
     for (int i = 0; i <= maxX; i++) {
       bottomTitle[i] = '$i'; // Example: 'Q1', 'Q2', etc. for each data point
     }
+    bottomTitle = {};
 
     // Return FlChartData with calculated titles and spots
     return FlChartData(

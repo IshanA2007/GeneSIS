@@ -40,7 +40,7 @@ class GenesisGPAGrid extends StatelessWidget {
         ),
         GenesisStatsCardContent(
           title: "GPA Trend",
-          stat: "-20%",
+          stat: "${user.getGPAYearlyChange()}%",
           units: " this month",
           icon: Icon(Iconsax.trend_up, color: Colors.blue),
         ),

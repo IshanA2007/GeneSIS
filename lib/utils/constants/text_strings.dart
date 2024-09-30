@@ -6,12 +6,12 @@ class GenesisTexts {
   static const String onBoardingTitle3 = "Calculation With Convenience";
 
   static const String onBoardingSubtitle1 =
-      "The best place to get all your school information";
+      "The best place to get all your academic information.";
   static const String thereYouGo = "There you go!";
   static const String onBoardingSubtitle2 =
-      "Get started by logging in with your credentials";
+      "Access useful trends and info through a sleek, intuitive interface.";
   static const String onBoardingSubtitle3 =
-      "Stay connected with your school and teachers";
+      "Simply log in with your SIS credentials!";
 
   static const String loginTitle = "Welcome back,";
   static const String loginSubTitle = "Sign in to your StudentVue account";

@@ -25,9 +25,9 @@ class GradesView extends StatelessWidget {
 
 
 
-    const weeklyChange = 0; // HARDCODED VALUE
-    const monthlyChange = 0; // HARDCODED VALUE
-    const semesterChange = -100; // HARDCODED VALUE
+    double weeklyChange = user.getWeeklyChange(classData); // HARDCODED VALUE
+    double monthlyChange = user.getMonthlyChange(classData); // HARDCODED VALUE
+    double quarterChange = user.getQuarterChange(classData); // HARDCODED VALUE
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -50,7 +50,7 @@ class GradesView extends StatelessWidget {
                 gradePercent: classData.percent,
                 weeklyChange: weeklyChange,
                 monthlyChange: monthlyChange,
-                semesterChange: semesterChange),
+                quarterChange: quarterChange),
             const SizedBox(height: GenesisSizes.lg),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: GenesisSizes.md),
