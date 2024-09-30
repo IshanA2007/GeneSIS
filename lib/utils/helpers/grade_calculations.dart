@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:grades/common/data/GPAData.dart';
 import 'package:grades/features/authentication/controllers/user/user_controller.dart';
@@ -28,6 +29,8 @@ class GenesisGradeCalculations {
     return (earned / possible) * 100;
   }
 
+
+
   static double calculateCumulativeGPA(User user, int curQuarter) {
     double outdatedGPA = user.initialCumGPA ?? 0.0;
     double creditsTaken = user.creditsTaken ?? 1.0;
@@ -53,21 +56,6 @@ class GenesisGradeCalculations {
         }
       }
     }
-    return gpaVal / creditsTaken;
-  }
-
-  // TODO: update GPA based on semester/yearlong instead of assuming semester and forgetting last semester
-  static double updateGPA(double outdatedGPA, double creditsTaken) {
-    final user = Get.find<GenesisUserController>();
-    final courses = user.userdata['courses'];
-    print(outdatedGPA);
-    print(creditsTaken);
-    double gpaVal = outdatedGPA * creditsTaken;
-    courses.forEach((courseName, courseData) {
-      print(courseName);
-      gpaVal += gpaFromLetter(courseData['letter'], courseName) * 0.5;
-      creditsTaken += 0.5;
-    });
     return gpaVal / creditsTaken;
   }
 
@@ -146,7 +134,7 @@ class GenesisGradeCalculations {
         cumWeightage += (cat["weight"] / 100);
       }
     }
-    if (cumWeightage == 0){
+    if (cumWeightage == 0) {
       return -1;
     }
     return cumPercent / cumWeightage;

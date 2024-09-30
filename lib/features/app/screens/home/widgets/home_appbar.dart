@@ -9,6 +9,7 @@ import 'package:grades/utils/helpers/helper_functions.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../../utils/local_storage/storage_utility.dart';
+import '../../../../authentication/screens/login/widgets/login_policy_view.dart';
 
 class GenesisHomeAppBar extends StatelessWidget {
   const GenesisHomeAppBar({
@@ -40,7 +41,7 @@ class GenesisHomeAppBar extends StatelessWidget {
               color: GenesisColors.primaryColor),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {Get.to(const PolicyView());},
           icon: const Icon(Iconsax.message_question, color: GenesisColors.primaryColor),
         )
       ],

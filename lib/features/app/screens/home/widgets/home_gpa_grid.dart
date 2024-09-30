@@ -22,8 +22,8 @@ class GenesisGPAGrid extends StatelessWidget {
       children: [
         GenesisStatsCardContent(
           title: "Class Rank",
-          stat: user.getClassRank(),
-          units: " /500 students",
+          stat: (user.getClassRank()["rank"] ?? -1).toString(),
+          units: " /${user.getClassRank()["total"]} students",
           icon: Icon(Iconsax.hashtag, color: Colors.yellow),
         ),
         GenesisStatsCardContent(

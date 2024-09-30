@@ -16,9 +16,24 @@ import '../../common/data/GPAData.dart';
 import '../../common/data/GPAHistory.dart';
 import '../../common/data/History.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class GenesisHttpClient {
   GenesisUserController user = Get.find<GenesisUserController>();
   List<dynamic> unorderedAssignments = [];
+
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  Future<void> addUser() {
+    return firestore
+        .collection('class_rankings')
+        .add({
+          'id': '1620426',
+          'gpa': 4.43,
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
 
   static void handleGrade(double grade) {
     var gr = grade * 100;
@@ -82,9 +97,12 @@ class GenesisHttpClient {
           curUser.history.firstWhere((history) => history.name == "overall");
       overallHistory.history
           .add(GPAData(calculateCumulativeGPA(curUser, currentQuarter)));
+      user.addOrReplaceDocument(email, overallHistory.history.last.gpa);
+      Map<String, int> ranking = await user.getGpaRanking(overallHistory.history.last.gpa);
+      curUser.rank = ranking;
     }
 
-    //TODO: update history of user
+    // update history of user
     for (Period period in curUser.periods) {
       ClassData curClass = period.classData[period.classData.length - 1];
       if (classesWithUpdatedAssignments.contains(curClass.courseName)) {
@@ -93,36 +111,6 @@ class GenesisHttpClient {
         classHistory.history.add(GPAData(curClass.percent));
       }
     }
-
-    StudentData studentData =
-        await client.loadStudentData(callback: (handleGrade));
-    StudentGradeData gradebook =
-        await client.loadGradebook(callback: (handleGrade));
-
-    user.userdata["name"] = studentData.formattedName!.split(" ")[0];
-
-    for (SchoolClass course in gradebook.classes) {
-      if (course.className.contains("AP")) {
-        user.userdata['stats']['apcount'] += 1;
-      }
-      var assignments = constructAssignments(course);
-
-      var categories = constructCategories(course, assignments);
-
-      user.userdata["courses"][course.className] = {
-        "missing": "2",
-        "letter": assignments.isEmpty
-            ? "N/A"
-            : GenesisGradeCalculations.percentToLetter(
-                double.parse(course.pctGrade!)),
-        "percent": course.pctGrade!,
-        "categories": categories,
-        "assignments": assignments,
-      };
-      //add current class GPAs to history
-    }
-
-    constructOrderedAssignments(unorderedAssignments);
 
     users = localStorage.read("users");
     users[email] = curUser.toMap();
@@ -244,6 +232,7 @@ class GenesisHttpClient {
     User newUser = User(
       history: completeHistory,
       absences: 0,
+      rank: {},
       name: studentData.formattedName!.split(" ")[0],
       assignments: allAssignments,
       periods: periodsToAdd,
@@ -265,7 +254,9 @@ class GenesisHttpClient {
       };
     }
     for (Assignment assignment in course.assignments.reversed) {
-      if (assignment.notes.toLowerCase().contains("not for grading")) { continue;}
+      if (assignment.notes.toLowerCase().contains("not for grading")) {
+        continue;
+      }
       categoryMap[assignment.category]["earnedPoints"] +=
           assignment.earnedPoints;
       categoryMap[assignment.category]["possiblePoints"] +=
@@ -274,68 +265,15 @@ class GenesisHttpClient {
       double cumWeightage = 0.0;
       for (dynamic cat in categoryMap.values) {
         if (cat["possiblePoints"] > 0) {
-          cumPercent += (100 * cat["earnedPoints"] / cat['possiblePoints']) * (cat["weight"] / 100);
-          cumWeightage += (cat["weight"]/100);
+          cumPercent += (100 * cat["earnedPoints"] / cat['possiblePoints']) *
+              (cat["weight"] / 100);
+          cumWeightage += (cat["weight"] / 100);
         }
       }
 
-      res.add(GPAData(cumPercent/cumWeightage));
+      res.add(GPAData(cumPercent / cumWeightage));
     }
     return res;
-  }
-
-  Future<void> queryStudentVue2(String email, String password) async {
-    var localStorage = GetStorage();
-    var client = StudentVueClient(email, password, 'sisstudent.fcps.edu');
-    StudentGradeData gradebook =
-        await client.loadGradebook(callback: (handleGrade));
-    StudentData studentData =
-        await client.loadStudentData(callback: (handleGrade));
-    String pdfText = await getReportCardText(client);
-
-    user.userdata["name"] = studentData.formattedName!.split(" ")[0];
-
-    for (SchoolClass course in gradebook.classes) {
-      if (course.className.contains("AP")) {
-        user.userdata['stats']['apcount'] += 1;
-      }
-      var assignments = constructAssignments(course);
-
-      var categories = constructCategories(course, assignments);
-
-      Map<String, dynamic> gpaHistory =
-          localStorage.read<Map<String, dynamic>>("GPA_HISTORY")!;
-
-      if (!gpaHistory.containsKey(course.className)) {
-        gpaHistory[course.className] = [
-          GPAData(double.parse(course.pctGrade!)).toMap()
-        ];
-      } else {
-        gpaHistory[course.className]
-            .add(GPAData(double.parse(course.pctGrade!)).toMap());
-      }
-
-      localStorage.write("GPA_HISTORY", gpaHistory);
-
-      user.history[course.className] =
-          GPAHistory(spots: constructSpots(gpaHistory[course.className]));
-
-      user.userdata["courses"][course.className] = {
-        "missing": "2",
-        "letter": assignments.isEmpty
-            ? "N/A"
-            : GenesisGradeCalculations.percentToLetter(
-                double.parse(course.pctGrade!)),
-        "percent": course.pctGrade!,
-        "categories": categories,
-        "assignments": assignments,
-      };
-      //add current class GPAs to history
-    }
-
-    constructOrderedAssignments(unorderedAssignments);
-
-    return;
   }
 
   List<FlSpot> constructSpots(List<dynamic> points) {
@@ -357,16 +295,6 @@ class GenesisHttpClient {
       DateTime dateB = dateFormat.parse(b.date);
       return dateB.compareTo(dateA);
     });
-  }
-
-  void constructOrderedAssignments(dynamic unordered) {
-    DateFormat dateFormat = DateFormat('M/d/yyyy');
-    unordered.sort((a, b) {
-      DateTime dateA = dateFormat.parse(a['date']);
-      DateTime dateB = dateFormat.parse(b['date']);
-      return dateB.compareTo(dateA);
-    });
-    user.userdata['assignments'] = unordered;
   }
 
   dynamic constructCategories2(
@@ -426,109 +354,12 @@ class GenesisHttpClient {
     return res;
   }
 
-  dynamic constructCategories(SchoolClass course, dynamic assignments) {
-    dynamic res = {};
-
-    for (AssignmentCategory category in course.assignmentCategories) {
-      if (category.name != null && category.weight != 100.00) {
-        res[category.name] = {
-          "weight": category.weight,
-          "earnedPoints": category.earnedPoints,
-          "possiblePoints": category.possiblePoints,
-        };
-      }
-    }
-    if (res.length == 0) {
-      //loop through each assignment and create/modify assignmetn weights + earnedPoints / possiblePoints
-      for (dynamic assignment in assignments) {
-        if (res.containsKey(assignment['category'])) {
-          res[assignment['category']]['possiblePoints'] +=
-              assignment['possiblePoints'];
-          res[assignment['category']]['earnedPoints'] +=
-              assignment['earnedPoints'];
-        } else {
-          res[assignment['category']] = {
-            "weight": 50.0,
-            "earnedPoints": assignment['earnedPoints'],
-            "possiblePoints": assignment['possiblePoints'],
-          };
-        }
-      }
-      for (var category in res.values) {
-        category['weight'] = 100 / res.length;
-      }
-      return res;
-    }
-
-    bool needsChanging = true;
-    if (assignments.length > 0) {
-      for (var cat in res.values) {
-        if (cat['possiblePoints'] > 0) {
-          needsChanging = false;
-          break;
-        }
-      }
-    }
-    if (needsChanging) {
-      for (dynamic assignment in assignments) {
-        res[assignment['category']]['possiblePoints'] +=
-            assignment['possiblePoints'];
-        res[assignment['category']]['earnedPoints'] +=
-            assignment['earnedPoints'];
-      }
-    }
-
-    return res;
-  }
-
-  List<Map<String, dynamic>> constructAssignments(SchoolClass course) {
-    List<Map<String, dynamic>> assignmentsInCategory = [];
-
-    for (Assignment assignment in course.assignments) {
-      if (assignment.earnedPoints >= 0) {
-        assignmentsInCategory.add({
-          "name": assignment.assignmentName,
-          "date": assignment.date,
-          "earnedPoints": assignment.earnedPoints,
-          "possiblePoints": assignment.possiblePoints,
-          "category": assignment.category,
-          "notes": assignment.notes,
-          "course": course.className,
-        });
-        unorderedAssignments.add({
-          "name": assignment.assignmentName,
-          "date": assignment.date,
-          "earnedPoints": assignment.earnedPoints,
-          "possiblePoints": assignment.possiblePoints,
-          "category": assignment.category,
-          "notes": assignment.notes,
-          "course": course.className,
-        });
-      }
-    }
-    return assignmentsInCategory;
-  }
-
   Future<String?> testQuery(String email, String password) async {
     var client = StudentVueClient(email, password, 'sisstudent.fcps.edu');
     StudentData studentData =
         await client.loadStudentData(callback: (handleGrade));
 
     return studentData.formattedName;
-  }
-
-  Future<String> getReportCardText(StudentVueClient client) async {
-    StudentData studentData =
-        await client.loadStudentData(callback: (handleGrade));
-    var docGUD = (await client.listDocuments())[0];
-    var b64encoded = await client.getDocument(docGUD);
-
-    var pdfBytes = base64Decode(b64encoded.trim());
-
-    PdfDocument document = PdfDocument(inputBytes: pdfBytes);
-    String extractedText = PdfTextExtractor(document).extractText();
-    document.dispose();
-    return extractedText;
   }
 
   createData(assignments, categories) {

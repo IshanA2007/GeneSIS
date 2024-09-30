@@ -40,9 +40,7 @@ class GPAInputController extends GetxController {
       user.curUser!.initialCumGPA = double.parse(cumGPA.text.trim());
       user.curUser!.creditsTaken = double.parse(courseCreditsTaken.text.trim());
 
-      double updatedCGPA = GenesisGradeCalculations.calculateCumulativeGPA(
-          user.curUser!,
-          GenesisHelpers.currentQuarter()); //TODO: calculate current quarter
+
       History overallHistory = user.curUser!.history
           .firstWhere((history) => history.name == "overall");
       // overallHistory.history.insert(0, GPAData(updatedCGPA));
@@ -55,8 +53,7 @@ class GPAInputController extends GetxController {
 
       List<DateTime> dateList =
           GenesisHelpers.generateDateList(startDate, endDate);
-      print("running datelist!!!");
-      print(dateList.length);
+
       for (DateTime date in dateList) {
         double outdatedGPA = curUser.initialCumGPA ?? 0.0;
         double creditsTaken = curUser.creditsTaken ?? 1.0;
@@ -94,12 +91,15 @@ class GPAInputController extends GetxController {
             }
           }
         }
-        print("date: $date");
-        print("gpa: ${gpaVal/creditsTaken}");
+
         overallHistory.history.add(GPAData(gpaVal / creditsTaken));
 
         //TODO: implement q2-q4
       }
+
+      await user.addOrReplaceDocument(localStorage.read("username"), overallHistory.history.last.gpa);
+      Map<String, int> ranking = await user.getGpaRanking(overallHistory.history.last.gpa);
+      curUser.rank = ranking;
 
       Map<dynamic, dynamic> users = localStorage.read("users");
       users[localStorage.read("username")] = user.curUser!.toMap();

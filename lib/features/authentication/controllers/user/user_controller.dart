@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -18,13 +19,6 @@ import '../../../../common/data/User.dart';
 class GenesisUserController extends GetxController {
   //vars
 
-  Map<String, dynamic> userdata = {
-    "name": "",
-    "stats": {"apcount": 0, "rank": 15, "absences": 4},
-    "courses": {},
-    "assignments": [],
-  };
-
   var localStorage = GetStorage();
 
   var users = GetStorage().read("users");
@@ -42,14 +36,14 @@ class GenesisUserController extends GetxController {
     History? overallHistory = curUser?.history
         .firstWhere((historyPoint) => historyPoint.name == "overall");
     double curGPA = overallHistory?.history.last.gpa ?? 0.0;
-    double res = double.parse((curGPA - (curUser?.initialCumGPA ?? 0.0)).toStringAsFixed(0));
+    double res = double.parse(
+        (curGPA - (curUser?.initialCumGPA ?? 0.0)).toStringAsFixed(0));
     if (res == 0) {
       return "+0";
     }
     if (res > 0) {
       return "+$res";
-    }
-    else{
+    } else {
       return "-$res";
     }
   }
@@ -226,8 +220,8 @@ class GenesisUserController extends GetxController {
     );
   }
 
-  String getClassRank() {
-    return userdata["stats"]["rank"].toString();
+  Map<String, int> getClassRank() {
+    return curUser?.rank ?? {};
   }
 
   int getAbsences() {
@@ -249,5 +243,57 @@ class GenesisUserController extends GetxController {
       }
     }
     return inc.toString();
+  }
+
+  Future<void> addOrReplaceDocument(String id, double gpa) async {
+    // Reference to the Firestore collection "class_ranking"
+    CollectionReference classRanking =
+        FirebaseFirestore.instance.collection('class_ranking');
+
+    try {
+      // Using set with merge: false will replace the document completely
+      await classRanking.doc(id).set({
+        'id': id,
+        'gpa': gpa,
+      }, SetOptions(merge: false));
+    } catch (e) {
+      print("Error adding/replacing document: $e");
+    }
+  }
+
+  Future<Map<String, int>> getGpaRanking(double gpa) async {
+    CollectionReference classRanking =
+        FirebaseFirestore.instance.collection('class_ranking');
+
+    try {
+      // Fetch all documents from the collection
+      QuerySnapshot snapshot = await classRanking.get();
+
+      // Extract all GPAs and sort them in descending order
+      List<double> allGpas = snapshot.docs
+          .map((doc) => (doc.data() as Map<String, dynamic>)['gpa'] as double)
+          .toList();
+
+      // Sort GPAs in descending order
+      allGpas.sort((a, b) => b.compareTo(a));
+
+      // Find the rank of the provided GPA (rank is 1-based)
+      int rank = allGpas.indexOf(gpa) + 1;
+
+      // Total number of documents (students) in the collection
+      int total = allGpas.length;
+
+      // Return the rank and the total number of students
+      return {
+        'rank': rank,
+        'total': total,
+      };
+    } catch (e) {
+      print("Error getting ranking: $e");
+      return {
+        'rank': -1, // Return an invalid rank in case of an error
+        'total': 0
+      };
+    }
   }
 }
