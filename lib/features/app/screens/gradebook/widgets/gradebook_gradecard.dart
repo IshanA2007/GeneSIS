@@ -20,7 +20,7 @@ class GradeCard extends StatelessWidget {
 
   final String className;
   final ClassData classData;
-  final int monthlyChange;
+  final double monthlyChange;
   final int missingAssignments;
   final String letterGrade;
   final double gradePercent;

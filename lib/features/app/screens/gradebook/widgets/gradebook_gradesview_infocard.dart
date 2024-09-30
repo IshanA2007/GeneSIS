@@ -10,7 +10,7 @@ class GradesViewInfoCard extends StatelessWidget {
     super.key,
     required this.weeklyChange,
     required this.monthlyChange,
-    required this.semesterChange,
+    required this.quarterChange,
     required this.letterGrade,
     required this.missingAssignments,
     required this.gradePercent,
@@ -18,9 +18,9 @@ class GradesViewInfoCard extends StatelessWidget {
   final String letterGrade;
   final int missingAssignments;
   final double gradePercent;
-  final int weeklyChange;
-  final int monthlyChange;
-  final int semesterChange;
+  final double weeklyChange;
+  final double monthlyChange;
+  final double quarterChange;
 
   @override
   Widget build(BuildContext context) {
@@ -139,18 +139,18 @@ class GradesViewInfoCard extends StatelessWidget {
                         children: [
                           TextSpan(
                             text:
-                            "${semesterChange >= 0 ? '+' : '-'}${semesterChange.abs()}%",
+                            "${quarterChange >= 0 ? '+' : '-'}${quarterChange.abs()}%",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
                                 .apply(
-                              color: semesterChange >= 0
+                              color: quarterChange >= 0
                                   ? Colors.greenAccent
                                   : Colors.redAccent,
                             ),
                           ),
                           TextSpan(
-                            text: " change this semester",
+                            text: " change this quarter",
                             style: Theme.of(context)
                                 .textTheme
                                 .labelMedium!

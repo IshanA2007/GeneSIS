@@ -26,7 +26,7 @@ class Gradebook extends StatelessWidget {
       grCards.add(
         GradeCard(
             className: curClass.courseName,
-            monthlyChange: 0,
+            monthlyChange: user.getMonthlyChange(curClass),
             classData: curClass,
             missingAssignments: user.getMissing(curClass),
             letterGrade: GenesisGradeCalculations.percentToLetter(curClass.percent),
