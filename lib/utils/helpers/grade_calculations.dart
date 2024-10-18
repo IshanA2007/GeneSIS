@@ -29,8 +29,6 @@ class GenesisGradeCalculations {
     return (earned / possible) * 100;
   }
 
-
-
   static double calculateCumulativeGPA(User user, int curQuarter) {
     double outdatedGPA = user.initialCumGPA ?? 0.0;
     double creditsTaken = user.creditsTaken ?? 1.0;
@@ -83,6 +81,8 @@ class GenesisGradeCalculations {
         return 1.3 + boost;
       case 'D':
         return 1.0 + boost;
+      case 'D-':
+        return 0.7 + boost;
       case 'F':
         return 0.0 + boost;
       default:
