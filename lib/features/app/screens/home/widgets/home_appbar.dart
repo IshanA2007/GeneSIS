@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grades/common/widgets/appbar/appbar.dart';
+import 'package:grades/features/app/screens/home/widgets/home_info_screen.dart';
 import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/text_strings.dart';
@@ -41,7 +42,7 @@ class GenesisHomeAppBar extends StatelessWidget {
               color: GenesisColors.primaryColor),
         ),
         IconButton(
-          onPressed: () {Get.to(const PolicyView());},
+          onPressed: () {Get.to(const GenesisDashboardInfoScreen());},
           icon: const Icon(Iconsax.message_question, color: GenesisColors.primaryColor),
         )
       ],

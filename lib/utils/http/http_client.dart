@@ -83,12 +83,19 @@ class GenesisHttpClient {
       for (Assignment assignment in foundClass.assignments) {
         if ((assignment.possiblePoints >= 0 && assignment.earnedPoints >= 0) &&
             !curClass.assignments.contains(assignment)) {
-          curClass.assignments.add(assignment);
-          curUser.assignments.add(assignment);
+          curClass.assignments.insert(0, assignment);
+          curUser.assignments.insert(0, assignment);
+
           newAssignmentsReturned = true;
           classesWithUpdatedAssignments.add(curClass.courseName);
         }
       }
+
+      List<AssignmentCategory> categories =
+      constructCategories2(foundClass, curClass.assignments);
+
+      curClass.categories = categories;
+
 
       curClass.percent = double.parse(foundClass.pctGrade!);
 
@@ -106,6 +113,7 @@ class GenesisHttpClient {
       await user.getGpaRanking(overallHistory.history.last.gpa);
       curUser.rank = ranking;
     }
+
 
     // update history of user
     for (Period period in curUser.periods) {
