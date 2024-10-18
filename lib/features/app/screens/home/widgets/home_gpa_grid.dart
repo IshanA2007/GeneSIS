@@ -14,6 +14,11 @@ class GenesisGPAGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Get.find<GenesisUserController>();
+    var classrank = user.getClassRank()["rank"] ?? -1;
+    var total = user.getClassRank()["total"] ?? 500;
+    var multiplier = 500 / total;
+    total = (total * multiplier).round();
+    classrank = (classrank * multiplier).round();
     return GenesisCardGrid(
       key: super.key,
       columns: 2,
@@ -22,8 +27,10 @@ class GenesisGPAGrid extends StatelessWidget {
       children: [
         GenesisStatsCardContent(
           title: "Class Rank",
-          stat: (user.getClassRank()["rank"] ?? -1).toString(),
-          units: " /${user.getClassRank()["total"]} students",
+          // stat: (user.getClassRank()["rank"] ?? -1).toString(),
+          // units: " /${user.getClassRank()["total"]} students",
+          stat: (classrank).toString(),
+          units: " /${total} students",
           icon: Icon(Iconsax.hashtag, color: Colors.yellow),
         ),
         GenesisStatsCardContent(
