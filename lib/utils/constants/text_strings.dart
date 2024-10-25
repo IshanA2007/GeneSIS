@@ -27,7 +27,7 @@ class GenesisTexts {
 
   //Home
   static const String homeAppbarTitle = "Hi, ";
-  static const String homeAppbarSubTitle = "Have a wonderful Tuesday.";
+  static const String homeAppbarSubTitle = "Have a wonderful";
 
   //Gradebook
   static const String gradebookAppbarTitle = "Gradebook";
