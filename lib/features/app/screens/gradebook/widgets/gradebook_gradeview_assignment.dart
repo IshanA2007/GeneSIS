@@ -37,12 +37,12 @@ class GradesViewAssignment extends StatelessWidget {
           ),
           Expanded(
             flex: 2,
-            child: Text("$earnedPoints/$possiblePoints",
+            child: FittedBox(fit: BoxFit.scaleDown, child: Text("$earnedPoints/$possiblePoints",
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
                     .labelMedium!
-                    .apply(color: !dark ? GenesisColors.black : GenesisColors.white)),
+                    .apply(color: !dark ? GenesisColors.black : GenesisColors.white))),
           ),
           Expanded(
             flex: 4,
