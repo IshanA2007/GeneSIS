@@ -117,7 +117,7 @@ class GenesisGradeCalculations {
     }
     for (Assignment assignment in course.assignments.reversed) {
       if (GenesisHelpers.stringToDateTime(assignment.date).isAfter(date)) {
-        break;
+        continue; // not break since ordering can be weird
       }
       if (assignment.notes.toLowerCase().contains("not for grading")) {
         continue;
