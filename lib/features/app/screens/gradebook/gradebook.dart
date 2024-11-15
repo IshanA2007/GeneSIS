@@ -66,13 +66,17 @@ class _GradebookState extends State<Gradebook> with SingleTickerProviderStateMix
     List<GradeCard> grCards = [];
     for (Period period in periods) {
       ClassData curClass = period.classData[period.classData.length - 1];
+      String letterGrade = GenesisGradeCalculations.percentToLetter(curClass.percent);
+      if(curClass.assignments.isEmpty){
+        letterGrade = "N/A";
+      }
       grCards.add(
         GradeCard(
           className: curClass.courseName,
           monthlyChange: user.getMonthlyChange(curClass),
           classData: curClass,
           missingAssignments: user.getMissing(curClass),
-          letterGrade: GenesisGradeCalculations.percentToLetter(curClass.percent),
+          letterGrade: letterGrade,
           gradePercent: curClass.percent,
         ),
       );
