@@ -88,9 +88,15 @@ class GenesisUserController extends GetxController {
   }
 
   double getQuarterChange(ClassData course) {
-    double grade = (course.assignments.last.earnedPoints /
-            course.assignments.last.possiblePoints) *
-        100;
+    double grade = 0;
+    if(course.assignments.isEmpty){
+      grade = 0;
+    }
+    else{
+      grade = (course.assignments.last.earnedPoints /
+          course.assignments.last.possiblePoints)
+          * 100;
+    }
     return double.parse((course.percent - grade).toStringAsFixed(1));
   }
 
