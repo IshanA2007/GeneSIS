@@ -106,7 +106,7 @@ class GradesView extends StatelessWidget {
                           earnedPoints: assignment.earnedPoints,
                           possiblePoints: assignment.possiblePoints,
                         ),
-                        const SizedBox(height: GenesisSizes.sm),
+                        const SizedBox(height: GenesisSizes.md),
                         // Add SizedBox after each item
                       ],
                     ],

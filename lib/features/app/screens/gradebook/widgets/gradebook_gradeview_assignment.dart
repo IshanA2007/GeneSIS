@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:grades/common/widgets/genesis_card.dart';
 import 'package:grades/features/app/screens/gradebook/widgets/gradebook_gradesview_infocard.dart';
 import 'package:grades/features/app/screens/gradebook/widgets/gradebook_gradesviewappbar.dart';
@@ -16,10 +17,17 @@ class GradesViewAssignment extends StatelessWidget {
   final String assignmentName;
   final double earnedPoints;
   final double possiblePoints;
-
   @override
   Widget build(BuildContext context) {
     final dark = GenesisHelpers.isDarkMode(context);
+    bool intEarned = false;
+    if(earnedPoints % 1 == 0){
+      intEarned = true;
+    }
+    bool intPossible = false;
+    if(possiblePoints % 1 == 0){
+      intPossible = true;
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: GenesisSizes.cardPaddingLg),
       child: Row(
@@ -37,7 +45,8 @@ class GradesViewAssignment extends StatelessWidget {
           ),
           Expanded(
             flex: 2,
-            child: FittedBox(fit: BoxFit.scaleDown, child: Text("$earnedPoints/$possiblePoints",
+            
+            child: FittedBox(fit: BoxFit.scaleDown, child: Text("${intEarned ? earnedPoints.toInt() : earnedPoints}/${intPossible ? possiblePoints.toInt() : possiblePoints}",
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
