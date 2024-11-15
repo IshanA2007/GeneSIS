@@ -28,7 +28,10 @@ class GradesView extends StatelessWidget {
     double weeklyChange = user.getWeeklyChange(classData); // HARDCODED VALUE
     double monthlyChange = user.getMonthlyChange(classData); // HARDCODED VALUE
     double quarterChange = user.getQuarterChange(classData); // HARDCODED VALUE
-
+    String letterGrade = GenesisGradeCalculations.percentToLetter(classData.percent);
+    if(classData.assignments.isEmpty){
+      letterGrade = "N/A";
+    }
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -45,7 +48,7 @@ class GradesView extends StatelessWidget {
               categories: classData.categories,
             ),
             GradesViewInfoCard(
-                letterGrade: GenesisGradeCalculations.percentToLetter(classData.percent),
+                letterGrade: letterGrade,
                 missingAssignments: user.getMissing(classData),
                 gradePercent: classData.percent,
                 weeklyChange: weeklyChange,
