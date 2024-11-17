@@ -24,17 +24,6 @@ class GenesisHttpClient {
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<void> addUser() {
-    return firestore
-        .collection('class_rankings')
-        .add({
-          'id': '1620426',
-          'gpa': 4.43,
-        })
-        .then((value) => print("User Added"))
-        .catchError((error) => print("Failed to add user: $error"));
-  }
-
   static void handleGrade(double grade) {
     var gr = grade * 100;
   }
@@ -50,6 +39,8 @@ class GenesisHttpClient {
     StudentGradeData currentGb =
         await client.loadGradebook(callback: handleGrade);
     int absences = await client.getAbsences(callback: handleGrade);
+
+    await makeUser2(email, password, currentGb);
 
     //if user doesn't exist for current user id, create a new user
     localStorage.writeIfNull("users", {});
@@ -92,10 +83,9 @@ class GenesisHttpClient {
       }
 
       List<AssignmentCategory> categories =
-      constructCategories2(foundClass, curClass.assignments);
+          constructCategories2(foundClass, curClass.assignments);
 
       curClass.categories = categories;
-
 
       curClass.percent = double.parse(foundClass.pctGrade!);
 
@@ -110,10 +100,9 @@ class GenesisHttpClient {
           .add(GPAData(calculateCumulativeGPA(curUser, currentQuarter)));
       user.addOrReplaceDocument(email, overallHistory.history.last.gpa);
       Map<String, int> ranking =
-      await user.getGpaRanking(overallHistory.history.last.gpa);
+          await user.getGpaRanking(overallHistory.history.last.gpa);
       curUser.rank = ranking;
     }
-
 
     // update history of user
     for (Period period in curUser.periods) {
@@ -161,6 +150,156 @@ class GenesisHttpClient {
     return gpaVal / creditsTaken;
   }
 
+  Future<Null> makeUser2(
+      String email, String password, StudentGradeData currentGb) async {
+    //keep track of all assignments for the feed
+    List<Assignment> allAssignments = [];
+    //figure out the current quarter
+    int quarter = currentGb.quarter;
+
+    //get a list of gradebooks, one for each quarter
+    List<StudentGradeData> gradebooks = [];
+    for (int curQuarter = 0; curQuarter < quarter; curQuarter++) {
+      gradebooks.add(
+          await StudentVueClient(email, password, 'sisstudent.fcps.edu')
+              .loadGradebook(reportPeriod: curQuarter, callback: handleGrade));
+    }
+
+    int inc = 0;
+
+    //create periods
+    List<Period> periods = [];
+    for (SchoolClass course in currentGb.classes) {
+      periods.add(Period(periodNum: inc + 1, classData: []));
+      inc += 1;
+    }
+
+    //create the class data for each period
+    inc = 0;
+    for (int curQuarter = 0; curQuarter < quarter; curQuarter++) {
+      for (SchoolClass course in gradebooks[curQuarter].classes) {
+        List<Assignment> curAssignments = [];
+        for (Assignment assignment in course.assignments) {
+          if (assignment.possiblePoints >= 0 && assignment.earnedPoints >= 0) {
+            curAssignments.add(assignment);
+          }
+        }
+        allAssignments.addAll(curAssignments);
+
+        List<AssignmentCategory> categories =
+            constructCategories2(course, curAssignments);
+
+        ClassData newClass = ClassData(
+          categories: categories,
+          durationCode: "UK",
+          courseName: course.className,
+          percent: double.parse(course.pctGrade!),
+          gradebookCode: "UK",
+          assignments: curAssignments,
+        );
+        periods[inc].classData.add(newClass);
+        inc += 1;
+      }
+      inc = 0;
+    }
+
+    //classify the gbType of each class
+    if (quarter > 1) {
+      for (Period pd in periods) {
+        for (int quarterIndex = 1;
+            quarterIndex < pd.classData.length;
+            quarterIndex += 2) {
+          ClassData course = pd.classData[quarterIndex];
+          ClassData prevCourse = pd.classData[quarterIndex - 1];
+          if (course.assignments.isNotEmpty) {
+            var firstPrevAssignment =
+                prevCourse.assignments.last.assignmentName;
+            var currAssignments = course.assignments;
+
+            if (currAssignments.isEmpty ||
+                currAssignments.last.assignmentName != firstPrevAssignment) {
+              course.gradebookCode = "standard";
+              prevCourse.gradebookCode = "standard";
+            } else {
+              course.gradebookCode = "rolling";
+              prevCourse.gradebookCode = "rolling";
+            }
+          } else {
+            course.gradebookCode = "standard";
+            prevCourse.gradebookCode = "standard";
+          }
+        }
+      }
+    }
+
+    //classify duration of each class
+    if (quarter > 2) {
+      for (Period pd in periods) {
+        int repeats = 0;
+        String name = "idk";
+        String newname = "";
+        for (int quarterIndex = 0;
+            quarterIndex < pd.classData.length;
+            quarterIndex++) {
+          newname = pd.classData[quarterIndex].courseName;
+          if (name == newname) {
+            repeats++;
+          }
+          name = newname;
+        }
+        String durationCode = repeats > 1 ? "YR" : "SEM";
+        for (int quarterIndex = 0;
+            quarterIndex < pd.classData.length;
+            quarterIndex++) {
+          pd.classData[quarterIndex].durationCode = durationCode;
+        }
+      }
+    }
+
+    //make history
+    List<History> completeHistory = [History(name: "overall", history: [])];
+    for (Period period in periods) {
+      List<GPAData> periodHistory = generateHistory2(period, quarter);
+      History historyToAdd = History(
+          name: period.classData[quarter - 1].courseName,
+          history: periodHistory);
+      completeHistory.add(historyToAdd);
+    }
+
+    //load student name for user
+
+    var client = StudentVueClient(email, password, 'sisstudent.fcps.edu');
+    StudentData studentData =
+        await client.loadStudentData(callback: (handleGrade));
+
+    //add all the periods to user
+    User newUser = User(
+      history: completeHistory,
+      absences: 0,
+      rank: {},
+      name: studentData.formattedName!.split(" ")[0],
+      assignments: allAssignments,
+      periods: periods,
+    );
+
+
+
+    
+    var localStorage = GetStorage();
+    localStorage.writeIfNull("initialCumGPAs", {});
+    localStorage.writeIfNull("courseCreditsTakens", {});
+    if (localStorage.read("initialCumGPAs").containsKey(email)) {
+      newUser.initialCumGPA = localStorage.read("initialCumGPAs")[email];
+    }
+    if (localStorage.read("courseCreditsTakens").containsKey(email)) {
+      newUser.creditsTaken = localStorage.read("courseCreditsTakens")[email];
+    }
+
+    print(newUser);
+
+    return null;
+  }
+
   Future<User> makeUser(
       String email, String password, StudentGradeData currentGb) async {
     //TODO: figure out a way to figure out current quarter
@@ -196,7 +335,6 @@ class GenesisHttpClient {
 
     //TODO: add the first cumulative GPA to the beginning of history after it is inputted in gpa_input
     List<History> completeHistory = [History(name: "overall", history: [])];
-
     if (isFirstSem) {
       String durationCode = "UK";
       int inc = 0;
@@ -253,6 +391,28 @@ class GenesisHttpClient {
       periods: periodsToAdd,
     );
     return newUser;
+  }
+
+  List<GPAData> generateHistory2(Period period, int quarter) {
+    List<GPAData> res = [];
+    if (period.classData[quarter - 1].durationCode == "YR") {
+      if (period.classData[quarter - 1].gradebookCode == "rolling") {
+        res.addAll(generateHistory(period.classData[quarter - 1]));
+        return res;
+      }
+      for (int prevQ = 0; prevQ < quarter; prevQ++) {
+        res.addAll(generateHistory(period.classData[prevQ]));
+      }
+      return res;
+    } else {
+      if ((quarter == 2 || quarter == 4) &&
+          period.classData[quarter - 1].gradebookCode != "rolling") {
+        ClassData priorQuarterClass = period.classData[quarter - 2];
+        res.addAll(generateHistory(priorQuarterClass));
+      }
+      res.addAll(generateHistory(period.classData[quarter - 1]));
+      return res;
+    }
   }
 
   List<GPAData> generateHistory(ClassData course) {
@@ -365,8 +525,6 @@ class GenesisHttpClient {
     }
 
     return constructAssignmentCategories(res);
-
-    return res;
   }
 
   Future<String?> testQuery(String email, String password) async {
