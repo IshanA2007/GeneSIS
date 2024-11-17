@@ -180,7 +180,7 @@ class GPAInputController extends GetxController {
       //write initialCumGPA and courseCreditsTaken to local storage
 
       localStorage.writeIfNull("initialCumGPAs", {});
-      Map<String, dynamic> initialCumGPAs = localStorage.read("initialCumGPAs");
+      Map<dynamic, dynamic> initialCumGPAs = localStorage.read("initialCumGPAs");
       initialCumGPAs[localStorage.read("username")] =
           double.parse(cumGPA.text.trim());
       localStorage.write("initialCumGPAs", initialCumGPAs);
@@ -188,7 +188,7 @@ class GPAInputController extends GetxController {
       user.curUser!.initialCumGPA = double.parse(cumGPA.text.trim());
 
       localStorage.writeIfNull("courseCreditsTakens", {});
-      Map<String, dynamic> courseCreditsTakens =
+      Map<dynamic, dynamic> courseCreditsTakens =
           localStorage.read("courseCreditsTakens");
       courseCreditsTakens[localStorage.read("username")] =
           double.parse(courseCreditsTaken.text.trim());

@@ -39,14 +39,16 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
     _slideAnimations = List.generate(assignments.length, (index) {
       // Determine slide direction: even index (left column) from left, odd index (right column) from right
       final isLeftColumn = index % 2 == 0;
-      final startOffset = isLeftColumn ? const Offset(-1, 0) : const Offset(1, 0);
+      final startOffset =
+          isLeftColumn ? const Offset(-1, 0) : const Offset(1, 0);
 
       return Tween<Offset>(
         begin: startOffset,
         end: Offset.zero,
       ).animate(CurvedAnimation(
         parent: _controller,
-        curve: Interval((index * 0.1).clamp(0.0, 1.0), 1.0, curve: Curves.easeOut),
+        curve:
+            Interval((index * 0.1).clamp(0.0, 1.0), 1.0, curve: Curves.easeOut),
       ));
     });
 
@@ -67,7 +69,10 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
     List<AssignmentCard> assignmentCards = [];
     List<Assignment> assignments = user.getAllAssignments();
     for (Assignment assignment in assignments) {
+      print("hee");
+      print(assignment);
       ClassData containingClass = user.findClassWithAssignment(assignment)!;
+      print("ha");
       assignmentCards.add(AssignmentCard(
         assignment: assignment,
         course: containingClass,
@@ -86,7 +91,8 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
               height: GenesisSizes.spaceBtwItems,
             ),
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: GenesisSizes.md),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: GenesisSizes.md),
                 child: GenesisCardGrid(
                   cardPadding: const EdgeInsets.all(0),
                   columns: 2,
