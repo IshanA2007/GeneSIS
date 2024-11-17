@@ -89,13 +89,12 @@ class GenesisUserController extends GetxController {
 
   double getQuarterChange(ClassData course) {
     double grade = 0;
-    if(course.assignments.isEmpty){
+    if (course.assignments.isEmpty) {
       grade = 0;
-    }
-    else{
+    } else {
       grade = (course.assignments.last.earnedPoints /
-          course.assignments.last.possiblePoints)
-          * 100;
+              course.assignments.last.possiblePoints) *
+          100;
     }
     return double.parse((course.percent - grade).toStringAsFixed(1));
   }
@@ -125,11 +124,13 @@ class GenesisUserController extends GetxController {
 
   ClassData? findClassWithAssignment(Assignment assignment) {
     for (Period period in curUser?.periods ?? []) {
-      ClassData curClass = period.classData.last;
-      if (curClass.assignments.contains(assignment)) {
-        return curClass;
+      for (ClassData course in period.classData) {
+        if (course.assignments.contains(assignment)) {
+          return course;
+        }
       }
     }
+    return null;
   }
 
   //void getWeekTrend(String course) #accesses local storage and does a bnch of math
@@ -239,6 +240,7 @@ class GenesisUserController extends GetxController {
   bool requiresGPAInput() {
     History? overallHistory = curUser?.history
         .firstWhere((historyPoint) => historyPoint.name == "overall");
+    print(overallHistory);
     return overallHistory?.history.isEmpty ?? true;
   }
 

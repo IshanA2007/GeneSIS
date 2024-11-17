@@ -11,20 +11,17 @@ import 'data/repositories/authentication/authentication_repository.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-
   //Widget Binding
-  final WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  final WidgetsBinding widgetsBinding =
+      WidgetsFlutterBinding.ensureInitialized();
 
   //Initialize Local Storage
   await GetStorage.init();
 
-
-
   GetStorage().remove("username");
   GetStorage().remove("password");
 
-  //GetStorage().erase();
-
+  GetStorage().erase();
 
   //Native Splash Screen
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -41,5 +38,3 @@ Future<void> main() async {
   //Load Application
   runApp(const MainApp());
 }
-
-

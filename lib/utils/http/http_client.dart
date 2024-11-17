@@ -41,18 +41,14 @@ class GenesisHttpClient {
         await client.loadGradebook(callback: handleGrade);
     int absences = await client.getAbsences(callback: handleGrade);
 
-    await makeUser2(email, password, currentGb);
-
     //if user doesn't exist for current user id, create a new user
     localStorage.writeIfNull("users", {});
     Map<dynamic, dynamic> users = localStorage.read("users");
     if (!users.containsKey(email)) {
       isFirstTime = true;
-      users[email] = (await makeUser(email, password, currentGb)).toMap();
+      users[email] = (await makeUser2(email, password, currentGb)).toMap();
       localStorage.write("users", users);
     }
-
-    print("hi");
 
     User curUser = User.fromMap(localStorage.read("users")[email]);
 
@@ -68,20 +64,23 @@ class GenesisHttpClient {
     for (Period period in curUser.periods) {
       ClassData curClass = period.classData.last;
 
+      print(curClass);
+
       SchoolClass foundClass = currentGb.classes.firstWhere(
           (schoolClass) => schoolClass.className == curClass.courseName);
 
-      //update assignments and allAssignments
+      //update assignments
+      List<Assignment> curAssignments = [];
       for (Assignment assignment in foundClass.assignments) {
-        if ((assignment.possiblePoints >= 0 && assignment.earnedPoints >= 0) &&
-            !curClass.assignments.contains(assignment)) {
-          curClass.assignments.insert(0, assignment);
-          curUser.assignments.insert(0, assignment);
-
-          newAssignmentsReturned = true;
-          classesWithUpdatedAssignments.add(curClass.courseName);
+        if (assignment.possiblePoints >= 0 && assignment.earnedPoints >= 0) {
+          if (!curUser.assignments.contains(assignment)) {
+            curUser.assignments.insert(0, assignment);
+          }
+          curAssignments.add(assignment);
         }
       }
+
+      curClass.assignments = curAssignments;
 
       List<AssignmentCategory> categories =
           constructCategories2(foundClass, curClass.assignments);
@@ -94,7 +93,8 @@ class GenesisHttpClient {
     }
 
     //calculate cumulative GPA, add it to history
-    if (newAssignmentsReturned) {
+
+    if (!isFirstTime) {
       History overallHistory =
           curUser.history.firstWhere((history) => history.name == "overall");
       overallHistory.history
@@ -108,14 +108,10 @@ class GenesisHttpClient {
     // update history of user
     for (Period period in curUser.periods) {
       ClassData curClass = period.classData[period.classData.length - 1];
-      if (classesWithUpdatedAssignments.contains(curClass.courseName)) {
-        History classHistory = curUser.history
-            .firstWhere((history) => history.name == curClass.courseName);
-        classHistory.history.add(GPAData(curClass.percent));
-      }
+      History classHistory = curUser.history
+          .firstWhere((history) => history.name == curClass.courseName);
+      classHistory.history.add(GPAData(curClass.percent));
     }
-
-    print("hello");
 
     users = localStorage.read("users");
     users[email] = curUser.toMap();
@@ -378,7 +374,7 @@ class GenesisHttpClient {
     return gpaVal / creditsTaken;
   }
 
-  Future<Null> makeUser2(
+  Future<User> makeUser2(
       String email, String password, StudentGradeData currentGb) async {
     //keep track of all assignments for the feed
     List<Assignment> allAssignments = [];
@@ -529,10 +525,12 @@ class GenesisHttpClient {
     // Get the current date
     DateTime endDate = DateTime.now();
 
-    reconstructHistory(overallHistory, newUser, startDate, endDate);
-    print(overallHistory);
+    if (newUser.initialCumGPA != null && newUser.creditsTaken != null) {
+      reconstructHistory(overallHistory, newUser, startDate, endDate);
+      print("Reconstructing history because quarter changed and user exists");
+    }
 
-    return null;
+    return newUser;
   }
 
   Future<User> makeUser(
