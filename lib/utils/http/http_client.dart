@@ -7,6 +7,7 @@ import 'package:grades/common/data/Period.dart';
 import 'package:grades/common/data/User.dart';
 import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/utils/helpers/grade_calculations.dart';
+import 'package:grades/utils/helpers/helper_functions.dart';
 import 'package:studentvueclient/studentvueclient.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
@@ -131,7 +132,6 @@ class GenesisHttpClient {
 
     if (curQuarter <= 2) {
       for (Period period in curUser.periods) {
-        
         ClassData curQCourse = period.classData[curQuarter - 1];
         if (curQuarter == 1 ||
             curQCourse.gradebookCode == "UK" ||
@@ -208,6 +208,146 @@ class GenesisHttpClient {
       }
     }
     return gpaVal / creditsTaken;
+  }
+
+  void reconstructHistory(
+      History history, User curUser, DateTime startDate, DateTime endDate) {
+    List<DateTime> dateList =
+        GenesisHelpers.generateDateList(startDate, endDate);
+
+    for (DateTime date in dateList) {
+      double outdatedGPA = curUser.initialCumGPA ?? 4.43;
+      double creditsTaken = curUser.creditsTaken ?? 26;
+      double gpaVal = outdatedGPA * creditsTaken;
+      int curQuarter = GenesisHelpers.getQuarterOfDate(date);
+      if (curQuarter <= 2) {
+        for (Period period in curUser.periods) {
+          ClassData curClass =
+              period.classData[GenesisHelpers.getQuarterOfDate(date) - 1];
+          if (curQuarter == 1 ||
+              curClass.gradebookCode == "UK" ||
+              curClass.gradebookCode == "rolling") {
+            double currentClassGrade =
+                GenesisGradeCalculations.calculateGradeOn(
+                    date: date, course: curClass);
+            if (currentClassGrade != -1) {
+              gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          currentClassGrade),
+                      curClass.courseName) *
+                  0.5;
+
+              creditsTaken += 0.5;
+            }
+          } else {
+            //quarter must be 2 and standard
+            ClassData prevClass = period.classData[0];
+            double currentClassGrade =
+                GenesisGradeCalculations.calculateGradeOn(
+                    date: date, course: curClass);
+            double prevClassGrade = prevClass.percent;
+            if (currentClassGrade != -1 && prevClassGrade != -1) {
+              gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          (currentClassGrade + prevClassGrade) / 2),
+                      curClass.courseName) *
+                  0.5;
+              creditsTaken += 0.5;
+            }
+          }
+        }
+
+        history.history.add(GPAData(gpaVal / creditsTaken));
+      } else {
+        //quarter is 3 or 4
+        for (Period period in curUser.periods) {
+          ClassData curQCourse = period.classData[curQuarter - 1];
+          if (curQCourse.durationCode == "YR") {
+            if (curQCourse.gradebookCode == "rolling") {
+              double currentClassGrade =
+                  GenesisGradeCalculations.calculateGradeOn(
+                      date: date, course: curQCourse);
+              gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          currentClassGrade),
+                      curQCourse.courseName) *
+                  1;
+              creditsTaken += 1;
+            } else {
+              for (int prevQ = 0; prevQ < curQuarter - 1; prevQ++) {
+                ClassData prevQCourse = period.classData[prevQ];
+                gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                        GenesisGradeCalculations.percentToLetter(
+                            prevQCourse.percent),
+                        prevQCourse.courseName) *
+                    0.25;
+                creditsTaken += 0.25;
+              }
+              double currentClassGrade =
+                  GenesisGradeCalculations.calculateGradeOn(
+                      date: date, course: curQCourse);
+              gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          currentClassGrade),
+                      curQCourse.courseName) *
+                  0.25;
+              creditsTaken += 0.25;
+            }
+          } else {
+            for (int qIndex = 1; qIndex < curQuarter - 1; qIndex += 2) {
+              if (period.classData[qIndex].gradebookCode == "rolling") {
+                gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                        GenesisGradeCalculations.percentToLetter(
+                            period.classData[qIndex].percent),
+                        period.classData[qIndex].courseName) *
+                    0.5;
+                creditsTaken += 0.5;
+              } else {
+                ClassData prevQCourse = period.classData[qIndex - 1];
+                double avgGPA = (GenesisGradeCalculations.gpaFromLetter(
+                            GenesisGradeCalculations.percentToLetter(
+                                period.classData[qIndex].percent),
+                            period.classData[qIndex].courseName) +
+                        GenesisGradeCalculations.gpaFromLetter(
+                            GenesisGradeCalculations.percentToLetter(
+                                prevQCourse.percent),
+                            prevQCourse.courseName)) /
+                    2;
+                gpaVal += avgGPA * 0.5;
+                creditsTaken += 0.5;
+              }
+            }
+            if (curQCourse.gradebookCode == "rolling") {
+              double currentClassGrade =
+                  GenesisGradeCalculations.calculateGradeOn(
+                      date: date, course: curQCourse);
+              gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          currentClassGrade),
+                      curQCourse.courseName) *
+                  0.5;
+              creditsTaken += 0.5;
+            } else {
+              ClassData prevQCourse = period.classData[curQuarter - 2];
+              double currentClassGrade =
+                  GenesisGradeCalculations.calculateGradeOn(
+                      date: date, course: curQCourse);
+              double avgGPA = (GenesisGradeCalculations.gpaFromLetter(
+                          GenesisGradeCalculations.percentToLetter(
+                              currentClassGrade),
+                          curQCourse.courseName) +
+                      GenesisGradeCalculations.gpaFromLetter(
+                          GenesisGradeCalculations.percentToLetter(
+                              prevQCourse.percent),
+                          prevQCourse.courseName)) /
+                  2;
+              gpaVal += avgGPA * 0.5;
+              creditsTaken += 0.5;
+            }
+          }
+        }
+      }
+    }
   }
 
   double calculateCumulativeGPA(User curUser, int curQuarter) {
@@ -380,7 +520,17 @@ class GenesisHttpClient {
       newUser.creditsTaken = localStorage.read("courseCreditsTakens")[email];
     }
 
-    print(calculateCumulativeGPA2(newUser, quarter));
+    History overallHistory =
+        newUser.history.firstWhere((history) => history.name == "overall");
+    // overallHistory.history.insert(0, GPAData(updatedCGPA));
+
+    DateTime startDate = DateTime(2024, 8, 19);
+
+    // Get the current date
+    DateTime endDate = DateTime.now();
+
+    reconstructHistory(overallHistory, newUser, startDate, endDate);
+    print(overallHistory);
 
     return null;
   }
