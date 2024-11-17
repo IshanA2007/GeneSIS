@@ -27,6 +27,146 @@ class GPAInputController extends GetxController {
   GlobalKey<FormState> gpaInputFormKey = GlobalKey<FormState>();
   final user = Get.find<GenesisUserController>();
 
+  void reconstructHistory(
+      History history, User curUser, DateTime startDate, DateTime endDate) {
+    List<DateTime> dateList =
+        GenesisHelpers.generateDateList(startDate, endDate);
+
+    for (DateTime date in dateList) {
+      double outdatedGPA = curUser.initialCumGPA ?? 4.43;
+      double creditsTaken = curUser.creditsTaken ?? 26;
+      double gpaVal = outdatedGPA * creditsTaken;
+      int curQuarter = GenesisHelpers.getQuarterOfDate(date);
+      if (curQuarter <= 2) {
+        for (Period period in curUser.periods) {
+          ClassData curClass =
+              period.classData[GenesisHelpers.getQuarterOfDate(date) - 1];
+          if (curQuarter == 1 ||
+              curClass.gradebookCode == "UK" ||
+              curClass.gradebookCode == "rolling") {
+            double currentClassGrade =
+                GenesisGradeCalculations.calculateGradeOn(
+                    date: date, course: curClass);
+            if (currentClassGrade != -1) {
+              gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          currentClassGrade),
+                      curClass.courseName) *
+                  0.5;
+
+              creditsTaken += 0.5;
+            }
+          } else {
+            //quarter must be 2 and standard
+            ClassData prevClass = period.classData[0];
+            double currentClassGrade =
+                GenesisGradeCalculations.calculateGradeOn(
+                    date: date, course: curClass);
+            double prevClassGrade = prevClass.percent;
+            if (currentClassGrade != -1 && prevClassGrade != -1) {
+              gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          (currentClassGrade + prevClassGrade) / 2),
+                      curClass.courseName) *
+                  0.5;
+              creditsTaken += 0.5;
+            }
+          }
+        }
+
+        history.history.add(GPAData(gpaVal / creditsTaken));
+      } else {
+        //quarter is 3 or 4
+        for (Period period in curUser.periods) {
+          ClassData curQCourse = period.classData[curQuarter - 1];
+          if (curQCourse.durationCode == "YR") {
+            if (curQCourse.gradebookCode == "rolling") {
+              double currentClassGrade =
+                  GenesisGradeCalculations.calculateGradeOn(
+                      date: date, course: curQCourse);
+              gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          currentClassGrade),
+                      curQCourse.courseName) *
+                  1;
+              creditsTaken += 1;
+            } else {
+              for (int prevQ = 0; prevQ < curQuarter - 1; prevQ++) {
+                ClassData prevQCourse = period.classData[prevQ];
+                gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                        GenesisGradeCalculations.percentToLetter(
+                            prevQCourse.percent),
+                        prevQCourse.courseName) *
+                    0.25;
+                creditsTaken += 0.25;
+              }
+              double currentClassGrade =
+                  GenesisGradeCalculations.calculateGradeOn(
+                      date: date, course: curQCourse);
+              gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          currentClassGrade),
+                      curQCourse.courseName) *
+                  0.25;
+              creditsTaken += 0.25;
+            }
+          } else {
+            for (int qIndex = 1; qIndex < curQuarter - 1; qIndex += 2) {
+              if (period.classData[qIndex].gradebookCode == "rolling") {
+                gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                        GenesisGradeCalculations.percentToLetter(
+                            period.classData[qIndex].percent),
+                        period.classData[qIndex].courseName) *
+                    0.5;
+                creditsTaken += 0.5;
+              } else {
+                ClassData prevQCourse = period.classData[qIndex - 1];
+                double avgGPA = (GenesisGradeCalculations.gpaFromLetter(
+                            GenesisGradeCalculations.percentToLetter(
+                                period.classData[qIndex].percent),
+                            period.classData[qIndex].courseName) +
+                        GenesisGradeCalculations.gpaFromLetter(
+                            GenesisGradeCalculations.percentToLetter(
+                                prevQCourse.percent),
+                            prevQCourse.courseName)) /
+                    2;
+                gpaVal += avgGPA * 0.5;
+                creditsTaken += 0.5;
+              }
+            }
+            if (curQCourse.gradebookCode == "rolling") {
+              double currentClassGrade =
+                  GenesisGradeCalculations.calculateGradeOn(
+                      date: date, course: curQCourse);
+              gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          currentClassGrade),
+                      curQCourse.courseName) *
+                  0.5;
+              creditsTaken += 0.5;
+            } else {
+              ClassData prevQCourse = period.classData[curQuarter - 2];
+              double currentClassGrade =
+                  GenesisGradeCalculations.calculateGradeOn(
+                      date: date, course: curQCourse);
+              double avgGPA = (GenesisGradeCalculations.gpaFromLetter(
+                          GenesisGradeCalculations.percentToLetter(
+                              currentClassGrade),
+                          curQCourse.courseName) +
+                      GenesisGradeCalculations.gpaFromLetter(
+                          GenesisGradeCalculations.percentToLetter(
+                              prevQCourse.percent),
+                          prevQCourse.courseName)) /
+                  2;
+              gpaVal += avgGPA * 0.5;
+              creditsTaken += 0.5;
+            }
+          }
+        }
+      }
+    }
+  }
+
   Future<void> submitGPAInput() async {
     try {
       GenesisFullScreenLoader.openLoadingDialog(
@@ -67,55 +207,7 @@ class GPAInputController extends GetxController {
       // Get the current date
       DateTime endDate = DateTime.now();
 
-      List<DateTime> dateList =
-          GenesisHelpers.generateDateList(startDate, endDate);
-
-      for (DateTime date in dateList) {
-        double outdatedGPA = curUser.initialCumGPA ?? 0.0;
-        double creditsTaken = curUser.creditsTaken ?? 1.0;
-        double gpaVal = outdatedGPA * creditsTaken;
-        if (GenesisHelpers.getQuarterOfDate(date) == 1 ||
-            GenesisHelpers.getQuarterOfDate(date) == 2) {
-          for (Period period in curUser.periods) {
-            ClassData curClass =
-                period.classData[GenesisHelpers.getQuarterOfDate(date) - 1];
-            if (curClass.gradebookCode == "UK" ||
-                curClass.gradebookCode == "rolling") {
-              double currentClassGrade =
-                  GenesisGradeCalculations.calculateGradeOn(
-                      date: date, course: curClass);
-              if (currentClassGrade != -1) {
-                gpaVal += GenesisGradeCalculations.gpaFromLetter(
-                        GenesisGradeCalculations.percentToLetter(
-                            currentClassGrade),
-                        curClass.courseName) *
-                    0.5;
-
-                creditsTaken += 0.5;
-              }
-            } else {
-              //TODO: store quarterly grades in ClassData somehow
-              //temp solution, just use current grade
-              double currentClassGrade =
-                  GenesisGradeCalculations.calculateGradeOn(
-                      date: date, course: curClass);
-              if (currentClassGrade != -1) {
-                gpaVal += GenesisGradeCalculations.gpaFromLetter(
-                        GenesisGradeCalculations.percentToLetter(
-                            currentClassGrade),
-                        curClass.courseName) *
-                    0.5;
-
-                creditsTaken += 0.5;
-              }
-            }
-          }
-        }
-
-        overallHistory.history.add(GPAData(gpaVal / creditsTaken));
-
-        //TODO: implement q2-q4
-      }
+      reconstructHistory(overallHistory, curUser, startDate, endDate);
 
       await user.addOrReplaceDocument(
           localStorage.read("username"), overallHistory.history.last.gpa);
