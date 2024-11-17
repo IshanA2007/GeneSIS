@@ -37,9 +37,22 @@ class GPAInputController extends GetxController {
         return;
       }
 
-      user.curUser!.initialCumGPA = double.parse(cumGPA.text.trim());
-      user.curUser!.creditsTaken = double.parse(courseCreditsTaken.text.trim());
+      localStorage.writeIfNull("initialCumGPAs", {});
+      Map<String, dynamic> initialCumGPAs = localStorage.read("initialCumGPAs");
+      initialCumGPAs[localStorage.read("username")] =
+          double.parse(cumGPA.text.trim());
+      localStorage.write("initialCumGPAs", initialCumGPAs);
 
+      user.curUser!.initialCumGPA = double.parse(cumGPA.text.trim());
+
+      localStorage.writeIfNull("courseCreditsTakens", {});
+      Map<String, dynamic> courseCreditsTakens =
+          localStorage.read("courseCreditsTakens");
+      courseCreditsTakens[localStorage.read("username")] =
+          double.parse(courseCreditsTaken.text.trim());
+      localStorage.write("courseCreditsTakens", courseCreditsTakens);
+
+      user.curUser!.creditsTaken = double.parse(courseCreditsTaken.text.trim());
 
       History overallHistory = user.curUser!.history
           .firstWhere((history) => history.name == "overall");
@@ -65,27 +78,31 @@ class GPAInputController extends GetxController {
                 period.classData[GenesisHelpers.getQuarterOfDate(date) - 1];
             if (curClass.gradebookCode == "UK" ||
                 curClass.gradebookCode == "rolling") {
-              double currentClassGrade = GenesisGradeCalculations.calculateGradeOn(
-                                date: date, course: curClass);
-              if (currentClassGrade != -1){
+              double currentClassGrade =
+                  GenesisGradeCalculations.calculateGradeOn(
+                      date: date, course: curClass);
+              if (currentClassGrade != -1) {
                 gpaVal += GenesisGradeCalculations.gpaFromLetter(
-                        GenesisGradeCalculations.percentToLetter(currentClassGrade),
+                        GenesisGradeCalculations.percentToLetter(
+                            currentClassGrade),
                         curClass.courseName) *
                     0.5;
-                
+
                 creditsTaken += 0.5;
               }
             } else {
               //TODO: store quarterly grades in ClassData somehow
               //temp solution, just use current grade
-              double currentClassGrade = GenesisGradeCalculations.calculateGradeOn(
-                                date: date, course: curClass);
-              if (currentClassGrade != -1){
+              double currentClassGrade =
+                  GenesisGradeCalculations.calculateGradeOn(
+                      date: date, course: curClass);
+              if (currentClassGrade != -1) {
                 gpaVal += GenesisGradeCalculations.gpaFromLetter(
-                        GenesisGradeCalculations.percentToLetter(currentClassGrade),
+                        GenesisGradeCalculations.percentToLetter(
+                            currentClassGrade),
                         curClass.courseName) *
                     0.5;
-                
+
                 creditsTaken += 0.5;
               }
             }
@@ -97,8 +114,10 @@ class GPAInputController extends GetxController {
         //TODO: implement q2-q4
       }
 
-      await user.addOrReplaceDocument(localStorage.read("username"), overallHistory.history.last.gpa);
-      Map<String, int> ranking = await user.getGpaRanking(overallHistory.history.last.gpa);
+      await user.addOrReplaceDocument(
+          localStorage.read("username"), overallHistory.history.last.gpa);
+      Map<String, int> ranking =
+          await user.getGpaRanking(overallHistory.history.last.gpa);
       curUser.rank = ranking;
 
       Map<dynamic, dynamic> users = localStorage.read("users");
