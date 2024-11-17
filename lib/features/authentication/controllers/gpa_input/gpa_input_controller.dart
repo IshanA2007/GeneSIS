@@ -37,6 +37,8 @@ class GPAInputController extends GetxController {
         return;
       }
 
+      //write initialCumGPA and courseCreditsTaken to local storage
+
       localStorage.writeIfNull("initialCumGPAs", {});
       Map<String, dynamic> initialCumGPAs = localStorage.read("initialCumGPAs");
       initialCumGPAs[localStorage.read("username")] =
@@ -54,6 +56,7 @@ class GPAInputController extends GetxController {
 
       user.curUser!.creditsTaken = double.parse(courseCreditsTaken.text.trim());
 
+      //reconstruct the overall history of the user
       History overallHistory = user.curUser!.history
           .firstWhere((history) => history.name == "overall");
       // overallHistory.history.insert(0, GPAData(updatedCGPA));

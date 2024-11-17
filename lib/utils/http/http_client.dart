@@ -122,6 +122,94 @@ class GenesisHttpClient {
     return;
   }
 
+  double calculateCumulativeGPA2(User curUser, int curQuarter) {
+    //double outdatedGPA = curUser.initialCumGPA ?? 0.0;
+    //double creditsTaken = curUser.creditsTaken ?? 1.0;
+    double outdatedGPA = curUser.initialCumGPA ?? 4.43;
+    double creditsTaken = curUser.creditsTaken ?? 26;
+    double gpaVal = outdatedGPA * creditsTaken;
+
+    if (curQuarter <= 2) {
+      for (Period period in curUser.periods) {
+        
+        ClassData curQCourse = period.classData[curQuarter - 1];
+        if (curQuarter == 1 ||
+            curQCourse.gradebookCode == "UK" ||
+            curQCourse.gradebookCode == "rolling") {
+          gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                  GenesisGradeCalculations.percentToLetter(curQCourse.percent),
+                  curQCourse.courseName) *
+              0.5;
+          creditsTaken += 0.5;
+        } else {
+          //always second quarter now bc we chekced for 1 quarter above
+          ClassData prevQCourse = period.classData[curQuarter - 2];
+
+          double avgGPA = (GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          curQCourse.percent),
+                      curQCourse.courseName) +
+                  GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          prevQCourse.percent),
+                      prevQCourse.courseName)) /
+              2;
+          gpaVal += avgGPA * 0.5;
+          creditsTaken += 0.5;
+        }
+      }
+    } else {
+      for (Period period in curUser.periods) {
+        ClassData curQCourse = period.classData[curQuarter - 1];
+        if (curQCourse.durationCode == "YR") {
+          if (curQCourse.gradebookCode == "rolling") {
+            gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                    GenesisGradeCalculations.percentToLetter(
+                        curQCourse.percent),
+                    curQCourse.courseName) *
+                1;
+            creditsTaken += 1;
+          } else {
+            for (int prevQ = 0; prevQ < curQuarter; prevQ++) {
+              ClassData prevQCourse = period.classData[prevQ];
+              gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          prevQCourse.percent),
+                      prevQCourse.courseName) *
+                  0.25;
+              creditsTaken += 0.25;
+            }
+          }
+        } else {
+          for (int qIndex = 1; qIndex < curQuarter; qIndex += 2) {
+            if (period.classData[qIndex].gradebookCode == "rolling") {
+              gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          period.classData[qIndex].percent),
+                      period.classData[qIndex].courseName) *
+                  0.5;
+              creditsTaken += 0.5;
+            } else {
+              ClassData prevQCourse = period.classData[qIndex - 1];
+              double avgGPA = (GenesisGradeCalculations.gpaFromLetter(
+                          GenesisGradeCalculations.percentToLetter(
+                              period.classData[qIndex].percent),
+                          period.classData[qIndex].courseName) +
+                      GenesisGradeCalculations.gpaFromLetter(
+                          GenesisGradeCalculations.percentToLetter(
+                              prevQCourse.percent),
+                          prevQCourse.courseName)) /
+                  2;
+              gpaVal += avgGPA * 0.5;
+              creditsTaken += 0.5;
+            }
+          }
+        }
+      }
+    }
+    return gpaVal / creditsTaken;
+  }
+
   double calculateCumulativeGPA(User curUser, int curQuarter) {
     double outdatedGPA = curUser.initialCumGPA ?? 0.0;
     double creditsTaken = curUser.creditsTaken ?? 1.0;
@@ -282,9 +370,6 @@ class GenesisHttpClient {
       periods: periods,
     );
 
-
-
-    
     var localStorage = GetStorage();
     localStorage.writeIfNull("initialCumGPAs", {});
     localStorage.writeIfNull("courseCreditsTakens", {});
@@ -295,7 +380,7 @@ class GenesisHttpClient {
       newUser.creditsTaken = localStorage.read("courseCreditsTakens")[email];
     }
 
-    print(newUser);
+    print(calculateCumulativeGPA2(newUser, quarter));
 
     return null;
   }
