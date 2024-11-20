@@ -355,19 +355,23 @@ class GenesisHttpClient {
         ClassData curClass = period.classData[period.classData.length - 1];
         if (curClass.gradebookCode == "UK" ||
             curClass.gradebookCode == "rolling") {
-          gpaVal += GenesisGradeCalculations.gpaFromLetter(
-                  GenesisGradeCalculations.percentToLetter(curClass.percent),
-                  curClass.courseName) *
-              0.5;
-          creditsTaken += 0.5;
+          if(curClass.assignments.isNotEmpty){
+            gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                    GenesisGradeCalculations.percentToLetter(curClass.percent),
+                    curClass.courseName) *
+                0.5;
+            creditsTaken += 0.5;
+          }
         } else {
           //TODO: store quarterly grades in ClassData somehow
           //temp solution, just use current grade
-          gpaVal += GenesisGradeCalculations.gpaFromLetter(
-                  GenesisGradeCalculations.percentToLetter(curClass.percent),
-                  curClass.courseName) *
-              0.5;
-          creditsTaken += 0.5;
+           if(curClass.assignments.isNotEmpty){
+            gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                    GenesisGradeCalculations.percentToLetter(curClass.percent),
+                    curClass.courseName) *
+                0.5;
+            creditsTaken += 0.5;
+           }
         }
       }
     }
@@ -520,7 +524,7 @@ class GenesisHttpClient {
         newUser.history.firstWhere((history) => history.name == "overall");
     // overallHistory.history.insert(0, GPAData(updatedCGPA));
 
-    DateTime startDate = DateTime(2024, 8, 19);
+    DateTime startDate = DateTime(2024, 8, 19); // TODO - calculate dynamically
 
     // Get the current date
     DateTime endDate = DateTime.now();
