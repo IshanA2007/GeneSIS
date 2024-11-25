@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:grades/navigation_menu.dart';
 import 'package:grades/utils/constants/sizes.dart';
 import 'package:grades/utils/constants/text_strings.dart';
 import 'package:grades/utils/validators/validation.dart';

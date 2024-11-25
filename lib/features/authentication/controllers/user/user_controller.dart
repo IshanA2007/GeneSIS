@@ -4,9 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:grades/common/data/GPAData.dart';
-import 'package:grades/features/authentication/screens/login/login.dart';
 import 'package:grades/utils/helpers/grade_calculations.dart';
-import 'package:grades/utils/helpers/helper_functions.dart';
 import 'package:studentvueclient/studentvueclient.dart';
 
 import '../../../../common/data/ClassData.dart';
@@ -69,7 +67,7 @@ class GenesisUserController extends GetxController {
 
   double getWeeklyChange(ClassData course) {
     DateTime now = DateTime.now();
-    DateTime weekAgoDate = now.subtract(Duration(days: 7));
+    DateTime weekAgoDate = now.subtract(const Duration(days: 7));
 
     // TODO: beginning of quarter dynamic retrieval
     DateTime beginningOfQuarter = DateTime(now.year, 8, 19);

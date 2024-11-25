@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:grades/features/app/screens/feed/widgets/feed_appbar.dart';
 import 'package:grades/features/app/screens/settings/widgets/settings_setting.dart';
 import 'package:grades/features/app/screens/settings/widgets/settings_appbar.dart';
-import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
 
 

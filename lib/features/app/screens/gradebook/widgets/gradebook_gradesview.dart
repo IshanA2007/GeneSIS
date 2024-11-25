@@ -6,7 +6,6 @@ import 'package:grades/features/app/screens/gradebook/widgets/gradebook_gradesvi
 import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
-import 'package:grades/utils/device/device_utilities.dart';
 import 'package:grades/utils/helpers/grade_calculations.dart';
 import 'package:studentvueclient/studentvueclient.dart';
 

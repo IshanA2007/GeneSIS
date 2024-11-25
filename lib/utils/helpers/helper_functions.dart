@@ -24,7 +24,7 @@ class GenesisHelpers {
     // Add each date from startDate to endDate
     for (DateTime date = startDate;
         date.isBefore(endDate) || date.isAtSameMomentAs(endDate);
-        date = date.add(Duration(days: 1))) {
+        date = date.add(const Duration(days: 1))) {
       dates.add(date);
     }
 

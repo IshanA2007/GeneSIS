@@ -6,7 +6,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/features/authentication/screens/login/login.dart';
 import 'package:grades/features/authentication/screens/onboarding/onboarding.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:grades/navigation_menu.dart';
 import 'package:grades/utils/exceptions/firebase_auth_exceptions.dart';
 

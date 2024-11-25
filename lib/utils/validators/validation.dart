@@ -1,7 +1,6 @@
 //regex stuff
 
 import 'package:grades/utils/http/http_client.dart';
-import 'package:studentvueclient/studentvueclient.dart';
 
 class GenesisValidator {
   static String? validateEmail(String? value) {

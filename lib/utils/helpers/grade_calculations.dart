@@ -1,7 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
 import 'package:grades/common/data/GPAData.dart';
-import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/utils/helpers/helper_functions.dart';
 import 'package:studentvueclient/studentvueclient.dart';
 

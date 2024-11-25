@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
-import 'package:grades/utils/device/device_utilities.dart';
 import 'package:grades/utils/helpers/helper_functions.dart';
 
 class GenesisCard extends StatelessWidget {
