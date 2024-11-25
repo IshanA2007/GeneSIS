@@ -17,13 +17,13 @@ class _FeedFilterBarState extends State<FeedFilterBar> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Spacer(),
+        const Spacer(),
         _buildFilterButton('All'),
         const Spacer(),
         _buildFilterButton('New'),
         const Spacer(),
         _buildFilterButton('Major'),
-        Spacer(),
+        const Spacer(),
       ],
     );
   }

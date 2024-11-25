@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:grades/common/widgets/appbar/appbar.dart';
 import 'package:grades/features/app/screens/home/widgets/home_appbar.dart';
 import 'package:grades/common/widgets/genesis_card.dart';
 import 'package:grades/features/app/screens/home/widgets/home_gpa_card_content.dart';

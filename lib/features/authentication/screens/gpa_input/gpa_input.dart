@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grades/common/styles/spacing_styles.dart';
 import 'package:grades/features/authentication/screens/gpa_input/widgets/gpa_input_form.dart';
 import 'package:grades/features/authentication/screens/gpa_input/widgets/gpa_input_header.dart';
-import 'package:grades/features/authentication/screens/login/widgets/login_form.dart';
-import 'package:grades/features/authentication/screens/login/widgets/login_header.dart';
 import 'package:grades/utils/helpers/helper_functions.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class GPAInputMenu extends StatelessWidget {

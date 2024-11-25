@@ -29,7 +29,7 @@ class GenesisAppBar extends StatelessWidget implements PreferredSizeWidget {
         leading: showBackArrow
             ? IconButton(
                 onPressed: () => Get.back(),
-                icon: Icon(
+                icon: const Icon(
                   Iconsax.arrow_left,
                   color: GenesisColors.primaryColor,
                 ))

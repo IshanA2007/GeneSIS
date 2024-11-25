@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grades/features/app/screens/gradebook/widgets/gradebook_appbar.dart';
-import 'package:grades/common/widgets/genesis_card.dart';
 import 'package:grades/common/widgets/card_grid.dart';
 import 'package:grades/features/authentication/controllers/user/user_controller.dart';
 import 'package:grades/utils/constants/sizes.dart';

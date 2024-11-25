@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:grades/common/widgets/genesis_card.dart';
-import 'package:grades/features/app/screens/gradebook/widgets/gradebook_gradesview_infocard.dart';
-import 'package:grades/features/app/screens/gradebook/widgets/gradebook_gradesviewappbar.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
-import 'package:grades/utils/device/device_utilities.dart';
 import 'package:grades/utils/helpers/grade_calculations.dart';
 import 'package:grades/utils/helpers/helper_functions.dart';
 
-import 'gradebook_gradesview_gradebars.dart';
 
 class GradesViewAssignment extends StatelessWidget {
   const GradesViewAssignment({super.key, required this.assignmentName, required this.earnedPoints, required this.possiblePoints});

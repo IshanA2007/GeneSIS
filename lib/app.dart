@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:grades/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/theme/theme.dart';
 

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grades/features/app/screens/gradebook/widgets/gradebook_gradesview.dart';
 import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
-import 'package:grades/utils/theme/custom_themes/text_theme.dart';
 import 'package:get/get.dart';
 import 'package:studentvueclient/studentvueclient.dart';
 

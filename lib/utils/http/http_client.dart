@@ -1,5 +1,4 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:grades/common/data/ClassData.dart';
@@ -10,11 +9,8 @@ import 'package:grades/utils/helpers/grade_calculations.dart';
 import 'package:grades/utils/helpers/helper_functions.dart';
 import 'package:studentvueclient/studentvueclient.dart';
 import 'package:intl/intl.dart';
-import 'dart:convert';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 import '../../common/data/GPAData.dart';
-import '../../common/data/GPAHistory.dart';
 import '../../common/data/History.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';

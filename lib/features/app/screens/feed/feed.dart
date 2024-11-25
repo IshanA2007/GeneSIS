@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:grades/common/widgets/appbar/appbar.dart';
 import 'package:grades/common/widgets/card_grid.dart';
 import 'package:grades/features/app/screens/feed/widgets/feed_appbar.dart';
 import 'package:grades/features/app/screens/feed/widgets/feed_filterbar.dart';
