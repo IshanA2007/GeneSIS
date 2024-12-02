@@ -162,7 +162,8 @@ class GenesisUserController extends GetxController {
   }
 
   FlChartData createDataPoints(History history) {
-    int multiplier = history.name == "overall" ? 10 : 10;
+    // int multiplier = history.name == "overall" ? 10 : 10;
+    int multiplier = 1;
     List<FlSpot> spots = [];
     Map<int, String> leftTitle = {};
     Map<int, String> bottomTitle = {};
@@ -182,18 +183,18 @@ class GenesisUserController extends GetxController {
       if (gpa > maxY) {
         maxY = gpa;
       }
-      spots.add(FlSpot(inc, double.parse(gpa.toStringAsFixed(1))));
+      spots.add(FlSpot(inc, double.parse(gpa.toStringAsFixed(2))));
       inc += 1;
     }
     maxX = inc - 1;
 
     // Adjust Y limits slightly for visual padding
     if (!(history.name == "overall")) {
-      minY -= 5;
-      maxY += 5;
+      minY -= 0.5;
+      maxY += 0.5;
     } else {
-      minY -= 0.3;
-      maxY += 0.3;
+      minY -= 0.03;
+      maxY += 0.03;
     }
     if (maxY > (100 * multiplier)) {
       // Since we're now working with values multiplied by 10
