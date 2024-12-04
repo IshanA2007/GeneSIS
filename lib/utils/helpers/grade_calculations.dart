@@ -136,4 +136,53 @@ class GenesisGradeCalculations {
     }
     return cumPercent / cumWeightage;
   }
-}
+  static double calculateCategoryGradeOn(
+      //TODO: implement
+      {required DateTime date,
+      required ClassData course,
+      required String category}) {
+      double points = 0.0;
+      double total = 0.0;
+      for (Assignment assignment in course.assignments.reversed) {
+        if (GenesisHelpers.stringToDateTime(assignment.date).isAfter(date)) {
+          continue; // not break since ordering can be weird
+        }
+        if (assignment.notes.toLowerCase().contains("not for grading")) {
+          continue;
+        }
+        if (assignment.category == category){
+          points += assignment.earnedPoints;
+          total += assignment.possiblePoints;
+        }
+      }
+      if (total == 0){
+        return -1;
+      }
+      else{
+        print("gradeon: ${points/total} ");
+        return 100*points / total;
+      }
+
+  }
+  static (double, double) calculateCategoryPointsTotalOn(
+      //TODO: implement
+      {required DateTime date,
+      required ClassData course,
+      required String category}) {
+      double points = 0.0;
+      double total = 0.0;
+      for (Assignment assignment in course.assignments.reversed) {
+        if (GenesisHelpers.stringToDateTime(assignment.date).isAfter(date)) {
+          continue; // not break since ordering can be weird
+        }
+        if (assignment.notes.toLowerCase().contains("not for grading")) {
+          continue;
+        }
+        if (assignment.category == category){
+          points += assignment.earnedPoints;
+          total += assignment.possiblePoints;
+        }
+      }
+      return (points, total);
+    }
+  }

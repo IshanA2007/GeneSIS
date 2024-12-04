@@ -10,12 +10,12 @@ import '../../../../../common/data/ClassData.dart';
 class AssignmentCard extends StatelessWidget {
   final Assignment assignment;
   final ClassData course;
+  final int impact;
 
-  const AssignmentCard({super.key, required this.assignment, required this.course});
+  const AssignmentCard({super.key, required this.assignment, required this.course, required this.impact});
 
   @override
   Widget build(BuildContext context) {
-    int impact = 24; //TODO: make an assignment impact
     Color impactColor = impact > 0
         ? GenesisColors.success
         : impact < 0
