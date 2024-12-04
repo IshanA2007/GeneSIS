@@ -16,6 +16,14 @@ class AssignmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String gradeText;
+    double grade = assignment.earnedPoints*100/assignment.possiblePoints;
+    if (grade.isNaN){
+      gradeText = "N/A";
+    }
+    else{
+      gradeText = "${grade.toStringAsFixed(1)}%";
+    }
     String impactstring = impact.toStringAsFixed(1);
     Color impactColor = impact > 0
         ? GenesisColors.success
@@ -59,7 +67,7 @@ class AssignmentCard extends StatelessWidget {
                 Text(assignment.date, style: Theme.of(context).textTheme.labelSmall!),
                 const SizedBox(height: GenesisSizes.sm),
                 Text(
-                  "${(assignment.earnedPoints*100/assignment.possiblePoints).toStringAsFixed(1)}%",
+                  gradeText,
                   style: Theme.of(context)
                       .textTheme
                       .headlineMedium!
