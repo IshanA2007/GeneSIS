@@ -5,6 +5,8 @@ import 'package:grades/features/app/screens/feed/widgets/feed_appbar.dart';
 import 'package:grades/features/app/screens/feed/widgets/feed_filterbar.dart';
 import 'package:grades/features/app/screens/feed/widgets/feed_assignmentcard.dart';
 import 'package:grades/utils/constants/sizes.dart';
+import 'package:grades/utils/helpers/grade_calculations.dart';
+import 'package:intl/intl.dart';
 import 'package:studentvueclient/studentvueclient.dart';
 
 import '../../../authentication/controllers/user/user_controller.dart';
@@ -68,13 +70,22 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
     List<AssignmentCard> assignmentCards = [];
     List<Assignment> assignments = user.getAllAssignments();
     for (Assignment assignment in assignments) {
-      print("hee");
-      print(assignment);
       ClassData containingClass = user.findClassWithAssignment(assignment)!;
-      print("ha");
+      var (pointsafter, totalafter) = GenesisGradeCalculations.calculateCategoryPointsTotalOn(date: DateFormat("MM/dd/yyyy").parse(assignment.date), course: containingClass, category: assignment.category);
+      double pointsbefore = pointsafter - assignment.earnedPoints;
+      double totalbefore = totalafter - assignment.possiblePoints;
+      double gradebefore = pointsbefore/totalbefore;
+      double gradeafter = pointsafter/totalafter;
+      double difference = gradeafter-gradebefore;
+      if(difference.isNaN){
+        // this is the first grade in category (or tied for first)
+        difference = 0;
+      }
+      int impact = ((difference)*100).round();
       assignmentCards.add(AssignmentCard(
         assignment: assignment,
         course: containingClass,
+        impact: impact,
       ));
     }
 
