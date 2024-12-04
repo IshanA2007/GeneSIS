@@ -185,4 +185,11 @@ class GenesisGradeCalculations {
       }
       return (points, total);
     }
+  static double calculateCategoryWeight(
+      //TODO: implement
+      {required ClassData course,
+      required String category}) {
+    List<AssignmentCategory> categories = course.categories;
+    return categories.firstWhere((cat) => cat.name == category).weight;
   }
+}
