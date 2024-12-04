@@ -10,12 +10,13 @@ import '../../../../../common/data/ClassData.dart';
 class AssignmentCard extends StatelessWidget {
   final Assignment assignment;
   final ClassData course;
-  final int impact;
+  final double impact;
 
   const AssignmentCard({super.key, required this.assignment, required this.course, required this.impact});
 
   @override
   Widget build(BuildContext context) {
+    String impactstring = impact.toStringAsFixed(1);
     Color impactColor = impact > 0
         ? GenesisColors.success
         : impact < 0
@@ -28,7 +29,7 @@ class AssignmentCard extends StatelessWidget {
             ? GenesisColors.error
             : GenesisColors.grey;
 
-    String impactText = impact > 0 ? "+$impact%" : "$impact%";
+    String impactText = impact > 0 ? "+$impactstring%" : "$impactstring%";
 
     return InkWell(
       onTap: () {

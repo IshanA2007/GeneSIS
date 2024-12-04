@@ -81,11 +81,12 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
         // this is the first grade in category (or tied for first)
         difference = 0;
       }
-      int impact = ((difference)*100).round();
+      // multiply difference by category weight
+      difference *= GenesisGradeCalculations.calculateCategoryWeight(course: containingClass, category: assignment.category)/100;
       assignmentCards.add(AssignmentCard(
         assignment: assignment,
         course: containingClass,
-        impact: impact,
+        impact: difference*100,
       ));
     }
 
