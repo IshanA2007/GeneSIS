@@ -20,7 +20,7 @@ Future<void> main() async {
   GetStorage().remove("username");
   GetStorage().remove("password");
 
-  GetStorage().erase();
+  //GetStorage().erase();
 
   //Native Splash Screen
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
