@@ -61,6 +61,10 @@ class GenesisUserController extends GetxController {
 
     double grade = GenesisGradeCalculations.calculateGradeOn(
         date: monthAgoDate, course: course);
+    if(grade == -1){
+      // a month ago was before the start of course - we'll just assume a 100% at the start;
+      grade = 100;
+    }
 
     return double.parse((course.percent - grade).toStringAsFixed(1));
   }
@@ -192,6 +196,9 @@ class GenesisUserController extends GetxController {
     if (!(history.name == "overall")) {
       minY -= 0.5;
       maxY += 0.5;
+      // manual override - (i think it looks better and is easier to interpret)
+      maxY = 100;
+      minY = 50.0;
     } else {
       minY -= 0.03;
       maxY += 0.03;
@@ -200,7 +207,6 @@ class GenesisUserController extends GetxController {
       // Since we're now working with values multiplied by 10
       maxY = 100.0 * multiplier;
     }
-
     // Define 4 intervals for the left title (Y-axis)
     double yInterval =
         (maxY - minY) / 3; // 4 labels -> 3 intervals between them
