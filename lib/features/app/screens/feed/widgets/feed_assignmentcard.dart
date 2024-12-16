@@ -16,6 +16,8 @@ class AssignmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String assignmentName = assignment.assignmentName;
+    assignmentName = assignmentName.replaceAll("&amp;", "&");
     String gradeText;
     double grade = assignment.earnedPoints*100/assignment.possiblePoints;
     if (grade.isNaN){
@@ -58,7 +60,7 @@ class AssignmentCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  assignment.assignmentName,
+                  assignmentName,
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
