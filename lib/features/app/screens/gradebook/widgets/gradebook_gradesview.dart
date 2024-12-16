@@ -104,7 +104,7 @@ class GradesView extends StatelessWidget {
                       const SizedBox(height: GenesisSizes.xs),
                       for (Assignment assignment in classData.assignments) ...[
                         GradesViewAssignment(
-                          assignmentName: assignment.assignmentName,
+                          assignmentName: assignment.assignmentName.replaceAll("&amp;", "&"),
                           earnedPoints: assignment.earnedPoints,
                           possiblePoints: assignment.possiblePoints,
                         ),
