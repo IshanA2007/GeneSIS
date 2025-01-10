@@ -14,6 +14,9 @@ class GenesisGPAGrid extends StatelessWidget {
     final user = Get.find<GenesisUserController>();
     var classrank = user.getClassRank()["rank"] ?? -1;
     var total = user.getClassRank()["total"] ?? 500;
+    if(total==0){
+      total = 1; // idk it should stop the error?
+    }
     var multiplier = 500 / total;
     total = (total * multiplier).round();
     classrank = (classrank * multiplier).round();
