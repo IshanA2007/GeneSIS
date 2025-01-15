@@ -132,6 +132,7 @@ class GenesisUserController extends GetxController {
         }
       }
     }
+    print("uh oh! looks like i couldn't find this assignment: $assignment");
     return null;
   }
 
