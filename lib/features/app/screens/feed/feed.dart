@@ -70,7 +70,10 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
     List<AssignmentCard> assignmentCards = [];
     List<Assignment> assignments = user.getAllAssignments();
     for (Assignment assignment in assignments) {
-      ClassData containingClass = user.findClassWithAssignment(assignment)!;
+      ClassData? containingClass = user.findClassWithAssignment(assignment);
+      if (containingClass == null){
+        continue; // Skip assignment if class doesn't have it - was either deleted or modified
+      }
       var (pointsafter, totalafter) = GenesisGradeCalculations.calculateCategoryPointsTotalOn(date: DateFormat("MM/dd/yyyy").parse(assignment.date), course: containingClass, category: assignment.category);
       double pointsbefore = pointsafter - assignment.earnedPoints;
       double totalbefore = totalafter - assignment.possiblePoints;
