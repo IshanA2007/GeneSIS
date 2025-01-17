@@ -94,7 +94,7 @@ class GenesisHttpClient {
       History overallHistory =
           curUser.history.firstWhere((history) => history.name == "overall");
       overallHistory.history
-          .add(GPAData(calculateCumulativeGPA(curUser, currentQuarter)));
+          .add(GPAData(calculateCumulativeGPA2(curUser, currentQuarter)));
       user.addOrReplaceDocument(email, overallHistory.history.last.gpa);
       Map<String, int> ranking =
           await user.getGpaRanking(overallHistory.history.last.gpa);
