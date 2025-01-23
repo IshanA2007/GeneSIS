@@ -29,7 +29,7 @@ class GenesisHttpClient {
     bool newAssignmentsReturned = false;
     List<String> classesWithUpdatedAssignments = [];
     var localStorage = GetStorage();
-    int currentQuarter = 1;
+    int currentQuarter = 2; // hmmmmmm...
     bool isFirstTime = false;
 
     var client = StudentVueClient(email, password, 'sisstudent.fcps.edu');
@@ -94,7 +94,7 @@ class GenesisHttpClient {
       History overallHistory =
           curUser.history.firstWhere((history) => history.name == "overall");
       overallHistory.history
-          .add(GPAData(calculateCumulativeGPA(curUser, currentQuarter)));
+          .add(GPAData(calculateCumulativeGPA2(curUser, currentQuarter)));
       user.addOrReplaceDocument(email, overallHistory.history.last.gpa);
       Map<String, int> ranking =
           await user.getGpaRanking(overallHistory.history.last.gpa);
@@ -121,7 +121,7 @@ class GenesisHttpClient {
     double outdatedGPA = curUser.initialCumGPA ?? 4.43;
     double creditsTaken = curUser.creditsTaken ?? 26;
     double gpaVal = outdatedGPA * creditsTaken;
-
+    print("CURRENT QUARTER: ${curQuarter}");
     if (curQuarter <= 2) {
       for (Period period in curUser.periods) {
         ClassData curQCourse = period.classData[curQuarter - 1];
@@ -132,6 +132,7 @@ class GenesisHttpClient {
                   GenesisGradeCalculations.percentToLetter(curQCourse.percent),
                   curQCourse.courseName) *
               0.5;
+          print(curQCourse.gradebookCode + " class: " + curQCourse.courseName + " with grade: " + GenesisGradeCalculations.percentToLetter(curQCourse.percent));
           creditsTaken += 0.5;
         } else {
           //always second quarter now bc we chekced for 1 quarter above
@@ -147,6 +148,8 @@ class GenesisHttpClient {
                       prevQCourse.courseName)) /
               2;
           gpaVal += avgGPA * 0.5;
+          print("STANDARD? class: " + curQCourse.courseName + " with grade: " + GenesisGradeCalculations.percentToLetter(curQCourse.percent) + " AND " + GenesisGradeCalculations.percentToLetter(
+                          prevQCourse.percent));
           creditsTaken += 0.5;
         }
       }
