@@ -60,7 +60,7 @@ class GenesisHttpClient {
     for (Period period in curUser.periods) {
       ClassData curClass = period.classData.last;
 
-      print(curClass);
+      // print(curClass);
 
       SchoolClass foundClass = currentGb.classes.firstWhere(
           (schoolClass) => schoolClass.className == curClass.courseName);
@@ -121,7 +121,7 @@ class GenesisHttpClient {
     double outdatedGPA = curUser.initialCumGPA ?? 4.43;
     double creditsTaken = curUser.creditsTaken ?? 26;
     double gpaVal = outdatedGPA * creditsTaken;
-    print("CURRENT QUARTER: ${curQuarter}");
+    // print("CURRENT QUARTER: ${curQuarter}");
     if (curQuarter <= 2) {
       for (Period period in curUser.periods) {
         ClassData curQCourse = period.classData[curQuarter - 1];
@@ -132,7 +132,7 @@ class GenesisHttpClient {
                   GenesisGradeCalculations.percentToLetter(curQCourse.percent),
                   curQCourse.courseName) *
               0.5;
-          print(curQCourse.gradebookCode + " class: " + curQCourse.courseName + " with grade: " + GenesisGradeCalculations.percentToLetter(curQCourse.percent));
+          // print(curQCourse.gradebookCode + " class: " + curQCourse.courseName + " with grade: " + GenesisGradeCalculations.percentToLetter(curQCourse.percent));
           creditsTaken += 0.5;
         } else {
           //always second quarter now bc we chekced for 1 quarter above
@@ -148,8 +148,7 @@ class GenesisHttpClient {
                       prevQCourse.courseName)) /
               2;
           gpaVal += avgGPA * 0.5;
-          print("STANDARD? class: " + curQCourse.courseName + " with grade: " + GenesisGradeCalculations.percentToLetter(curQCourse.percent) + " AND " + GenesisGradeCalculations.percentToLetter(
-                          prevQCourse.percent));
+          // print("STANDARD? class: " + curQCourse.courseName + " with grade: " + GenesisGradeCalculations.percentToLetter(curQCourse.percent) + " AND " + GenesisGradeCalculations.percentToLetter(prevQCourse.percent));
           creditsTaken += 0.5;
         }
       }
@@ -211,8 +210,8 @@ class GenesisHttpClient {
         GenesisHelpers.generateDateList(startDate, endDate);
 
     for (DateTime date in dateList) {
-      double outdatedGPA = curUser.initialCumGPA ?? 4.43;
-      double creditsTaken = curUser.creditsTaken ?? 26;
+      double outdatedGPA = curUser.initialCumGPA ?? 0;
+      double creditsTaken = curUser.creditsTaken ?? 1;
       double gpaVal = outdatedGPA * creditsTaken;
       int curQuarter = GenesisHelpers.getQuarterOfDate(date);
       if (curQuarter <= 2) {
