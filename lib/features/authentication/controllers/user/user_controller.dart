@@ -246,8 +246,8 @@ class GenesisUserController extends GetxController {
   bool requiresGPAInput() {
     History? overallHistory = curUser?.history
         .firstWhere((historyPoint) => historyPoint.name == "overall");
-    print("overall history:");
-    debugPrint(overallHistory.toString());
+    // print("overall history:");
+    // debugPrint(overallHistory.toString());
     return overallHistory?.history.isEmpty ?? true;
   }
 
