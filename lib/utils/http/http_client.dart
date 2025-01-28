@@ -138,15 +138,9 @@ class GenesisHttpClient {
           //always second quarter now bc we chekced for 1 quarter above
           ClassData prevQCourse = period.classData[curQuarter - 2];
 
-          double avgGPA = (GenesisGradeCalculations.gpaFromLetter(
+          double avgGPA = GenesisGradeCalculations.gpaFromLetter(
                       GenesisGradeCalculations.percentToLetter(
-                          curQCourse.percent),
-                      curQCourse.courseName) +
-                  GenesisGradeCalculations.gpaFromLetter(
-                      GenesisGradeCalculations.percentToLetter(
-                          prevQCourse.percent),
-                      prevQCourse.courseName)) /
-              2;
+                          (curQCourse.percent + prevQCourse.percent) / 2), curQCourse.courseName);
           gpaVal += avgGPA * 0.5;
           // print("STANDARD? class: " + curQCourse.courseName + " with grade: " + GenesisGradeCalculations.percentToLetter(curQCourse.percent) + " AND " + GenesisGradeCalculations.percentToLetter(prevQCourse.percent));
           creditsTaken += 0.5;
