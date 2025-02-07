@@ -180,6 +180,9 @@ class GenesisUserController extends GetxController {
 
     // Generate FlSpot data and determine min/max Y values
     for (GPAData dataPoint in history.history) {
+      if(dataPoint.gpa == 0){
+        continue; // no way someone genuinely has a 0, right?
+      }
       double gpa =
           dataPoint.gpa * multiplier; // Multiply by 10 for internal calculation
       if (gpa < minY) {
