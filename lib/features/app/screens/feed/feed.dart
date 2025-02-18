@@ -22,6 +22,7 @@ class Feed extends StatefulWidget {
 class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late List<Animation<Offset>> _slideAnimations;
+  String filter = "All";
 
   @override
   void initState() {
@@ -63,6 +64,12 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+  void updateFilter(String filt) {
+    setState(() {
+      filter = filt;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Get.find<GenesisUserController>();
@@ -70,26 +77,35 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
     List<AssignmentCard> assignmentCards = [];
     List<Assignment> assignments = user.getAllAssignments();
     for (Assignment assignment in assignments) {
+      if (filter != "All") {
+        continue;
+      }
       ClassData? containingClass = user.findClassWithAssignment(assignment);
-      if (containingClass == null){
+      if (containingClass == null) {
         continue; // Skip assignment if class doesn't have it - was either deleted or modified
       }
-      var (pointsafter, totalafter) = GenesisGradeCalculations.calculateCategoryPointsTotalOn(date: DateFormat("MM/dd/yyyy").parse(assignment.date), course: containingClass, category: assignment.category);
+      var (pointsafter, totalafter) =
+          GenesisGradeCalculations.calculateCategoryPointsTotalOn(
+              date: DateFormat("MM/dd/yyyy").parse(assignment.date),
+              course: containingClass,
+              category: assignment.category);
       double pointsbefore = pointsafter - assignment.earnedPoints;
       double totalbefore = totalafter - assignment.possiblePoints;
-      double gradebefore = pointsbefore/totalbefore;
-      double gradeafter = pointsafter/totalafter;
-      double difference = gradeafter-gradebefore;
-      if(difference.isNaN){
+      double gradebefore = pointsbefore / totalbefore;
+      double gradeafter = pointsafter / totalafter;
+      double difference = gradeafter - gradebefore;
+      if (difference.isNaN) {
         // this is the first grade in category (or tied for first)
         difference = 0;
       }
       // multiply difference by category weight
-      difference *= GenesisGradeCalculations.calculateCategoryWeight(course: containingClass, category: assignment.category)/100;
+      difference *= GenesisGradeCalculations.calculateCategoryWeight(
+              course: containingClass, category: assignment.category) /
+          100;
       assignmentCards.add(AssignmentCard(
         assignment: assignment,
         course: containingClass,
-        impact: difference*100,
+        impact: difference * 100,
       ));
     }
 
@@ -98,9 +114,10 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
         child: Column(
           children: [
             const FeedAppBar(),
-            const Padding(
+            Padding(
                 padding: EdgeInsets.symmetric(horizontal: GenesisSizes.md),
-                child: FeedFilterBar()),
+                child: FeedFilterBar(
+                    filter: filter, onFilterChanged: updateFilter)),
             const SizedBox(
               height: GenesisSizes.spaceBtwItems,
             ),

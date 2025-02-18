@@ -3,7 +3,11 @@ import 'package:grades/utils/constants/colors.dart';
 import 'package:grades/utils/constants/sizes.dart';
 
 class FeedFilterBar extends StatefulWidget {
-  const FeedFilterBar({super.key});
+  final String filter;
+  final Function(String) onFilterChanged;
+
+  const FeedFilterBar(
+      {super.key, required this.filter, required this.onFilterChanged});
 
   @override
   _FeedFilterBarState createState() => _FeedFilterBarState();
@@ -29,34 +33,26 @@ class _FeedFilterBarState extends State<FeedFilterBar> {
   }
 
   Widget _buildFilterButton(String label) {
-    bool isSelected = selectedFilter == label;
+    bool isSelected = widget.filter == label;
 
     return GestureDetector(
       onTap: () {
-        setState(() {
-          selectedFilter = label;
-        });
+        widget.onFilterChanged(label);
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: GenesisSizes.xs, horizontal: GenesisSizes.lg),
+        padding: const EdgeInsets.symmetric(
+            vertical: GenesisSizes.xs, horizontal: GenesisSizes.lg),
         decoration: BoxDecoration(
           color: isSelected ? GenesisColors.darkestGrey : Colors.transparent,
-          borderRadius: BorderRadius.circular(GenesisSizes.feedFilterBarButtonRadius),
+          borderRadius:
+              BorderRadius.circular(GenesisSizes.feedFilterBarButtonRadius),
         ),
-        child: Text(
-          label,
-          style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .apply(color: GenesisColors.grey)),
-        ),
+        child: Text(label,
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .apply(color: GenesisColors.grey)),
+      ),
     );
   }
 }
-
-void main() => runApp(const MaterialApp(
-  home: Scaffold(
-    backgroundColor: Colors.black,
-    body: Center(child: FeedFilterBar()),
-  ),
-));
