@@ -92,7 +92,16 @@ class GradesView extends StatelessWidget {
                             Expanded(
                               flex: 4,
                               child: Text("GRADE",
-                                  textAlign: TextAlign.end,
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall!
+                                      .apply(color: GenesisColors.darkerGrey)),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text("WEIGHT",
+                                  textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelSmall!
@@ -107,6 +116,7 @@ class GradesView extends StatelessWidget {
                           assignmentName: assignment.assignmentName.replaceAll("&amp;", "&"),
                           earnedPoints: assignment.earnedPoints,
                           possiblePoints: assignment.possiblePoints,
+                          percentageOfGrade: classData.categories.firstWhere((element) => element.name == assignment.category).weight * assignment.possiblePoints / classData.categories.firstWhere((element) => element.name == assignment.category).possiblePoints,
                         ),
                         const SizedBox(height: GenesisSizes.md),
                         // Add SizedBox after each item

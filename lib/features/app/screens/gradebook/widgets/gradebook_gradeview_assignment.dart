@@ -6,11 +6,12 @@ import 'package:grades/utils/helpers/helper_functions.dart';
 
 
 class GradesViewAssignment extends StatelessWidget {
-  const GradesViewAssignment({super.key, required this.assignmentName, required this.earnedPoints, required this.possiblePoints});
+  const GradesViewAssignment({super.key, required this.assignmentName, required this.earnedPoints, required this.possiblePoints, required this.percentageOfGrade});
 
   final String assignmentName;
   final double earnedPoints;
   final double possiblePoints;
+  final double percentageOfGrade;
   @override
   Widget build(BuildContext context) {
     final dark = GenesisHelpers.isDarkMode(context);
@@ -50,11 +51,21 @@ class GradesViewAssignment extends StatelessWidget {
           Expanded(
             flex: 4,
             child: Text("${GenesisGradeCalculations.percentify(earnedPoints, possiblePoints).toStringAsFixed(2)}%",
-                textAlign: TextAlign.end,
+                textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
                     .labelMedium!
                     .apply(color: !dark ? GenesisColors.black : GenesisColors.white)),
+          ),
+          Expanded(
+            flex: 2,
+            
+            child: FittedBox(fit: BoxFit.scaleDown, child: Text("${percentageOfGrade.toStringAsFixed(1)}%",
+                textAlign: TextAlign.end,
+                style: Theme.of(context)
+                    .textTheme
+                    .labelMedium!
+                    .apply(color: !dark ? GenesisColors.black : GenesisColors.white))),
           ),
         ],
       ),
