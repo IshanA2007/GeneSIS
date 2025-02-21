@@ -77,12 +77,29 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
     List<AssignmentCard> assignmentCards = [];
     List<Assignment> assignments = user.getAllAssignments();
     for (Assignment assignment in assignments) {
-      if (filter != "All") {
-        continue;
-      }
       ClassData? containingClass = user.findClassWithAssignment(assignment);
       if (containingClass == null) {
         continue; // Skip assignment if class doesn't have it - was either deleted or modified
+      }
+      AssignmentCategory assignmentCat = containingClass.categories[0];
+      for(AssignmentCategory cat in containingClass.categories){
+        if(cat.name == assignment.category){
+          assignmentCat = cat;
+        }
+      }
+      // Get percentage of grade impact (poss points of this assignment / poss category points * category weight %)
+      double percentageOfGrade = assignmentCat.weight * assignment.possiblePoints / assignmentCat.possiblePoints;
+      print("$percentageOfGrade percent");
+      if (filter == "New") {
+        if(DateFormat("MM/dd/yyyy").parse(assignment.date).difference(DateTime.now()).inDays > 6){
+          continue;
+        }
+      }
+      else if (filter == "Major"){
+        // Major: at least 10% of total grade
+        if(percentageOfGrade < 10){
+          continue;
+        }
       }
       var (pointsafter, totalafter) =
           GenesisGradeCalculations.calculateCategoryPointsTotalOn(
@@ -106,6 +123,7 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
         assignment: assignment,
         course: containingClass,
         impact: difference * 100,
+        percentageOfGrade: percentageOfGrade,
       ));
     }
 
