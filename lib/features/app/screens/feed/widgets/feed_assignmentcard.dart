@@ -11,8 +11,9 @@ class AssignmentCard extends StatelessWidget {
   final Assignment assignment;
   final ClassData course;
   final double impact;
+  final double percentageOfGrade;
 
-  const AssignmentCard({super.key, required this.assignment, required this.course, required this.impact});
+  const AssignmentCard({super.key, required this.assignment, required this.course, required this.impact, required this.percentageOfGrade});
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +41,7 @@ class AssignmentCard extends StatelessWidget {
             : GenesisColors.grey;
 
     String impactText = impact > 0 ? "+$impactstring%" : "$impactstring%";
+    String percentageOfGradeText = "${percentageOfGrade.toStringAsFixed(1)}% of grade";
 
     return InkWell(
       onTap: () {
@@ -67,7 +69,7 @@ class AssignmentCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelMedium!,
                 ),
                 Text(assignment.date, style: Theme.of(context).textTheme.labelSmall!),
-                const SizedBox(height: GenesisSizes.sm),
+                const SizedBox(height: GenesisSizes.xs),
                 Text(
                   gradeText,
                   style: Theme.of(context)
@@ -82,7 +84,7 @@ class AssignmentCard extends StatelessWidget {
                       .titleSmall!
                       .apply(color: GenesisColors.grey),
                 ),
-                const SizedBox(height: GenesisSizes.sm),
+                const SizedBox(height: GenesisSizes.xs/2),
                 RichText(
                   text: TextSpan(
                     children: [
@@ -103,6 +105,12 @@ class AssignmentCard extends StatelessWidget {
                     ],
                   ),
                 ),
+                const SizedBox(height: GenesisSizes.xs/3),
+                Text(percentageOfGradeText,
+                style: Theme.of(context)
+                      .textTheme
+                      .labelMedium!
+                      .apply(color: GenesisColors.grey)),
                 const Spacer(),
               ],
             ),
