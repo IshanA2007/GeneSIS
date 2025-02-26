@@ -76,7 +76,14 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
 
     List<AssignmentCard> assignmentCards = [];
     List<Assignment> assignments = user.getAllAssignments();
+    Set<Assignment> uniqueAssignments = {}; 
+
     for (Assignment assignment in assignments) {
+      // DUPLICATE CHECKING
+      if(uniqueAssignments.contains(assignment)){
+        continue;
+      }
+      uniqueAssignments.add(assignment);
       ClassData? containingClass = user.findClassWithAssignment(assignment);
       if (containingClass == null) {
         continue; // Skip assignment if class doesn't have it - was either deleted or modified
@@ -89,9 +96,10 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
       }
       // Get percentage of grade impact (poss points of this assignment / poss category points * category weight %)
       double percentageOfGrade = assignmentCat.weight * assignment.possiblePoints / assignmentCat.possiblePoints;
-      print("$percentageOfGrade percent");
+      // print("$percentageOfGrade percent");
+      // print(DateTime.now().difference(DateFormat("MM/dd/yyyy").parse(assignment.date)).inDays);
       if (filter == "New") {
-        if(DateFormat("MM/dd/yyyy").parse(assignment.date).difference(DateTime.now()).inDays > 6){
+        if(DateTime.now().difference(DateFormat("MM/dd/yyyy").parse(assignment.date)).inDays > 6){
           continue;
         }
       }
@@ -100,6 +108,17 @@ class _FeedState extends State<Feed> with SingleTickerProviderStateMixin {
         if(percentageOfGrade < 10){
           continue;
         }
+        // if(!assignment.assignmentName.contains("Essay") || !containingClass.courseName.contains("ment")){
+        //   continue;
+        // }
+        // print("Assignment: ${assignment.assignmentName}");
+        // print("Containing class: ${containingClass}");
+        // print("Category: ${assignmentCat}");
+        // print("Possible assignment points: ${assignment.possiblePoints}");
+        // print("Possible points in category: ${assignmentCat.possiblePoints}");
+        // print("Dividing them: ${assignment.possiblePoints/assignmentCat.possiblePoints}");
+        // print("Multiplying by category: ${assignmentCat.weight * assignment.possiblePoints/assignmentCat.possiblePoints}");
+        // print("Grade impact: ${percentageOfGrade}");
       }
       var (pointsafter, totalafter) =
           GenesisGradeCalculations.calculateCategoryPointsTotalOn(
