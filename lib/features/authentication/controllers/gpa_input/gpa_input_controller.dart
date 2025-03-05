@@ -198,7 +198,7 @@ class GPAInputController extends GetxController {
       // overallHistory.history.insert(0, GPAData(updatedCGPA));
 
       User curUser = user.curUser!;
-      DateTime startDate = DateTime(2024, 8, 19);
+      DateTime startDate = DateTime(2024, 8, 19); // TODO: don't hardcode start date
 
       // Get the current date
       DateTime endDate = DateTime.now();
