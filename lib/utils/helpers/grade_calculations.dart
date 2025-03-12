@@ -88,7 +88,7 @@ class GenesisGradeCalculations {
   }
 
   static String gpaBoostFromCourse(String course) {
-    if (course.contains("AP") || course.contains("AV")) {
+    if (course.contains("AP") || course.contains("AV") || course.contains("DE")) {
       return "1.0";
     } else if (course.contains("HN") || course.contains("Honors")) {
       return "0.5";
