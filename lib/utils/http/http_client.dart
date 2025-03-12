@@ -29,7 +29,7 @@ class GenesisHttpClient {
     bool newAssignmentsReturned = false;
     List<String> classesWithUpdatedAssignments = [];
     var localStorage = GetStorage();
-    int currentQuarter = 2; // hmmmmmm...
+    int currentQuarter = 3; // hmmmmmm...
     bool isFirstTime = false;
 
     var client = StudentVueClient(email, password, 'sisstudent.fcps.edu');
@@ -94,7 +94,7 @@ class GenesisHttpClient {
       History overallHistory =
           curUser.history.firstWhere((history) => history.name == "overall");
       overallHistory.history
-          .add(GPAData(calculateCumulativeGPA2(curUser, currentQuarter)));
+          .add(GPAData(calculateCumulativeGPA3(curUser, currentQuarter)));
       user.addOrReplaceDocument(email, overallHistory.history.last.gpa);
       Map<String, int> ranking =
           await user.getGpaRanking(overallHistory.history.last.gpa);
@@ -195,6 +195,116 @@ class GenesisHttpClient {
         }
       }
     }
+    return gpaVal / creditsTaken;
+  }
+
+  double calculateCumulativeGPA3(User curUser, int curQuarter) {
+    double outdatedGPA = curUser.initialCumGPA ?? 0.0;
+    double creditsTaken = curUser.creditsTaken ?? 1.0;
+    double gpaVal = outdatedGPA * creditsTaken;
+    print("CURRENT QUARTER: ${curQuarter}");
+    if (curQuarter <= 2) {
+      print("quarter <2");
+      for (Period period in curUser.periods) {
+        ClassData curQCourse = period.classData[curQuarter - 1];
+        if (curQuarter == 1 ||
+            curQCourse.gradebookCode == "UK" ||
+            curQCourse.gradebookCode == "rolling") {
+          gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                  GenesisGradeCalculations.percentToLetter(curQCourse.percent),
+                  curQCourse.courseName) *
+              0.5;
+          creditsTaken += 0.5;
+        } else {
+          //always second quarter now bc we chekced for 1 quarter above
+          ClassData prevQCourse = period.classData[curQuarter - 2];
+
+          double avgGPA = GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          (curQCourse.percent + prevQCourse.percent) / 2), curQCourse.courseName);
+          gpaVal += avgGPA * 0.5;
+          creditsTaken += 0.5;
+        }
+      }
+    } else {
+      // third or fourth quarter
+      for (Period period in curUser.periods) {
+        ClassData curQCourse = period.classData[curQuarter - 1];
+        if (curQCourse.durationCode == "YR") {
+          if (curQCourse.gradebookCode == "rolling") {
+            gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                    GenesisGradeCalculations.percentToLetter(
+                        curQCourse.percent),
+                    curQCourse.courseName) *
+                1;
+            creditsTaken += 1;
+          } else {
+            // not rolling, yearlong
+            for (int prevQ = 0; prevQ < curQuarter; prevQ++) {
+              ClassData prevQCourse = period.classData[prevQ];
+              gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          prevQCourse.percent),
+                      prevQCourse.courseName) *
+                  1/curQuarter;
+            }
+            creditsTaken += 1;
+          }
+        } else {
+          // SEMESTER classes, 3rd or 4th quarter
+          for (int qIndex = 1; qIndex <= curQuarter; qIndex += 2) {
+            if(qIndex == curQuarter){
+              qIndex -= 1; // only check 3rd quarter if we're in fourth
+            }
+            if (period.classData[qIndex].gradebookCode == "rolling") {
+              gpaVal += GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          period.classData[qIndex].percent),
+                      period.classData[qIndex].courseName) *
+                  0.5;
+              creditsTaken += 0.5;
+            } else {
+              // standard (non-rolling)
+              print("non-rolling semester class detected. ---> ${period.classData[qIndex].courseName}");
+              if(period.classData[qIndex].courseName.contains("Multivar Calculus DE")){
+                print("hardcoding this course to be a B (4.0)");
+                creditsTaken += 0.5;
+                gpaVal += 2;
+                continue;
+              }
+              print("quarter is $qIndex btw");
+              if(curQuarter-1 == qIndex){ // if special case, only check 1 quarter
+                print("special case time!");
+                gpaVal += 0.5 * GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          period.classData[qIndex].percent),
+                      period.classData[qIndex].courseName);
+                creditsTaken += 0.5;
+              }
+              else{
+                // average both quarters
+                print("QUARTER GRADES...");
+                print(GenesisGradeCalculations.percentToLetter(
+                          period.classData[qIndex-1].percent));
+                print(GenesisGradeCalculations.percentToLetter(
+                          period.classData[qIndex].percent));
+                gpaVal += 0.25 * GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          period.classData[qIndex].percent),
+                      period.classData[qIndex].courseName);
+                gpaVal += 0.25 * GenesisGradeCalculations.gpaFromLetter(
+                      GenesisGradeCalculations.percentToLetter(
+                          period.classData[qIndex-1].percent),
+                      period.classData[qIndex-1].courseName);
+                creditsTaken += 0.5;
+              }
+            }
+          }
+        }
+      }
+    }
+    print("credits taken: $creditsTaken");
+    print("gpa val: $gpaVal");
     return gpaVal / creditsTaken;
   }
 
