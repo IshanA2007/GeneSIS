@@ -29,3 +29,14 @@ doc/api/
 flutter
 
 .vscode/
+
+# IDE / editor
+.idea/
+*.iml
+*.log
+
+# OS
+.DS_Store
+
+# Personal or sensitive assets: never commit real student data
+assets/images/output.pdf
